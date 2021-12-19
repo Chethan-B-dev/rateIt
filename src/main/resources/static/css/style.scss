@@ -1,0 +1,96 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+html,body,main{
+    min-height: 100vh;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid black;
+  border-right: none;
+  padding: 5px;
+  height: 45px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: black;
+}
+
+.searchTerm:active{
+  color: black;
+  border: 2px solid red !important;
+}
+
+.searchTerm:hover{
+  color: black;
+  border: 2px solid red !important;
+}
+
+.searchTerm:link{
+  color: black;
+  border: 2px solid red !important;
+}
+
+.searchButton {
+  width: 40px;
+  height: 45px;
+  border: 1px solid black;
+  background: black;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.searchButton:hover{
+  background: red !important;
+  border: 2px solid red !important;
+}
+
+.wrap{
+  width: 100%;
+}
+
+.main-bg{
+    background-image: url("https://www.themoviedb.org/t/p/w1920_and_h600_multi_faces_filter(duotone,032541,01b4e4)/kowTspKh9UkOVXnEvsZtZvp66AE.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+div.scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+div.scrollmenu div.card {
+    display: inline-block;
+}
+
+.horizontal-catalog{
+    padding: 10px;
+}
+
+.media-card{
+    max-width: 300px;
+    max-height: 600px;
+    margin: 5px;
+}
+
+.media-image{
+    max-width: 300px;
+    max-height: 400px;
+}
+
+.nav-background{
+  background: red !important;
+}
+
+.details-section{
+  min-height: 500px;
+}

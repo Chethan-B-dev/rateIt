@@ -34,5 +34,4 @@ public class Movie implements Serializable {
     @JsonProperty("vote_average")
     private double userRating;
     private int runtime;
-
 }
