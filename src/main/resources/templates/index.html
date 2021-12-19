@@ -2,452 +2,269 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>rateIT</title>
-  <!-- MDB icon -->
-  <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-  <!-- Bootstrap core CSS -->
-  <link th:href="@{css/bootstrap.min.css}" rel="stylesheet" >
-  <!-- Material Design Bootstrap -->
-  <link th:href="@{css/mdb.min.css}" rel="stylesheet">
-  <!-- Your custom styles (optional) -->
-  <link th:href="@{css/style.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>rateIT</title>
+    <!-- MDB icon -->
+    <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
 </head>
-  <body class="hidden-sn elegant-color">
+<body class="hidden-sn elegant-color">
 
-  <header class="mb-lg-5 mb-2">
-    <!-- Sidebar navigation -->
-    <div id="slide-out" class="side-nav">
-      <ul class="custom-scrollbar">
-        <!-- Logo -->
-        <li>
-          <div class="logo-wrapper waves-light">
-            <a href="#"><img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" class="img-fluid flex-center"></a>
-          </div>
-        </li>
-        <!--/. Logo -->
-        
-        <!--Search Form-->
-        <!-- <li>
-          <form class="search-form" role="search">
-            <div class="form-group md-form mt-0 pt-1 waves-light">
-              <input type="text" class="form-control" placeholder="Search">
-            </div>
-          </form>
-        </li> -->
-        <!--/.Search Form-->
-        <!-- Side navigation links -->
-        <li>
-          <ul class="collapsible collapsible-accordion">
-            <li class="nav-background"><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-film"></i>
-                Movies
-              <i class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#" class="waves-effect">Popular</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Now Playing</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Upcoming</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Top Rated</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-video"></i>
-                TV Shows
-                <i class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#" class="waves-effect">Popular</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Airing Today</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">On TV</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Top Rated</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-eye"></i> About<i class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#" class="waves-effect">Introduction</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Monthly meetings</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-envelope-o"></i> Contact me<i
-                  class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li> <a href="#" class="waves-effect">FAQ</a> </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </li>
-        <!--/. Side navigation links -->
-      </ul>
-      <div class="mask-strong"></div>
-    </div>
-    <!--/. Sidebar navigation -->
-    <!-- Navbar -->
-    <nav class="navbar bg-dark fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
-      <!-- SideNav slide-out button -->
-      <div class="float-left">
-        <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
-      </div>
+<!-- header -->
+<header th:replace="fragments/header :: header"></header>
+<!-- header -->
 
-      
+<main class="pt-4">
 
-      <!-- Breadcrumb-->
-      <div class="breadcrumb-dn mr-auto">
-        <p class="lead text-danger font-weight-bold">rateIT</p>
-      </div>
-
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-5 mr-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Movies
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Popular</a>
-              <a class="dropdown-item" href="#">Now Playing</a>
-              <a class="dropdown-item" href="#">Upcoming</a>
-              <a class="dropdown-item" href="#">Top Rated</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              TV Shows
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Popular</a>
-              <a class="dropdown-item" href="#">Airing Today</a>
-              <a class="dropdown-item" href="#">On TV</a>
-              <a class="dropdown-item" href="#">Top Rated</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <ul class="nav navbar-nav nav-flex-icons ml-auto text-white">
-
-        <li class="nav-item">
-          <a class="nav-link"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
-        </li>
-        
-        
-        <li class="nav-item">
-          <a class="nav-link "><i class="fas fa-bell text-danger animated swing infinite slow delay-1s"></i> <span class="clearfix d-none d-sm-inline-block">Notifications</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#modalLRForm"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Login/Register</span></a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </a>
-          <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Friends</a>
-            <a class="dropdown-item" href="#">something</a>
-            <a class="dropdown-item" href="#">something</a>
-          </div>
-        </li>
-        
-      </ul>
-    </nav>
-    <!-- /.Navbar -->
-  </header>
-
-
-  <main class="pt-4">
- 
     <section class="search-section">
 
-      <div class="jumbotron jumbotron-fluid main-bg">
-        <div class="container">
-          <h2 class="display-4 text-white">Welcome</h2>
-          <p class="lead text-white font-weight-bolder">
-            Millions of movies, TV shows to discover. Explore now.
-          </p>
-          <div class="wrap">
-            <div class="search">
-               <input type="text" class="searchTerm" placeholder="What are you looking for?">
-               <button type="submit" class="searchButton" onclick="window.location='search.html';">
-                 <i class="fa fa-search"></i>
-              </button>
+        <div class="jumbotron jumbotron-fluid main-bg">
+            <div class="container">
+                <h2 class="display-4 text-white">Welcome</h2>
+                <p class="lead text-white font-weight-bolder">
+                    Millions of movies, TV shows to discover. Explore now.
+                </p>
+                <div class="wrap">
+                    <div class="search">
+                        <input type="text" class="searchTerm" placeholder="What are you looking for?">
+                        <button type="submit" class="searchButton" onclick="window.location='search.html';">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-         </div>
         </div>
-      </div>
     </section>
 
     <section class="movie-catalog-section">
 
         <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">Movies</span></h3>
 
-        <div class="horizontal-catalog scrollmenu">
-        
-          <div class="card media-card bg-dark rounded hoverable">
+        <div class="row container-fluid">
 
-            <!-- Card image -->
-            <div class="view overlay zoom">
-              <img class="card-img-top media-image" src="https://image.tmdb.org/t/p/original/1P3QtW1IkivqDrKbbwuR0zCYIf8.jpg"
-                alt="Card image cap">
-              <a>
-                <div class="mask rgba-white-slight"></div>
-              </a>
+        <div th:each="movie : ${trendingMovies}" class="horizontal-catalog col-lg-3 col-md-4 col-sm-2">
+
+            <div class="card media-card bg-dark rounded hoverable">
+
+                <!-- Card image -->
+                <div class="view overlay zoom">
+                    <img class="card-img-top media-image"
+                         th:src="'https://image.tmdb.org/t/p/original' + ${movie.poster}"
+                         th:alt="${movie.title}">
+                    <a>
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+                <!-- Card image -->
+
+
+                <!-- Card content -->
+                <div class="card-body bg-dark white-text rounded-bottom">
+                    <a class="activator waves-effect mr-4"></a>
+                    <h6 class="card-title" th:text="${movie.title}"></h6>
+                    <P class="text-muted" th:text="${movie.releaseDate.toString()}"></P>
+                </div>
+                <!-- Card content -->
+
             </div>
-
-            
-            <!-- Card content -->
-            <div class="card-body bg-dark white-text rounded-bottom">
-          
-              <!-- Social shares button -->
-              <a class="activator waves-effect mr-4"></a>
-              <!-- Title -->
-              <h4 class="card-title">title</h4>
-
-              <P class="text-muted">fdsfsdfsdfsdgdfgfdfgfgfd</P>
-            
-              
-            </div>
-          
-          </div>
-
-          
 
         </div>
-
-  </section>
-
-   <section class="tv-catalog-section">
-
-      <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">TV Shows</span></h3>
-
-      <div class="horizontal-catalog scrollmenu">
-      
-        <div class="card media-card bg-dark hoverable">
-
-          <!-- Card image -->
-          <div class="view overlay zoom">
-            <img class="card-img-top media-image" src="https://image.tmdb.org/t/p/original/1P3QtW1IkivqDrKbbwuR0zCYIf8.jpg"
-              alt="Card image cap">
-            <a>
-              <div class="mask rgba-white-slight"></div>
-            </a>
-          </div>
-        
-          <!-- Card content -->
-          <div class="card-body bg-dark white-text rounded-bottom">
-        
-            <!-- Social shares button -->
-            <a class="activator waves-effect mr-4"></a>
-            <!-- Title -->
-            <h4 class="card-title">title</h4>
-
-            <P class="text-muted">fdsfsdfsdfsdgdfgfdfgfgfd</P>
-            
-          </div>
-        
         </div>
 
-        
+    </section>
 
-      </div>
+    <section class="tv-catalog-section">
 
+        <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">TV Shows</span></h3>
 
+        <div class="row container-fluid">
 
-  </section>
+        <div th:each="tv : ${trendingTv}" class="horizontal-catalog col-lg-3 col-md-4 col-sm-2">
 
-  <section>
-    <!--Modal: Login / Register Form-->
-<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog cascading-modal" role="document">
-    <!--Content-->
-    <div class="modal-content">
+            <div class="card media-card bg-dark hoverable">
 
-      <!--Modal cascading tabs-->
-      <div class="modal-c-tabs">
+                <!-- Card image -->
+                <div class="view overlay zoom">
+                    <img class="card-img-top media-image"
+                         th:src="'https://image.tmdb.org/t/p/original' + ${tv.poster}"
+                         th:alt="${tv.title}">
+                    <a>
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
 
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs tabs-2 bg-danger darken-3" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
-              Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
-              Register</a>
-          </li>
-        </ul>
+                <!-- Card content -->
+                <div class="card-body bg-dark white-text rounded-bottom">
 
-        <!-- Tab panels -->
-        <div class="tab-content">
-          <!--Panel 7-->
-          <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+                    <a class="activator waves-effect mr-4"></a>
+                    <h6 class="card-title" th:text="${tv.title}"></h6>
+                    <P class="text-muted" th:text="${tv.releaseDate}"></P>
 
-            <!--Body-->
-            <div class="modal-body mb-1">
-              <div class="md-form form-sm mb-5">
-                <i class="fas fa-envelope prefix"></i>
-                <input type="email" id="modalLRInput10" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput10">Your email</label>
-              </div>
-
-              <div class="md-form form-sm mb-4">
-                <i class="fas fa-lock prefix"></i>
-                <input type="password" id="modalLRInput11" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput11">Your password</label>
-              </div>
-              <div class="text-center mt-2">
-                <button class="btn btn-danger">Log in <i class="fas fa-sign-in ml-1"></i></button>
-                
-            <button type="button" class="btn btn-outline-danger waves-effect ml-auto" data-dismiss="modal">Close</button>
-           
-
-              </div>
-            </div>
-
-          </div>
-          <!--/.Panel 7-->
-
-          <!--Panel 8-->
-          <div class="tab-pane fade" id="panel8" role="tabpanel">
-
-            <!--Body-->
-            <div class="modal-body">
-              <div class="md-form form-sm mb-5">
-                <i class="fas fa-envelope prefix"></i>
-                <input type="email" id="modalLRInput12" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput12">Your email</label>
-              </div>
-
-              <div class="md-form form-sm mb-5">
-                <i class="fas fa-lock prefix"></i>
-                <input type="password" id="modalLRInput13" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput13">Your password</label>
-              </div>
-
-              <div class="md-form form-sm mb-4">
-                <i class="fas fa-lock prefix"></i>
-                <input type="password" id="modalLRInput14" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput14">Repeat password</label>
-              </div>
-
-              <div class="text-center form-sm mt-2">
-                <button class="btn btn-danger">Sign up <i class="fas fa-sign-in ml-1"></i></button>
-                <button type="button" class="btn btn-outline-danger waves-effect ml-auto" data-dismiss="modal">Close</button>
-           
-
-              </div>
+                </div>
 
             </div>
-           
-          </div>
-          <!--/.Panel 8-->
+
+
+        </div>
         </div>
 
-      </div>
-    </div>
-    <!--/.Content-->
-  </div>
-</div>
-<!--Modal: Login / Register Form-->
-  </section>
+
+    </section>
+
+    <section>
+        <!--Modal: Login / Register Form-->
+        <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Modal cascading tabs-->
+                    <div class="modal-c-tabs">
+
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs md-tabs tabs-2 bg-danger darken-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i
+                                        class="fas fa-user mr-1"></i>
+                                    Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i
+                                        class="fas fa-user-plus mr-1"></i>
+                                    Register</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panels -->
+                        <div class="tab-content">
+                            <!--Panel 7-->
+                            <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+                                <!--Body-->
+                                <div class="modal-body mb-1">
+                                    <div class="md-form form-sm mb-5">
+                                        <i class="fas fa-envelope prefix"></i>
+                                        <input type="email" id="modalLRInput10"
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput10">Your
+                                            email</label>
+                                    </div>
+
+                                    <div class="md-form form-sm mb-4">
+                                        <i class="fas fa-lock prefix"></i>
+                                        <input type="password" id="modalLRInput11"
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput11">Your
+                                            password</label>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <button class="btn btn-danger">Log in <i class="fas fa-sign-in ml-1"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-outline-danger waves-effect ml-auto"
+                                                data-dismiss="modal">Close
+                                        </button>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--/.Panel 7-->
+
+                            <!--Panel 8-->
+                            <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+                                <!--Body-->
+                                <div class="modal-body">
+                                    <div class="md-form form-sm mb-5">
+                                        <i class="fas fa-envelope prefix"></i>
+                                        <input type="email" id="modalLRInput12"
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput12">Your
+                                            email</label>
+                                    </div>
+
+                                    <div class="md-form form-sm mb-5">
+                                        <i class="fas fa-lock prefix"></i>
+                                        <input type="password" id="modalLRInput13"
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput13">Your
+                                            password</label>
+                                    </div>
+
+                                    <div class="md-form form-sm mb-4">
+                                        <i class="fas fa-lock prefix"></i>
+                                        <input type="password" id="modalLRInput14"
+                                               class="form-control form-control-sm validate">
+                                        <label data-error="wrong" data-success="right" for="modalLRInput14">Repeat
+                                            password</label>
+                                    </div>
+
+                                    <div class="text-center form-sm mt-2">
+                                        <button class="btn btn-danger">Sign up <i class="fas fa-sign-in ml-1"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger waves-effect ml-auto"
+                                                data-dismiss="modal">Close
+                                        </button>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!--/.Panel 8-->
+                        </div>
+
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!--Modal: Login / Register Form-->
+    </section>
 
 </main>
 
-  <!-- Footer -->
-<footer class="page-footer font-small bg-dark pt-4">
-
-  <!-- Footer Elements -->
-  <div class="container">
-
-    <!-- Social buttons -->
-    <ul class="list-unstyled list-inline text-center">
-      <li class="list-inline-item">
-        <a class="btn-floating btn-fb mx-1">
-          <i class="fab fa-facebook-f"> </i>
-        </a>
-      </li>
-      <li class="list-inline-item">
-        <a class="btn-floating btn-tw mx-1">
-          <i class="fab fa-twitter"> </i>
-        </a>
-      </li>
-      <li class="list-inline-item">
-        <a class="btn-floating btn-gplus mx-1">
-          <i class="fab fa-google-plus-g"> </i>
-        </a>
-      </li>
-      <li class="list-inline-item">
-        <a class="btn-floating btn-li mx-1">
-          <i class="fab fa-linkedin-in"> </i>
-        </a>
-      </li>
-      <li class="list-inline-item">
-        <a class="btn-floating btn-dribbble mx-1">
-          <i class="fab fa-dribbble"> </i>
-        </a>
-      </li>
-    </ul>
-    <!-- Social buttons -->
-
-  </div>
-  <!-- Footer Elements -->
-
-  <!-- Copyright -->
-  <div class="footer-copyright text-center py-3 text-white">© 2021 Copyright: <span class="text-danger font-weight-bold"> rateIT</span>
-  </div>
-  <!-- Copyright -->
-
-</footer>
+<!-- Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
 <!-- Footer -->
 
+<!-- End your project here-->
 
+<!-- jQuery -->
+<script type="text/javascript" th:src="@{js/jquery.min.js}" src="js/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" th:src="@{js/mdb.min.js}" src="js/mdb.min.js"></script>
 
+<script type="text/javascript" th:src="@{js/script.js}" src="js/script.js"></script>
 
+<!-- Your custom scripts (optional) -->
+<script type="text/javascript">
+    $(document).ready(function () {
 
-
-  <!-- End your project here-->
-
-  <!-- jQuery -->
-  <script type="text/javascript" th:src="@{js/jquery.min.js}" src="js/jquery.min.js"></script>
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" th:src="@{js/mdb.min.js}" src="js/mdb.min.js"></script>
-
-  <script type="text/javascript" th:src="@{js/script.js}" src="js/script.js"></script>
-
-  <!-- Your custom scripts (optional) -->
-  <script type="text/javascript">
-   $(document).ready(function() {
-
-    // SideNav Button Initialization
-    $(".button-collapse").sideNav();
-    // SideNav Scrollbar Initialization
-    var sideNavScrollbar = document.querySelector('.custom-scrollbar');
-    var ps = new PerfectScrollbar(sideNavScrollbar);
-    }) 
-  </script>
+        // SideNav Button Initialization
+        $(".button-collapse").sideNav();
+        // SideNav Scrollbar Initialization
+        var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+        var ps = new PerfectScrollbar(sideNavScrollbar);
+    })
+</script>
 
 </body>
 </html>
