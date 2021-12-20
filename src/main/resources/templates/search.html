@@ -1,260 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>rateIT</title>
     <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
     <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
-    <link rel="stylesheet" href="css/mdb.min.css" />
+    <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    <link rel="stylesheet" href="css/style.css" />
+    <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
   </head>
   <body class="hidden-sn elegant-color">
-    <header class="mb-lg-5 mb-2">
-      <!-- Sidebar navigation -->
-      <div id="slide-out" class="side-nav">
-        <ul class="custom-scrollbar">
-          <!-- Logo -->
-          <li>
-            <div class="logo-wrapper waves-light">
-              <a href="#"
-                ><img
-                  src="https://mdbootstrap.com/img/logo/mdb-transparent.png"
-                  class="img-fluid flex-center"
-              /></a>
-            </div>
-          </li>
-          <!--/. Logo -->
 
-          <!--Search Form-->
-          <!-- <li>
-          <form class="search-form" role="search">
-            <div class="form-group md-form mt-0 pt-1 waves-light">
-              <input type="text" class="form-control" placeholder="Search">
-            </div>
-          </form>
-        </li> -->
-          <!--/.Search Form-->
-          <!-- Side navigation links -->
-          <li>
-            <ul class="collapsible collapsible-accordion">
-              <li>
-                <a class="collapsible-header waves-effect arrow-r"
-                  ><i class="fas fa-film"></i>
-                  Movies
-                  <i class="fas fa-angle-down rotate-icon"></i
-                ></a>
-                <div class="collapsible-body">
-                  <ul>
-                    <li><a href="#" class="waves-effect">Popular</a></li>
-                    <li><a href="#" class="waves-effect">Now Playing</a></li>
-                    <li><a href="#" class="waves-effect">Upcoming</a></li>
-                    <li><a href="#" class="waves-effect">Top Rated</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <a class="collapsible-header waves-effect arrow-r"
-                  ><i class="fas fa-video"></i>
-                  TV Shows
-                  <i class="fas fa-angle-down rotate-icon"></i
-                ></a>
-                <div class="collapsible-body">
-                  <ul>
-                    <li><a href="#" class="waves-effect">Popular</a></li>
-                    <li><a href="#" class="waves-effect">Airing Today</a></li>
-                    <li><a href="#" class="waves-effect">On TV</a></li>
-                    <li><a href="#" class="waves-effect">Top Rated</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <a class="collapsible-header waves-effect arrow-r"
-                  ><i class="fas fa-eye"></i> About<i
-                    class="fas fa-angle-down rotate-icon"
-                  ></i
-                ></a>
-                <div class="collapsible-body">
-                  <ul>
-                    <li><a href="#" class="waves-effect">Introduction</a></li>
-                    <li>
-                      <a href="#" class="waves-effect">Monthly meetings</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <a class="collapsible-header waves-effect arrow-r"
-                  ><i class="fas fa-envelope-o"></i> Contact me<i
-                    class="fas fa-angle-down rotate-icon"
-                  ></i
-                ></a>
-                <div class="collapsible-body">
-                  <ul>
-                    <li><a href="#" class="waves-effect">FAQ</a></li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <!--/. Side navigation links -->
-        </ul>
-        <div class="mask-strong"></div>
-      </div>
-      <!--/. Sidebar navigation -->
-      <!-- Navbar -->
-      <nav
-        class="
-          navbar
-          bg-dark
-          fixed-top
-          navbar-toggleable-md navbar-expand-lg
-          scrolling-navbar
-          double-nav
-        "
-      >
-        <!-- SideNav slide-out button -->
-        <div class="float-left">
-          <a href="#" data-activates="slide-out" class="button-collapse"
-            ><i class="fas fa-bars"></i
-          ></a>
-        </div>
-
-        <!-- Breadcrumb-->
-        <div class="breadcrumb-dn mr-auto">
-          <p class="lead">rateIT</p>
-        </div>
-
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav ml-5 mr-auto">
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownMenuLink"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Movies
-              </a>
-              <div
-                class="dropdown-menu dropdown-menu-right dropdown-dark"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <a class="dropdown-item" href="#">Popular</a>
-                <a class="dropdown-item" href="#">Now Playing</a>
-                <a class="dropdown-item" href="#">Upcoming</a>
-                <a class="dropdown-item" href="#">Top Rated</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownMenuLink"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                TV Shows
-              </a>
-              <div
-                class="dropdown-menu dropdown-menu-right dropdown-dark"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <a class="dropdown-item" href="#">Popular</a>
-                <a class="dropdown-item" href="#">Airing Today</a>
-                <a class="dropdown-item" href="#">On TV</a>
-                <a class="dropdown-item" href="#">Top Rated</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <ul class="nav navbar-nav nav-flex-icons ml-auto text-white">
-          <li class="nav-item">
-            <a class="nav-link"
-              ><i class="fas fa-envelope"></i>
-              <span class="clearfix d-none d-sm-inline-block">Contact</span></a
-            >
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link"
-              ><i class="fas fa-bell"></i>
-              <span class="clearfix d-none d-sm-inline-block"
-                >Notifications</span
-              ></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link"
-              ><i class="fas fa-user"></i>
-              <span class="clearfix d-none d-sm-inline-block"
-                >Login/Register</span
-              ></a
-            >
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              id="navbarDropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <div
-              class="dropdown-menu dropdown-menu-right dropdown-dark"
-              aria-labelledby="navbarDropdownMenuLink"
-            >
-              <a class="dropdown-item" href="#">Friends</a>
-              <a class="dropdown-item" href="#">something</a>
-              <a class="dropdown-item" href="#">something</a>
-            </div>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.Navbar -->
-    </header>
+  <!-- header -->
+  <header th:insert="fragments/header :: header"></header>
+  <!-- header -->
 
     <main class="pt-4">
 
       <section class="search-result-section">
         <h3 class="pt-2 pl-4 font-weight-bold text-white pb-2">
-          Search Results for <span class="text-danger">Search</span>
+          Search Results for <span class="text-danger" th:text="${search}">Search</span>
         </h3>
 
         <div class="result-section container-fluid">
           <!-- News jumbotron -->
-          <div class="text-center hoverable bg-dark text-white p-2 mb-3">
+          <div th:each="media : ${mediaList}" class="text-center hoverable bg-dark text-white p-2 mb-3">
             <!-- Grid row -->
-            <div class="row">
+            <div class="row" >
               <!-- Grid column -->
               <div class="col-md-3">
                 <!-- Featured image -->
                 <div class="view overlay zoom">
                   <img
-                    src="https://image.tmdb.org/t/p/original/1P3QtW1IkivqDrKbbwuR0zCYIf8.jpg"
                     class="img-fluid"
-                    alt="Sample image for first version of blog listing"
-                  />
+                    th:src="'https://image.tmdb.org/t/p/original' + ${media.poster}"
+                    th:alt="${media.title != null} ? ${media.title} : ${media.name}"/>
+
                   <a>
                     <div class="mask rgba-white-slight"></div>
                   </a>
@@ -265,17 +54,16 @@
               <!-- Grid column -->
               <div class="col-md-9 text-md-left mt-3">
                
-                <h4 class="h4 mb-4">media title</h4>
+                <h4 th:text="${media.title != null} ? ${media.title} : ${media.name}" class="h4 mb-4">media title</h4>
 
-                <p class="font-weight-normal text-wrap">
+                <p class="font-weight-normal text-wrap" th:text="${media.overview}">
                   media overview
                 </p>
-                <p class="font-weight-normal">
-                  by <a><strong>Carine Fox</strong></a
-                  >, 19/08/2016
+                <p class="font-weight-normal" th:text="${media.releaseDate != null} ? ${media.releaseDate.toString()} : ${media.firstAirDate.toString()}">
+                   date
                 </p>
 
-                <a class="btn btn-danger btn-sm mb-2">Read more</a>
+                <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}" class="btn btn-danger btn-sm mb-2" >Read more</a>
 
               </div>
               <!-- Grid column -->
@@ -283,47 +71,6 @@
             <!-- Grid row -->
           </div>
           <!-- News jumbotron -->
-
-          <div class="text-center hoverable bg-dark text-white p-2">
-            <!-- Grid row -->
-            <div class="row">
-              <!-- Grid column -->
-              <div class="col-md-3">
-                <!-- Featured image -->
-                <div class="view overlay zoom">
-                  <img
-                    src="https://image.tmdb.org/t/p/original/1P3QtW1IkivqDrKbbwuR0zCYIf8.jpg"
-                    class="img-fluid"
-                    alt="Sample image for first version of blog listing"
-                  />
-                  <a>
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-              <!-- Grid column -->
-
-              <!-- Grid column -->
-              <div class="col-md-9 text-md-left mt-3">
-               
-                <h4 class="h4 mb-4">media title</h4>
-
-                <p class="font-weight-normal text-wrap">
-                  media overview
-                </p>
-                <p class="font-weight-normal">
-                  by <a><strong>Carine Fox</strong></a
-                  >, 19/08/2016
-                </p>
-
-                <a class="btn btn-danger btn-sm mb-2">Read more</a>
-
-              </div>
-              <!-- Grid column -->
-            </div>
-            <!-- Grid row -->
-          </div>
-
         </div>
 
 
@@ -357,70 +104,34 @@
   
   </section>
 
-    <footer class="page-footer font-small bg-dark pt-4">
-      <!-- Footer Elements -->
-      <div class="container">
-        <!-- Social buttons -->
-        <ul class="list-unstyled list-inline text-center">
-          <li class="list-inline-item">
-            <a class="btn-floating btn-fb mx-1">
-              <i class="fab fa-facebook-f"> </i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="btn-floating btn-tw mx-1">
-              <i class="fab fa-twitter"> </i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="btn-floating btn-gplus mx-1">
-              <i class="fab fa-google-plus-g"> </i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="btn-floating btn-li mx-1">
-              <i class="fab fa-linkedin-in"> </i>
-            </a>
-          </li>
-          <li class="list-inline-item">
-            <a class="btn-floating btn-dribbble mx-1">
-              <i class="fab fa-dribbble"> </i>
-            </a>
-          </li>
-        </ul>
-        <!-- Social buttons -->
-      </div>
-      <!-- Footer Elements -->
+  <!-- Footer -->
+  <footer th:replace="fragments/footer :: footer"></footer>
+  <!-- Footer -->
 
-      <!-- Copyright -->
-      <div class="footer-copyright text-center py-3 text-white">
-        © 2021 Copyright: rateIT
-      </div>
-      <!-- Copyright -->
-    </footer>
 
     <!-- End your project here-->
 
-    <!-- jQuery -->
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="js/popper.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="js/mdb.min.js"></script>
+  <!-- jQuery -->
+  <script type="text/javascript" th:src="@{js/jquery.min.js}" src="js/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" th:src="@{js/mdb.min.js}" src="js/mdb.min.js"></script>
 
-    <script type="text/javascript" src="js/script.js"></script>
+  <script type="text/javascript" th:src="@{js/script.js}" src="js/script.js"></script>
 
-    <!-- Your custom scripts (optional) -->
-    <script type="text/javascript">
-      $(document).ready(function () {
-        // SideNav Button Initialization
-        $(".button-collapse").sideNav();
-        // SideNav Scrollbar Initialization
-        var sideNavScrollbar = document.querySelector(".custom-scrollbar");
-        var ps = new PerfectScrollbar(sideNavScrollbar);
-      });
-    </script>
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+      // SideNav Button Initialization
+      $(".button-collapse").sideNav();
+      // SideNav Scrollbar Initialization
+      var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+      var ps = new PerfectScrollbar(sideNavScrollbar);
+    })
+  </script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.rateit.controller;
 
+import com.example.rateit.model.Media;
 import com.example.rateit.model.Movie;
 import com.example.rateit.model.TV;
 import com.example.rateit.service.APIService;
@@ -43,7 +44,7 @@ public class APIController {
     }
 
     @GetMapping("/search/{term}")
-    private List search(@PathVariable String term) throws JsonProcessingException {
+    private List<Media> search(@PathVariable String term) throws JsonProcessingException {
         return apiService.search(term);
     }
 }

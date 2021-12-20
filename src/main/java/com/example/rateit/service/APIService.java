@@ -1,7 +1,6 @@
 package com.example.rateit.service;
 
-import com.example.rateit.model.Movie;
-import com.example.rateit.model.TV;
+import com.example.rateit.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +30,54 @@ public class APIService {
     public Movie getMovie(int id){
         String movieUrl = url + "movie/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         return restTemplate.getForObject(movieUrl, Movie.class);
+    }
+
+    public List getMovieCastReviewsAndSimilarMovies(int id) throws JsonProcessingException {
+        // https://api.themoviedb.org/3/movie/557/credits?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US
+        String movieCastUrl = url + "movie/" + id + String.format("/credits?api_key=%s&language=en-US",apiKey);
+        String json = restTemplate.getForObject(movieCastUrl,String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        JsonNode root = objectMapper.readTree(json);
+        ArrayNode arrayNode = (ArrayNode) root.get("cast");
+        Iterator<JsonNode> node = arrayNode.elements();
+        List<Cast> castList = new ArrayList<>();
+        while (node.hasNext()){
+            JsonNode castNode = node.next();
+            Cast cast = objectMapper.treeToValue(castNode,Cast.class);
+            castList.add(cast);
+        }
+        // https://api.themoviedb.org/3/movie/557/similar?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&page=1
+        String similarMoviesUrl = url + "movie/" + id + String.format("/similar?api_key=%s&language=en-US&page=1",apiKey);
+        json = restTemplate.getForObject(similarMoviesUrl,String.class);
+        root = objectMapper.readTree(json);
+        arrayNode = (ArrayNode) root.get("results");
+        Iterator<JsonNode> nodes = arrayNode.elements();
+        List<Movie> similarMovies = new ArrayList<>();
+        while (nodes.hasNext()){
+            JsonNode movieNode = nodes.next();
+            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            similarMovies.add(movie);
+        }
+        // https://api.themoviedb.org/3/movie/557/reviews?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&page=1
+        String movieReviewUrl = url + "movie/" + id + String.format("/reviews?api_key=%s&language=en-US&page=1",apiKey);
+        json = restTemplate.getForObject(movieReviewUrl,String.class);
+        root = objectMapper.readTree(json);
+        arrayNode = (ArrayNode) root.get("results");
+        Iterator<JsonNode> reviewNodes = arrayNode.elements();
+        List<Review> movieReviews = new ArrayList<>();
+        while (reviewNodes.hasNext()){
+            JsonNode reviewNode = reviewNodes.next();
+            Review review = objectMapper.treeToValue(reviewNode,Review.class);
+            movieReviews.add(review);
+        }
+        return new ArrayList<>(){
+            {
+                add(castList);
+                add(similarMovies);
+                add(movieReviews);
+            }
+        };
     }
 
     public TV getTV(int id){
@@ -72,7 +119,7 @@ public class APIService {
         return tvList;
     }
 
-    public List search(String term) throws JsonProcessingException {
+    public List<Media> search(String term) throws JsonProcessingException {
         // https://api.themoviedb.org/3/search/multi?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&query=far%20from%20home&page=1&include_adult=false
         String searchUrl = url + "search/multi" + String.format("?api_key=%s&language=en-US&query=%s&page=1&include_adult=false",apiKey,term);
         String json = restTemplate.getForObject(searchUrl,String.class);
@@ -81,21 +128,17 @@ public class APIService {
         JsonNode root = objectMapper.readTree(json);
         ArrayNode arrayNode = (ArrayNode) root.get("results");
         Iterator<JsonNode> node = arrayNode.elements();
-        List<Movie> movieList = new ArrayList<>();
-        List<TV> tvList = new ArrayList<>();
+
+        List<Media> mediaList = new ArrayList<>();
+
         while (node.hasNext()){
             JsonNode mediaNode = node.next();
-            if (mediaNode.get("media_type").asText().equalsIgnoreCase("movie")){
-                Movie movie = objectMapper.treeToValue(mediaNode,Movie.class);
-                movieList.add(movie);
-            }else if (mediaNode.get("media_type").asText().equalsIgnoreCase("tv")){
-                TV tv = objectMapper.treeToValue(mediaNode,TV.class);
-                tvList.add(tv);
+            if (mediaNode.get("media_type").asText().equalsIgnoreCase("movie") || mediaNode.get("media_type").asText().equalsIgnoreCase("tv")){
+                Media media = objectMapper.treeToValue(mediaNode, Media.class);
+                mediaList.add(media);
             }
         }
-        System.out.println(movieList);
-        System.out.println(tvList);
-        return new ArrayList<Integer>();
+        return mediaList;
     }
 
 }

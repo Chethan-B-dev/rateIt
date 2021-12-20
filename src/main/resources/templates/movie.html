@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>rateIT</title>
+  <!-- MDB icon -->
+  <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+</head>
+  <body class="hidden-sn elegant-color">
+
+  <!-- header -->
+  <header th:replace="fragments/header :: header"></header>
+  <!-- header -->
+
+  <main class="pt-4">
+
+    <!-- movie details -->
+    <div class="container-fluid">
+
+
+        <section>
+
+            <div class="row my-4 pt-5 wow fadeIn" data-wow-delay="0.4s">
+  
+              <div class="col-lg-4 col-md-12 mb-4 text-center view overlay zoom">
+                <img
+                        class="img-fluid z-depth-2 rounded"
+                        th:src="'https://image.tmdb.org/t/p/original' + ${movie.poster}"
+                        th:alt="${movie.title}">
+              </div>
+             
+              <div class="col-lg-8 col-md-12 mb-4 text-left">
+  
+                <h2 class="mb-3 text-danger wow fadeIn" data-wow-delay="0.2s"><strong
+                    class="font-weight-bold" th:text="${movie.title}">title</strong></h2>
+  
+                <p class="text-white" th:text="${genres}">
+                    genres
+                </p>
+
+                <p class="grey-text mb-4" th:text="${movie.overview}">overview</p>
+
+              </div>
+              
+  
+            </div>
+            
+          </section>
+
+          <hr class="bg-white">
+    </div>
+    <!-- movie details -->
+
+
+    <!-- cast -->
+    <div class="container-fluid">
+     <section class="text-center pb-4 text-white">
+
+        <!--Section heading-->
+        <h1 class="mb-5 pt-4 text-center text-danger wow fadeIn" data-wow-delay="0.2s"><strong
+            class="font-weight-bold">Cast</h1>
+
+        <div class="row">
+
+          <!--Carousel Wrapper-->
+          <div id="multi-item-example" class="carousel testimonial-carousel slide carousel-multi-item mb-5"
+            data-ride="carousel">
+
+            <!--Controls-->
+            <div class="controls-top">
+              <a class="btn-floating btn-danger btn-sm" href="#multi-item-example" data-slide="prev"><i
+                  class="fas fa-chevron-left"></i></a>
+              <a class="btn-floating btn-danger btn-sm" href="#multi-item-example" data-slide="next"><i
+                  class="fas fa-chevron-right"></i></a>
+            </div>
+            <!--Controls-->
+
+            <!--Slides-->
+            <div class="carousel-inner" role="listbox">
+
+              <!--First slide-->
+              <div class="carousel-item active">
+
+                <!--Grid column-->
+                <div class="col-md-4">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(26).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">Anna Deynah</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Web Designer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>Lorem ipsum dolor sit amet,
+                      consectetur adipisicing elit. Quod eos id officiis hic tenetur.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star-half-alt"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-4 clearfix d-none d-md-block">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(27).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">John Doe</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Web Developer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>Ut enim ad minima veniam, quis
+                      nostrum exercitationem ullam corporis laboriosam.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-4 clearfix d-none d-md-block">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(31).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">Abbey Clark</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Photographer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>Quis autem vel eum iure
+                      reprehenderit qui in ea voluptate velit esse quam nihil molestiae.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="far fa-star"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+              </div>
+              <!--First slide-->
+
+              <!--Second slide-->
+              <div class="carousel-item">
+
+                <!--Grid column-->
+                <div class="col-md-4">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(4).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">Blake Dabney</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Web Designer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>Ut enim ad minima veniam, quis
+                      nostrum exercitationem ullam corporis laboriosam.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star-half-alt"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-4 clearfix d-none d-md-block">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(6).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">Andrea Clay</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Front-end developer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>Lorem ipsum dolor sit amet,
+                      consectetur adipisicing elit. Quod eos id officiis hic tenetur quae.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-4 clearfix d-none d-md-block">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(7).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">Cami Gosse</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Phtographer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>At vero eos et accusamus et
+                      iusto odio dignissimos ducimus qui blanditiis praesentium.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="far fa-star"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+              </div>
+              <!--Second slide-->
+
+              <!--Third slide-->
+              <div class="carousel-item">
+
+                <!--Grid column-->
+                <div class="col-md-4">
+                  <div class="testimonial">
+                    <!--Avatar-->
+                    <div class="avatar mx-auto">
+                      <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(8).jpg"
+                        class="rounded-circle img-fluid">
+                    </div>
+                    <!--Content-->
+                    <h4 class="font-weight-bold mt-4">Bobby Haley</h4>
+                    <h6 class="blue-text font-weight-bold my-3">Web Developer</h6>
+                    <p class="font-weight-normal"><i class="fas fa-quote-left pr-2"></i>Lorem ipsum dolor sit amet,
+                      consectetur adipisicing elit. Quod eos id officiis hic tenetur quae.</p>
+                    <!--Review-->
+                    <div class="grey-text">
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                      <i class="fas fa-star"> </i>
+                    </div>
+                  </div>
+                </div>
+                <!--Grid column-->
+
+               
+                <!--Grid column-->
+
+              </div>
+              <!--Third slide-->
+
+            </div>
+            <!--Slides-->
+
+          </div>
+          <!--Carousel Wrapper-->
+
+        </div>
+
+      </section>
+    </div>
+    <!-- cast -->
+
+    <hr class="bg-white">
+
+
+    <!-- reviews -->
+    <div class="container">
+        <section>
+          <!-- Main wrapper -->
+            <div class="comments-list text-center text-md-left text-white">
+              <div class="text-center my-5">
+                <h3 class="font-weight-bold text-danger"> Reviews
+                  <span class="badge indigo" th:text="${numberOfReviews}">0</span>
+                </h3>
+              </div>
+              <!-- First row -->
+              <div th:each="review : ${movieReviews}" class="row mb-5 ">
+                <!-- Image column -->
+                <div class="col-sm-2 col-12 mb-3">
+                  <!-- TODO: onerror render a default avatar image -->
+                  <img
+                    class="avatar rounded-circle z-depth-1-half"
+                    th:src="'https://image.tmdb.org/t/p/original' + ${review?.author?.avatar}"
+                    th:alt="${review?.author?.username}"/>
+
+                </div>
+                <!-- Image column -->
+
+                <!-- Content column -->
+                <div class="col-sm-10 col-12">
+                  <a>
+                    <h5 class="user-name font-weight-bold" th:text="${review?.author?.username}">John Doe</h5>
+                  </a>
+                  <div class="card-data">
+                    <ul class="list-unstyled">
+                      <li class="comment-date font-small" th:text="${review.createdAt}">
+                        <i class="far fa-clock-o"></i> Date</li>
+                    </ul>
+                  </div>
+                  <p class="article" th:text="${review.content}">content
+                  </p>
+                </div>
+                <!-- Content column -->
+              </div>
+              <!-- First row -->
+
+            </div>
+            <!-- Main wrapper -->
+
+          </section>
+    </div>
+    <!-- reviews -->
+
+    <hr class="bg-white">
+
+
+    <!-- similar movies -->
+    <div class="container-fluid">
+        <section class="movie-catalog-section">
+
+            <h3 class="pt-2 pl-3 font-weight-bold text-white">Similar <span class="text-danger">Movies</span></h3>
+    
+            <div class="horizontal-catalog scrollmenu">
+            
+              <div th:each="movie : ${similarMovies}" class="card media-card bg-dark rounded hoverable">
+    
+                <!-- Card image -->
+                <div class="view overlay zoom">
+                  <img class="card-img-top media-image"
+                       th:src="'https://image.tmdb.org/t/p/original' + ${movie.poster}"
+                       th:alt="${movie.title}">
+                  <a>
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+              
+                <!-- Card content -->
+                <div class="card-body bg-dark white-text rounded-bottom">
+              
+                  <!-- Social shares button -->
+                  <a class="activator waves-effect mr-4"></a>
+                  <!-- Title -->
+                  <h4 class="card-title" th:text="${movie.title}">title</h4>
+    
+                  <P class="text-muted" th:text="${movie.releaseDate.toString()}"></P>
+                
+                  
+                </div>
+              
+              </div>
+             
+            </div>
+    
+      </section>
+    </div>
+    <!-- similar movies -->
+
+
+</main>
+
+  <!-- Footer -->
+  <footer th:replace="fragments/footer :: footer"></footer>
+  <!-- Footer -->
+
+  <!-- End your project here-->
+
+  <!-- jQuery -->
+  <script type="text/javascript" th:src="@{js/jquery.min.js}" src="js/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" th:src="@{js/mdb.min.js}" src="js/mdb.min.js"></script>
+
+  <script type="text/javascript" th:src="@{js/script.js}" src="js/script.js"></script>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // SideNav Button Initialization
+      $(".button-collapse").sideNav();
+      // SideNav Scrollbar Initialization
+      var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+      var ps = new PerfectScrollbar(sideNavScrollbar);
+    })
+  </script>
+
+</body>
+</html>
