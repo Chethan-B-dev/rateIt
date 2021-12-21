@@ -2,13 +2,15 @@ package com.example.rateit.controller;
 
 import com.example.rateit.model.*;
 import com.example.rateit.service.APIService;
+import com.example.rateit.service.ListService;
+import com.example.rateit.service.MyUserDetails;
+import com.example.rateit.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -22,6 +24,12 @@ public class MainController {
 
     @Autowired
     private APIService apiService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ListService listService;
+
+
 
     @GetMapping
     public ModelAndView home() throws JsonProcessingException {
@@ -30,8 +38,19 @@ public class MainController {
         List<TV> trendingTv = apiService.getTrendingTV();
         mav.addObject("trendingMovies",trendingMovies);
         mav.addObject("trendingTv",trendingTv);
+        mav.addObject("user",new User());
         return mav;
     }
+
+    @PostMapping("/register")
+    public String processRegister(@ModelAttribute User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userService.save(user);
+        return "redirect:/?sucess-register";
+    }
+
 
     @GetMapping("/search")
     public ModelAndView search(@RequestParam String query) throws JsonProcessingException {
@@ -43,7 +62,7 @@ public class MainController {
     }
 
     @GetMapping("/movie/{id}")
-    public ModelAndView movie(@PathVariable int id) throws JsonProcessingException {
+    public ModelAndView movie(@PathVariable int id,@AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("movie");
         Movie movie = apiService.getMovie(id);
         if (movie == null) return new ModelAndView("redirect:/?error");
@@ -54,6 +73,16 @@ public class MainController {
         StringBuilder genreBuilder = new StringBuilder();
         for (Genre genre: movie.getGenres()) {
             genreBuilder.append(genre.getName()).append(" ,");
+        }
+        try{
+            User user = myUserDetails.getUser();
+            boolean hasWatched = listService.hasWatched(user.getId(),id);
+            boolean hasWished = listService.hasWished(user.getId(),id);
+            System.out.println(hasWatched + " " + hasWished);
+            mav.addObject("hasWatched",hasWatched);
+            mav.addObject("hasWished",hasWished);
+        }catch (NullPointerException ex){
+            System.out.println("user not logged in from /movie/id");
         }
         mav.addObject("movie",movie);
         mav.addObject("casts",casts);
@@ -78,6 +107,15 @@ public class MainController {
         List<Movie> movieList = apiService.getPopularMovies();
         mav.addObject("movieList",movieList);
         mav.addObject("topic","Popular Movies");
+        return mav;
+    }
+
+    @GetMapping("/list/movie/top")
+    public ModelAndView getTopRatedMovies() throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("list");
+        List<Movie> movieList = apiService.getTopRatedMovies();
+        mav.addObject("movieList",movieList);
+        mav.addObject("topic","Top Rated Movies");
         return mav;
     }
 
@@ -108,5 +146,38 @@ public class MainController {
         return mav;
     }
 
+    @GetMapping("/watchlist/{media}/{id}")
+    public ModelAndView addMediaToWatchList(@PathVariable String media,
+                                            @PathVariable int id,
+                                            @AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/" + media + "/" + id);
+        }
+        WatchList newMedia = new WatchList(user,media,id);
+        listService.saveWatchList(newMedia);
+        return new ModelAndView("redirect:/" + media + "/" + id);
+    }
+
+    @GetMapping("/wishlist/{media}/{id}")
+    public ModelAndView addMediaToWishList(@PathVariable String media,
+                                            @PathVariable int id,
+                                            @AuthenticationPrincipal MyUserDetails myUserDetails){
+
+        User user;
+
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/" + media + "/" + id);
+        }
+
+        WishList newMedia = new WishList(user,media,id);
+        listService.saveWishList(newMedia);
+        return new ModelAndView("redirect:/" + media + "/" + id);
+    }
 }
 

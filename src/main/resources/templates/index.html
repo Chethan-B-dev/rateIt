@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -162,34 +163,35 @@
                             <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
 
                                 <!--Body-->
-                                <div class="modal-body mb-1">
+
+                                <form th:action="@{/login}"
+                                      method="post">
+                                    <div class="modal-body mb-1">
                                     <div class="md-form form-sm mb-5">
                                         <i class="fas fa-envelope prefix"></i>
-                                        <input type="email" id="modalLRInput10"
-                                               class="form-control form-control-sm validate">
+                                        <input type="email" id="modalLRInput10" name="email"
+                                               class="form-control form-control-sm validate" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput10">Your
                                             email</label>
                                     </div>
 
                                     <div class="md-form form-sm mb-4">
                                         <i class="fas fa-lock prefix"></i>
-                                        <input type="password" id="modalLRInput11"
-                                               class="form-control form-control-sm validate">
+                                        <input type="password" id="modalLRInput11" name="password"
+                                               class="form-control form-control-sm validate" required minlength="3" maxlength="18">
                                         <label data-error="wrong" data-success="right" for="modalLRInput11">Your
                                             password</label>
                                     </div>
                                     <div class="text-center mt-2">
-                                        <button class="btn btn-danger">Log in <i class="fas fa-sign-in ml-1"></i>
+                                        <button type="submit" class="btn btn-danger">Log in <i class="fas fa-sign-in ml-1"></i>
                                         </button>
 
                                         <button type="button" class="btn btn-outline-danger waves-effect ml-auto"
                                                 data-dismiss="modal">Close
                                         </button>
-
-
                                     </div>
                                 </div>
-
+                                </form>
                             </div>
                             <!--/.Panel 7-->
 
@@ -197,43 +199,45 @@
                             <div class="tab-pane fade" id="panel8" role="tabpanel">
 
                                 <!--Body-->
-                                <div class="modal-body">
+
+                                <form th:action="@{/register}" th:object="${user}" method="post">
+                                    <div class="modal-body">
                                     <div class="md-form form-sm mb-5">
                                         <i class="fas fa-envelope prefix"></i>
-                                        <input type="email" id="modalLRInput12"
-                                               class="form-control form-control-sm validate">
+                                        <input type="text" id="modalLRInput12"
+                                               class="form-control form-control-sm validate" th:field="*{username}" required>
+                                        <label data-error="wrong" data-success="right" for="modalLRInput12">Your
+                                            username</label>
+                                    </div>
+
+                                    <div class="md-form form-sm mb-5">
+                                        <i class="fas fa-envelope prefix"></i>
+                                        <input type="email" id="modalLRInput14" th:field="*{email}"
+                                               class="form-control form-control-sm validate" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">Your
                                             email</label>
                                     </div>
 
                                     <div class="md-form form-sm mb-5">
                                         <i class="fas fa-lock prefix"></i>
-                                        <input type="password" id="modalLRInput13"
-                                               class="form-control form-control-sm validate">
+                                        <input type="password" id="modalLRInput13" th:field="*{password}"
+                                               class="form-control form-control-sm validate" required minlength="3" maxlength="18">
                                         <label data-error="wrong" data-success="right" for="modalLRInput13">Your
                                             password</label>
                                     </div>
 
-                                    <div class="md-form form-sm mb-4">
-                                        <i class="fas fa-lock prefix"></i>
-                                        <input type="password" id="modalLRInput14"
-                                               class="form-control form-control-sm validate">
-                                        <label data-error="wrong" data-success="right" for="modalLRInput14">Repeat
-                                            password</label>
-                                    </div>
 
                                     <div class="text-center form-sm mt-2">
-                                        <button class="btn btn-danger">Sign up <i class="fas fa-sign-in ml-1"></i>
+                                        <button type="submit" class="btn btn-danger">Sign up <i class="fas fa-sign-in ml-1"></i>
                                         </button>
                                         <button type="button" class="btn btn-outline-danger waves-effect ml-auto"
                                                 data-dismiss="modal">Close
                                         </button>
 
-
                                     </div>
 
                                 </div>
-
+                                </form>
                             </div>
                             <!--/.Panel 8-->
                         </div>

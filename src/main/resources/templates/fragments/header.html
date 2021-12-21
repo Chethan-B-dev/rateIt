@@ -1,3 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>rateIT</title>
+  <!-- MDB icon -->
+  <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+</head>
+<body class="hidden-sn elegant-color">
+
 <header th:fragment="header" class="mb-lg-5 mb-2">
 
   <!-- Sidebar navigation -->
@@ -6,7 +28,9 @@
       <!-- Logo -->
       <li>
         <div class="logo-wrapper waves-light">
-          <a href="#"><img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" class="img-fluid flex-center"></a>
+          <a href="/">
+              <h1 class="text-danger flex-center font-weight-bold">rateIt</h1>
+          </a>
         </div>
       </li>
 
@@ -17,13 +41,11 @@
             <i class="fas fa-angle-down rotate-icon"></i></a>
             <div class="collapsible-body">
               <ul>
-                <li><a href="#" class="waves-effect">Popular</a>
+                <li><a href="/list/movie/popular" class="waves-effect">Popular</a>
                 </li>
-                <li><a href="#" class="waves-effect">Now Playing</a>
+                <li><a href="/list/movie/upcoming" class="waves-effect">Upcoming</a>
                 </li>
-                <li><a href="#" class="waves-effect">Upcoming</a>
-                </li>
-                <li><a href="#" class="waves-effect">Top Rated</a>
+                <li><a href="/list/movie/top" class="waves-effect">Top Rated</a>
                 </li>
               </ul>
             </div>
@@ -33,35 +55,20 @@
             <i class="fas fa-angle-down rotate-icon"></i></a>
             <div class="collapsible-body">
               <ul>
-                <li><a href="#" class="waves-effect">Popular</a>
+                <li><a href="/list/tv/air" class="waves-effect">On TV</a>
                 </li>
-                <li><a href="#" class="waves-effect">Airing Today</a>
-                </li>
-                <li><a href="#" class="waves-effect">On TV</a>
-                </li>
-                <li><a href="#" class="waves-effect">Top Rated</a>
+                <li><a href="/list/tv/top" class="waves-effect">Top Rated</a>
                 </li>
               </ul>
             </div>
           </li>
-          <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-eye"></i> About<i class="fas fa-angle-down rotate-icon"></i></a>
-            <div class="collapsible-body">
-              <ul>
-                <li><a href="#" class="waves-effect">Introduction</a>
-                </li>
-                <li><a href="#" class="waves-effect">Monthly meetings</a>
-                </li>
-              </ul>
-            </div>
+
+<!--          th:if="${#authorization.expression('isAuthenticated()')}"-->
+
+          <li th:if="${#authorization.expression('isAuthenticated()')}">
+              <a class="text-white bg-dark waves-effect" th:href="@{/logout}">Logout</a>
           </li>
-          <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-envelope-o"></i> Contact me<i
-                  class="fas fa-angle-down rotate-icon"></i></a>
-            <div class="collapsible-body">
-              <ul>
-                <li> <a href="#" class="waves-effect">FAQ</a> </li>
-              </ul>
-            </div>
-          </li>
+
         </ul>
       </li>
       <!--/. Side navigation links -->
@@ -72,11 +79,10 @@
   <!-- Navbar -->
   <nav class="navbar bg-dark fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
     <!-- SideNav slide-out button -->
+
     <div class="float-left">
       <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
     </div>
-
-
 
     <!-- Breadcrumb-->
     <div class="breadcrumb-dn mr-auto">
@@ -93,6 +99,7 @@
           <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="/list/movie/popular">Popular</a>
             <a class="dropdown-item" href="/list/movie/upcoming">Upcoming</a>
+            <a class="dropdown-item" href="/list/movie/top">Top Rated</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -110,29 +117,57 @@
 
     <ul class="nav navbar-nav nav-flex-icons ml-auto text-white">
 
-      <li class="nav-item">
-        <a class="nav-link"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
-      </li>
-
 
       <li class="nav-item">
         <a class="nav-link "><i class="fas fa-bell text-danger animated swing infinite slow delay-1s"></i> <span class="clearfix d-none d-sm-inline-block">Notifications</span></a>
       </li>
-      <li class="nav-item">
+
+      <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}">
         <a class="nav-link" data-toggle="modal" data-target="#modalLRForm"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Login/Register</span></a>
       </li>
-      <li class="nav-item dropdown">
+
+      <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+        <a class="btn-sm btn-danger nav-link" th:href="@{/logout}">Logout</a>
+      </li>
+
+      <li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
+
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
-          Dropdown
+          Profile
         </a>
+
         <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Friends</a>
-          <a class="dropdown-item" href="#">something</a>
-          <a class="dropdown-item" href="#">something</a>
+          <a class="dropdown-item" href="/friends" th:if="${#authorization.expression('isAuthenticated()')}">Friends</a>
+          <a class="dropdown-item" href="#">My WatchList</a>
+          <a class="dropdown-item" href="#">My WishList</a>
+          <a class="dropdown-item" href="#">My Posts</a>
         </div>
+
       </li>
 
     </ul>
   </nav>
 </header>
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/script.js}"></script>
+
+<!-- Your custom scripts (optional) -->
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".button-collapse").sideNav();
+    var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+    var ps = new PerfectScrollbar(sideNavScrollbar);
+  })
+</script>
+
+</body>
+</html>

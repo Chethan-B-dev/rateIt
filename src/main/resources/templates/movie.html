@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -73,7 +74,16 @@
 
                 <p class="grey-text mb-4" th:text="${movie.overview}">overview</p>
 
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                  <a class="btn-sm btn-grey disabled text-white" th:if="${hasWatched}" th:href="@{'/watchlist/movie/' + ${movie.id}}">WatchList</a>
+                  <a class="btn-sm btn-danger" th:unless="${hasWatched}" th:href="@{'/watchlist/movie/' + ${movie.id}}">WatchList</a>
+                  <a class="btn-sm btn-outline-grey disabled text-white" th:if="${hasWished}" th:href="@{'/wishlist/movie/' + ${movie.id}}">WishList</a>
+                  <a class="btn-sm btn-outline-danger" th:unless="${hasWished}" th:href="@{'/wishlist/movie/' + ${movie.id}}">WishList</a>
+                </div>
+
               </div>
+
+
               
   
             </div>
@@ -83,7 +93,6 @@
           <hr class="bg-white">
     </div>
     <!-- movie details -->
-
 
     <!-- cast -->
     <div class="container-fluid">
@@ -148,7 +157,6 @@
 
     <hr class="bg-white">
 
-
     <!-- reviews -->
     <div class="container">
         <section>
@@ -202,7 +210,6 @@
 
     <hr class="bg-white">
 
-
     <!-- similar movies -->
     <div class="container-fluid">
         <section class="movie-catalog-section">
@@ -250,8 +257,6 @@
   <!-- Footer -->
   <footer th:replace="fragments/footer :: footer"></footer>
   <!-- Footer -->
-
-  <!-- End your project here-->
 
   <!-- jQuery -->
   <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>

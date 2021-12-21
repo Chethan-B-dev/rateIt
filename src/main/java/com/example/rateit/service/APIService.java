@@ -86,8 +86,12 @@ public class APIService {
     }
 
     public TV getTV(int id){
-        String movieUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
-        return restTemplate.getForObject(movieUrl, TV.class);
+        String tvUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
+        try {
+            return restTemplate.getForObject(tvUrl, TV.class);
+        }catch (HttpClientErrorException err){
+            return null;
+        }
     }
 
     public List<Movie> getTrendingMovies() throws JsonProcessingException {
@@ -141,6 +145,22 @@ public class APIService {
         return movieList;
     }
 
+    public List<Movie> getTopRatedMovies() throws JsonProcessingException {
+        String topRatedMovieUrl = url + "/movie/top_rated" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
+        String json = restTemplate.getForObject(topRatedMovieUrl,String.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        JsonNode root = objectMapper.readTree(json);
+        ArrayNode arrayNode = (ArrayNode) root.get("results");
+        Iterator<JsonNode> node = arrayNode.elements();
+        List<Movie> movieList = new ArrayList<>();
+        while (node.hasNext()){
+            JsonNode movieNode = node.next();
+            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            movieList.add(movie);
+        }
+        return movieList;
+    }
 
     public List<TV> getTrendingTV() throws JsonProcessingException {
         String trendingTVUrl = url + "trending/tv/day" + String.format("?api_key=%s",apiKey);
@@ -214,5 +234,7 @@ public class APIService {
         }
         return mediaList;
     }
+
+
 
 }
