@@ -1,6 +1,5 @@
 package com.example.rateit.controller;
 
-import com.example.rateit.MyUtilities;
 import com.example.rateit.model.*;
 import com.example.rateit.service.APIService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -47,13 +46,11 @@ public class MainController {
     public ModelAndView movie(@PathVariable int id) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("movie");
         Movie movie = apiService.getMovie(id);
+        if (movie == null) return new ModelAndView("redirect:/?error");
         List movieDetails = apiService.getMovieCastReviewsAndSimilarMovies(id);
         List<Cast> casts = (List<Cast>) movieDetails.get(0);
         List<Movie> similarMovies = (List<Movie>) movieDetails.get(1);
         List<Review> movieReviews = (List<Review>) movieDetails.get(2);
-        MyUtilities.print(casts);
-        MyUtilities.print(similarMovies);
-        MyUtilities.print(movieReviews);
         StringBuilder genreBuilder = new StringBuilder();
         for (Genre genre: movie.getGenres()) {
             genreBuilder.append(genre.getName()).append(" ,");
@@ -74,5 +71,42 @@ public class MainController {
         mav.addObject("tv",tv);
         return mav;
     }
+
+    @GetMapping("/list/movie/popular")
+    public ModelAndView getPopularMovies() throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("list");
+        List<Movie> movieList = apiService.getPopularMovies();
+        mav.addObject("movieList",movieList);
+        mav.addObject("topic","Popular Movies");
+        return mav;
+    }
+
+    @GetMapping("/list/movie/upcoming")
+    public ModelAndView getUpcomingMovies() throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("list");
+        List<Movie> movieList = apiService.getUpcomingMovies();
+        mav.addObject("movieList",movieList);
+        mav.addObject("topic","Upcoming Movies");
+        return mav;
+    }
+
+    @GetMapping("/list/tv/top")
+    public ModelAndView getTopRatedTv() throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("list");
+        List<TV> tvList = apiService.getTopRatedTV();
+        mav.addObject("tvList",tvList);
+        mav.addObject("topic","Top Rated TV Shows");
+        return mav;
+    }
+
+    @GetMapping("/list/tv/air")
+    public ModelAndView getOnAirTv() throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("list");
+        List<TV> tvList = apiService.getOnAirTV();
+        mav.addObject("tvList",tvList);
+        mav.addObject("topic","On Air TV Shows");
+        return mav;
+    }
+
 }
 

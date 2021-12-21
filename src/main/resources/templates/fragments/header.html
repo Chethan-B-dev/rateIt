@@ -1,4 +1,5 @@
 <header th:fragment="header" class="mb-lg-5 mb-2">
+
   <!-- Sidebar navigation -->
   <div id="slide-out" class="side-nav">
     <ul class="custom-scrollbar">
@@ -79,7 +80,7 @@
 
     <!-- Breadcrumb-->
     <div class="breadcrumb-dn mr-auto">
-      <p class="lead text-danger font-weight-bold">rateIT</p>
+      <p class="lead text-danger font-weight-bold" style="cursor: pointer;" onclick="window.location='/';">rateIT</p>
     </div>
 
     <div class="collapse navbar-collapse">
@@ -90,10 +91,8 @@
             Movies
           </a>
           <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Popular</a>
-            <a class="dropdown-item" href="#">Now Playing</a>
-            <a class="dropdown-item" href="#">Upcoming</a>
-            <a class="dropdown-item" href="#">Top Rated</a>
+            <a class="dropdown-item" href="/list/movie/popular">Popular</a>
+            <a class="dropdown-item" href="/list/movie/upcoming">Upcoming</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -102,10 +101,8 @@
             TV Shows
           </a>
           <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Popular</a>
-            <a class="dropdown-item" href="#">Airing Today</a>
-            <a class="dropdown-item" href="#">On TV</a>
-            <a class="dropdown-item" href="#">Top Rated</a>
+            <a class="dropdown-item" href="/list/tv/air">On TV</a>
+            <a class="dropdown-item" href="/list/tv/top">Top Rated</a>
           </div>
         </li>
       </ul>

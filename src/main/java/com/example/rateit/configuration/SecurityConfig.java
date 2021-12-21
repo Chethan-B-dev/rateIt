@@ -19,7 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**")
                 .permitAll();
 
-        // Disabling csrf tokens and x-frame-options to be able to run h2 console (localhost:8080/console)
         httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().disable();
     }

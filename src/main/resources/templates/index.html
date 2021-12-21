@@ -25,6 +25,7 @@
 
 <main class="pt-4">
 
+    <!-- search -->
     <section class="search-section">
 
         <div class="jumbotron jumbotron-fluid main-bg">
@@ -33,18 +34,22 @@
                 <p class="lead text-white font-weight-bolder">
                     Millions of movies, TV shows to discover. Explore now.
                 </p>
-                <div class="wrap">
-                    <div class="search">
-                        <input type="text" class="searchTerm" placeholder="What are you looking for?">
-                        <button type="submit" class="searchButton" onclick="window.location='search.html';">
-                            <i class="fa fa-search"></i>
-                        </button>
+                <form action="/search" method="get">
+                    <div class="wrap">
+                        <div class="search">
+                            <input type="text" class="searchTerm" name="query" placeholder="What are you looking for?">
+                            <button type="submit" class="searchButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </section>
+    <!-- search -->
 
+    <!-- trending movies-->
     <section class="movie-catalog-section">
 
         <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">Movies</span></h3>
@@ -60,7 +65,7 @@
                     <img class="card-img-top media-image"
                          th:src="'https://image.tmdb.org/t/p/original' + ${movie.poster}"
                          th:alt="${movie.title}">
-                    <a>
+                    <a th:href="'/movie/' + ${movie.id}">
                         <div class="mask rgba-white-slight"></div>
                     </a>
                 </div>
@@ -69,7 +74,7 @@
 
                 <!-- Card content -->
                 <div class="card-body bg-dark white-text rounded-bottom">
-                    <a class="activator waves-effect mr-4"></a>
+                    <a th:href="'/movie/' + ${movie.id}" class="activator waves-effect mr-4"></a>
                     <h6 class="card-title" th:text="${movie.title}"></h6>
                     <P class="text-muted" th:text="${movie.releaseDate.toString()}"></P>
                 </div>
@@ -81,7 +86,10 @@
         </div>
 
     </section>
+    <!-- trending movies -->
 
+
+    <!-- trending tv -->
     <section class="tv-catalog-section">
 
         <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">TV Shows</span></h3>
@@ -119,7 +127,10 @@
 
 
     </section>
+    <!-- trending tv -->
 
+
+    <!-- login/register -->
     <section>
         <!--Modal: Login / Register Form-->
         <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -234,6 +245,7 @@
         </div>
         <!--Modal: Login / Register Form-->
     </section>
+    <!-- login/register -->
 
 </main>
 
@@ -244,15 +256,15 @@
 <!-- End your project here-->
 
 <!-- jQuery -->
-<script type="text/javascript" th:src="@{js/jquery.min.js}" src="js/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <!-- Bootstrap tooltips -->
-<script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
 <!-- Bootstrap core JavaScript -->
-<script type="text/javascript" th:src="@{js/popper.min.js}" src="js/popper.min.js"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <!-- MDB core JavaScript -->
-<script type="text/javascript" th:src="@{js/mdb.min.js}" src="js/mdb.min.js"></script>
+<script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
 
-<script type="text/javascript" th:src="@{js/script.js}" src="js/script.js"></script>
+<script type="text/javascript" th:src="@{/js/script.js}"></script>
 
 <!-- Your custom scripts (optional) -->
 <script type="text/javascript">
