@@ -1,10 +1,7 @@
 package com.example.rateit.controller;
 
 import com.example.rateit.model.*;
-import com.example.rateit.service.APIService;
-import com.example.rateit.service.ListService;
-import com.example.rateit.service.MyUserDetails;
-import com.example.rateit.service.UserService;
+import com.example.rateit.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -28,6 +26,8 @@ public class MainController {
     private UserService userService;
     @Autowired
     private ListService listService;
+    @Autowired
+    private PostService postService;
 
 
 
@@ -70,10 +70,6 @@ public class MainController {
         List<Cast> casts = (List<Cast>) movieDetails.get(0);
         List<Movie> similarMovies = (List<Movie>) movieDetails.get(1);
         List<Review> movieReviews = (List<Review>) movieDetails.get(2);
-        StringBuilder genreBuilder = new StringBuilder();
-        for (Genre genre: movie.getGenres()) {
-            genreBuilder.append(genre.getName()).append(" ,");
-        }
         try{
             User user = myUserDetails.getUser();
             boolean hasWatched = listService.hasWatched(user.getId(),id);
@@ -85,11 +81,11 @@ public class MainController {
             System.out.println("user not logged in from /movie/id");
         }
         mav.addObject("movie",movie);
+        mav.addObject("customPost",new PostRequestBody());
         mav.addObject("casts",casts);
         mav.addObject("similarMovies",similarMovies);
         mav.addObject("movieReviews",movieReviews);
         mav.addObject("numberOfReviews",movieReviews.size());
-        mav.addObject("genres",genreBuilder.substring(0,genreBuilder.length() - 1));
         return mav;
     }
 
@@ -166,7 +162,6 @@ public class MainController {
     public ModelAndView addMediaToWishList(@PathVariable String media,
                                             @PathVariable int id,
                                             @AuthenticationPrincipal MyUserDetails myUserDetails){
-
         User user;
 
         try {
@@ -178,6 +173,71 @@ public class MainController {
         WishList newMedia = new WishList(user,media,id);
         listService.saveWishList(newMedia);
         return new ModelAndView("redirect:/" + media + "/" + id);
+    }
+
+    @GetMapping("/mywatchlist")
+    public ModelAndView myWatchList(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        List<Media> mediaList = listService.getWatchListMedia(user.getId());
+        ModelAndView mav = new ModelAndView("media_list");
+        mav.addObject("mediaList",mediaList);
+        mav.addObject("topic","My WatchList");
+        return mav;
+    }
+
+    @GetMapping("/mywishlist")
+    public ModelAndView myWishList(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        List<Media> mediaList = listService.getWishListMedia(user.getId());
+        ModelAndView mav = new ModelAndView("media_list");
+        mav.addObject("mediaList",mediaList);
+        mav.addObject("topic","My WishList");
+        return mav;
+    }
+
+    @PostMapping("/addPost")
+    public ModelAndView addPost(@ModelAttribute PostRequestBody postRequestBody,
+                                @AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        Post post = new Post(
+                user,
+                postRequestBody.getContent(),
+                postRequestBody.getMediaType(),
+                Integer.parseInt(postRequestBody.getMediaId()),
+                LocalDateTime.now()
+        );
+        postService.save(post);
+        return new ModelAndView("redirect:/");
+    }
+
+    @GetMapping("/myposts")
+    public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        List<Media> mediaList = apiService.getPostsOfUser(user.getId());
+        ModelAndView mav = new ModelAndView("post");
+        mav.addObject("mediaList",mediaList);
+        mav.addObject("username",user.getUsername());
+        return mav;
     }
 }
 

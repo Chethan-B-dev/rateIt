@@ -67,10 +67,11 @@
   
                 <h2 class="mb-3 text-danger wow fadeIn" data-wow-delay="0.2s"><strong
                     class="font-weight-bold" th:text="${movie.title}">title</strong></h2>
-  
-                <p class="text-white" th:text="${genres}">
-                    genres
-                </p>
+
+
+                <div class="m-2">
+                  <a class="btn-sm btn-grey disabled text-white m-2" th:each="genre: ${movie.getGenres()}" th:text="${genre.name}">Genre</a>
+                </div>
 
                 <p class="grey-text mb-4" th:text="${movie.overview}">overview</p>
 
@@ -79,7 +80,44 @@
                   <a class="btn-sm btn-danger" th:unless="${hasWatched}" th:href="@{'/watchlist/movie/' + ${movie.id}}">WatchList</a>
                   <a class="btn-sm btn-outline-grey disabled text-white" th:if="${hasWished}" th:href="@{'/wishlist/movie/' + ${movie.id}}">WishList</a>
                   <a class="btn-sm btn-outline-danger" th:unless="${hasWished}" th:href="@{'/wishlist/movie/' + ${movie.id}}">WishList</a>
+                  <button th:if="${#authorization.expression('isAuthenticated()')}" type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#basicExampleModal">
+                    Add Post
+                  </button>
                 </div>
+
+
+                <!-- post Modal -->
+                <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="exampleModalLabel">Post A Review</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <form th:action="@{/addPost}" th:object="${customPost}" method="post">
+                      <div class="modal-body">
+
+                          <div class="md-form">
+                            <textarea id="content" class="md-textarea form-control" rows="3" th:field="*{content}"></textarea>
+                            <label for="content">Review</label>
+                            <input name="mediaType" type="hidden" th:value="'movie'" >
+                            <input name="mediaId" type="hidden" th:value="${movie.id}">
+                          </div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Save changes</button>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- post Modal -->
 
               </div>
 

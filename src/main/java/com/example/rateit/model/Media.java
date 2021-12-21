@@ -32,4 +32,15 @@ public class Media implements Serializable {
     private String poster;
     @JsonProperty("media_type")
     private String mediaType;
+
+    public Media(String title, String name, String overview, String langugae, LocalDate releaseDate, LocalDate firstAirDate, String poster, String mediaType) {
+        this.title = title;
+        this.name = name;
+        this.overview = overview;
+        this.langugae = langugae;
+        this.releaseDate = releaseDate;
+        this.firstAirDate = firstAirDate;
+        this.poster = poster;
+        this.mediaType = mediaType;
+    }
 }

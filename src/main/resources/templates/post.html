@@ -1,177 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>rateIT</title>
   <!-- MDB icon -->
-  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon">
+  <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
-  <link rel="stylesheet" href="css/mdb.min.css">
+  <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
-  <link rel="stylesheet" href="css/style.css">
+  <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: darkred;
+    }
+
+  </style>
 </head>
-  <body class="hidden-sn elegant-color">
+<body class="hidden-sn elegant-color">
 
-  <header class="mb-lg-5 mb-2">
-    <!-- Sidebar navigation -->
-    <div id="slide-out" class="side-nav">
-      <ul class="custom-scrollbar">
-        <!-- Logo -->
-        <li>
-          <div class="logo-wrapper waves-light">
-            <a href="#"><img src="https://mdbootstrap.com/img/logo/mdb-transparent.png" class="img-fluid flex-center"></a>
-          </div>
-        </li>
-        <!--/. Logo -->
-        
-        <!--Search Form-->
-        <!-- <li>
-          <form class="search-form" role="search">
-            <div class="form-group md-form mt-0 pt-1 waves-light">
-              <input type="text" class="form-control" placeholder="Search">
-            </div>
-          </form>
-        </li> -->
-        <!--/.Search Form-->
-        <!-- Side navigation links -->
-        <li>
-          <ul class="collapsible collapsible-accordion">
-            <li class="nav-background"><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-film"></i>
-                Movies
-              <i class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#" class="waves-effect">Popular</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Now Playing</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Upcoming</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Top Rated</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-video"></i>
-                TV Shows
-                <i class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#" class="waves-effect">Popular</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Airing Today</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">On TV</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Top Rated</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-eye"></i> About<i class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="#" class="waves-effect">Introduction</a>
-                  </li>
-                  <li><a href="#" class="waves-effect">Monthly meetings</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-envelope-o"></i> Contact me<i
-                  class="fas fa-angle-down rotate-icon"></i></a>
-              <div class="collapsible-body">
-                <ul>
-                  <li> <a href="#" class="waves-effect">FAQ</a> </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </li>
-        <!--/. Side navigation links -->
-      </ul>
-      <div class="mask-strong"></div>
-    </div>
-    <!--/. Sidebar navigation -->
-    <!-- Navbar -->
-    <nav class="navbar bg-dark fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
-      <!-- SideNav slide-out button -->
-      <div class="float-left">
-        <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
-      </div>
-
-      
-
-      <!-- Breadcrumb-->
-      <div class="breadcrumb-dn mr-auto">
-        <p class="lead text-danger font-weight-bold">rateIT</p>
-      </div>
-
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-5 mr-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              Movies
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Popular</a>
-              <a class="dropdown-item" href="#">Now Playing</a>
-              <a class="dropdown-item" href="#">Upcoming</a>
-              <a class="dropdown-item" href="#">Top Rated</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              TV Shows
-            </a>
-            <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Popular</a>
-              <a class="dropdown-item" href="#">Airing Today</a>
-              <a class="dropdown-item" href="#">On TV</a>
-              <a class="dropdown-item" href="#">Top Rated</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <ul class="nav navbar-nav nav-flex-icons ml-auto text-white">
-
-        <li class="nav-item">
-          <a class="nav-link"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
-        </li>
-        
-        
-        <li class="nav-item">
-          <a class="nav-link "><i class="fas fa-bell text-danger animated swing infinite slow delay-1s"></i> <span class="clearfix d-none d-sm-inline-block">Notifications</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Login/Register</span></a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </a>
-          <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Friends</a>
-            <a class="dropdown-item" href="#">something</a>
-            <a class="dropdown-item" href="#">something</a>
-          </div>
-        </li>
-        
-      </ul>
-    </nav>
-    <!-- /.Navbar -->
-  </header>
-
+<!-- header -->
+<header th:replace="fragments/header :: header"></header>
+<!-- header -->
 
   <main class="pt-4">
  
@@ -181,10 +54,11 @@
           <!-- Excerpt -->
           <br>
           <h1 class="text-center dark-grey-text pb-3 pt-5">
-            <strong>ANNA'S</strong> Feed</h1>
+            <strong th:text="${username}">username</strong> Feed
+          </h1>
   
           
-          <!-- Grid row -->
+          <!-- username template -->
           <div class="row flex-center">
   
             <!-- Grid column -->
@@ -200,7 +74,7 @@
             <!-- Grid column -->
   
           </div>
-          <!-- Grid row -->
+          <!-- username template -->
   
         </div>
       </section>
@@ -214,7 +88,7 @@
             <div class="row mt-5 pt-3">
   
               <!-- Main listing -->
-              <div class="col-lg-8 col-12 mt-1 mx-lg-4">
+              <div th:each="media : ${mediaList}" class="col-lg-8 col-12 mt-1 mx-lg-4">
   
                 <!-- Section: Blog v.3 -->
                 <section class="pb-3 text-center text-lg-left">
@@ -241,28 +115,16 @@
                         <div class="card-body mx-4">
                           <!-- Title -->
                           <h4 class="card-title">
-                            <strong>Lorem ipsum dolor sit amet</strong>
+                            <strong th:text="${media.name}">Media Name</strong>
                           </h4>
                           <hr>
-                          <!-- Text -->
-                          <p class="mb-3">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                            accusantium
-                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-                            veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                            <p class="mb-4"> Disrupt vero ea id fugiat, lo-fi lomo post-ironic irony kitsch
-                              Banksy.
-                              Tumblr kale stumptown beer elit seitan tote bag Banksy, elit small
-                              batch fregan sed.
+
+                            <p class="mb-4" th:text="${media.overview}"> overview
                             </p>
                           </p>
                           <p class="font-small font-weight-bold mb-1">
-                            <i class="far fa-clock-o"></i> 27/08/2017</p>
-                          <p class="font-small  mb-0 font-weight-bold">Anna Smith</p>
-                          <p class="text-right mb-0 text-uppercase dark-grey-text font-weight-bold">
-                            <a>read more
-                              <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                            </a>
-                          </p>
+                            <i class="far fa-clock-o"></i> <span th:text="${media.releaseDate.toString()}">27/08/2017</span></p>
+                          <p class="font-small  mb-0 font-weight-bold" th:text="${username}">Anna Smith</p>
                         </div>
                         <!-- Card content -->
   
@@ -274,63 +136,6 @@
   
                   </div>
                   <!-- Grid row -->
-
-
-                  <div class="row mb-4">
-  
-                    <!-- Grid column -->
-                    <div class="col-md-12">
-                      <!-- Card -->
-                      <div class="card bg-dark text-white hoverable">
-  
-                        <!-- Card image -->
-                        <div class="view overlay">
-                          <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(144).jpg" class="card-img-top"
-                            alt="">
-                          <a>
-                            <div class="mask rgba-white-slight"></div>
-                          </a>
-                        </div>
-                        <!-- Card image -->
-  
-                        <!-- Card content -->
-                        <div class="card-body mx-4">
-                          <!-- Title -->
-                          <h4 class="card-title">
-                            <strong>Lorem ipsum dolor sit amet</strong>
-                          </h4>
-                          <hr>
-                          <!-- Text -->
-                          <p class="mb-3">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                            accusantium
-                            doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
-                            veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                            <p class="mb-4"> Disrupt vero ea id fugiat, lo-fi lomo post-ironic irony kitsch
-                              Banksy.
-                              Tumblr kale stumptown beer elit seitan tote bag Banksy, elit small
-                              batch fregan sed.
-                            </p>
-                          </p>
-                          <p class="font-small font-weight-bold mb-1">
-                            <i class="far fa-clock-o"></i> 27/08/2017</p>
-                          <p class="font-small  mb-0 font-weight-bold">Anna Smith</p>
-                          <p class="text-right mb-0 text-uppercase dark-grey-text font-weight-bold">
-                            <a>read more
-                              <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                            </a>
-                          </p>
-                        </div>
-                        <!-- Card content -->
-  
-                      </div>
-                      <!-- Card -->
-  
-                    </div>
-                    <!-- Grid column -->
-  
-                  </div>
-  
-  
                 </section>
                 <!-- Section: Blog v.3 -->
   
@@ -622,35 +427,32 @@
 </footer>
 <!-- Footer -->
 
-
-
-
-
-
-  <!-- End your project here-->
+  <!-- Footer -->
+  <footer th:replace="fragments/footer :: footer"></footer>
+  <!-- Footer -->
 
   <!-- jQuery -->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
   <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
   <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
   <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
 
-  <script type="text/javascript" src="js/script.js"></script>
+  <script type="text/javascript" th:src="@{/js/script.js}"></script>
 
   <!-- Your custom scripts (optional) -->
   <script type="text/javascript">
-   $(document).ready(function() {
+    $(document).ready(function () {
 
-    // SideNav Button Initialization
-    $(".button-collapse").sideNav();
-    // SideNav Scrollbar Initialization
-    var sideNavScrollbar = document.querySelector('.custom-scrollbar');
-    var ps = new PerfectScrollbar(sideNavScrollbar);
-    }) 
+      // SideNav Button Initialization
+      $(".button-collapse").sideNav();
+      // SideNav Scrollbar Initialization
+      var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+      var ps = new PerfectScrollbar(sideNavScrollbar);
+    })
   </script>
 
-</body>
+  </body>
 </html>

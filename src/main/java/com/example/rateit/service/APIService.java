@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +27,8 @@ public class APIService {
     private final String apiKey = "fc1f6677d898408bfc0966f089fc8088";
     private static final Logger log = LoggerFactory.getLogger(APIService.class);
     private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private PostService postService;
 
 
     public Movie getMovie(int id){
@@ -235,6 +238,49 @@ public class APIService {
         return mediaList;
     }
 
+    public Media movieToMedia(Movie movie){
+        return new Media(
+                movie.getId(),
+                movie.getTitle(),
+                movie.getTitle(),
+                movie.getOverview(),
+                movie.getLangugae(),
+                movie.getReleaseDate(),
+                movie.getReleaseDate(),
+                movie.getPoster(),
+                "movie"
+        );
+    }
 
+    public Media tvToMedia(TV tv){
+        return new Media(
+                tv.getId(),
+                tv.getTitle(),
+                tv.getTitle(),
+                tv.getOverview(),
+                tv.getLangugae(),
+                tv.getReleaseDate(),
+                tv.getReleaseDate(),
+                tv.getPoster(),
+                "tv"
+        );
+    }
+
+    public List<Media> getPostsOfUser(Long userId){
+        List<Post> posts = postService.getUserPosts(userId);
+        List<Media> mediaList = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getMediaType().equalsIgnoreCase("movie")){
+                Movie movie = getMovie(post.getMediaId());
+                Media media = movieToMedia(movie);
+                mediaList.add(media);
+            }else if (post.getMediaType().equalsIgnoreCase("tv")){
+                TV tv = getTV(post.getMediaId());
+                Media media = tvToMedia(tv);
+                mediaList.add(media);
+            }
+        }
+        return mediaList;
+    }
 
 }

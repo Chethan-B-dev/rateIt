@@ -139,8 +139,8 @@
 
         <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="/friends" th:if="${#authorization.expression('isAuthenticated()')}">Friends</a>
-          <a class="dropdown-item" href="#">My WatchList</a>
-          <a class="dropdown-item" href="#">My WishList</a>
+          <a class="dropdown-item" href="/mywatchlist">My WatchList</a>
+          <a class="dropdown-item" href="/mywishlist">My WishList</a>
           <a class="dropdown-item" href="#">My Posts</a>
         </div>
 
