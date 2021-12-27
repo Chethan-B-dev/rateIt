@@ -1,37 +1,27 @@
 package com.example.rateit.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * created by chethan on 19-12-2021
+ * created by chethan on 26-12-2021
  **/
 
 @Getter
 @Setter
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Movie implements Serializable {
-    private int id;
-    private String title;
-    private String overview;
-    @JsonProperty("original_language")
-    private String langugae;
-    @JsonProperty("release_date")
-    private LocalDate releaseDate;
-    private List<Genre> genres;
-    @JsonProperty("poster_path")
-    private String poster;
-    @JsonProperty("backdrop_path")
-    private String backdrop;
-    @JsonProperty("vote_average")
-    private double userRating;
+public class Movie extends Media {
+
     private int runtime;
+
+    public Movie(int id, String title, String backdrop, String overview, double userRating, String poster, String language, List<Genre> genres, LocalDate releaseDate, int runtime) {
+        super(id, title, backdrop, overview, userRating, poster, language, "movie", genres, releaseDate);
+        this.runtime = runtime;
+    }
 }

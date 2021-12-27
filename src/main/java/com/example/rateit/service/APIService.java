@@ -26,16 +26,33 @@ public class APIService {
     private final String url = "https://api.themoviedb.org/3/";
     private final String apiKey = "fc1f6677d898408bfc0966f089fc8088";
     private static final Logger log = LoggerFactory.getLogger(APIService.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
     @Autowired
     private PostService postService;
 
+    static {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
-    public Movie getMovie(int id){
+    public Media getMovie(int id){
         String movieUrl = url + "movie/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         try {
-            return restTemplate.getForObject(movieUrl, Movie.class);
-        }catch (HttpClientErrorException err){
+            Media movie =  restTemplate.getForObject(movieUrl, Movie.class);
+            movie.setMediaType("movie");
+            return movie;
+        } catch (HttpClientErrorException | NullPointerException err){
+            return null;
+        }
+    }
+
+    public Media getTV(int id){
+        String tvUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
+        try {
+            Media tv =  restTemplate.getForObject(tvUrl, TV.class);
+            tv.setMediaType("tv");
+            return tv;
+        }catch (HttpClientErrorException | NullPointerException err){
             return null;
         }
     }
@@ -44,8 +61,6 @@ public class APIService {
         // https://api.themoviedb.org/3/movie/557/credits?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US
         String movieCastUrl = url + "movie/" + id + String.format("/credits?api_key=%s&language=en-US",apiKey);
         String json = restTemplate.getForObject(movieCastUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
         JsonNode root = objectMapper.readTree(json);
         ArrayNode arrayNode = (ArrayNode) root.get("cast");
         Iterator<JsonNode> node = arrayNode.elements();
@@ -61,10 +76,10 @@ public class APIService {
         root = objectMapper.readTree(json);
         arrayNode = (ArrayNode) root.get("results");
         Iterator<JsonNode> nodes = arrayNode.elements();
-        List<Movie> similarMovies = new ArrayList<>();
+        List<Media> similarMovies = new ArrayList<>();
         while (nodes.hasNext()){
             JsonNode movieNode = nodes.next();
-            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
             similarMovies.add(movie);
         }
         // https://api.themoviedb.org/3/movie/557/reviews?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&page=1
@@ -88,41 +103,22 @@ public class APIService {
         };
     }
 
-    public TV getTV(int id){
-        String tvUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
-        try {
-            return restTemplate.getForObject(tvUrl, TV.class);
-        }catch (HttpClientErrorException err){
-            return null;
-        }
-    }
-
-    public List<Movie> getTrendingMovies() throws JsonProcessingException {
+    public List<Media> getTrendingMovies() throws JsonProcessingException {
         String trendingMovieUrl = url + "trending/movie/day" + String.format("?api_key=%s",apiKey);
-        String json = restTemplate.getForObject(trendingMovieUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<Movie> movieList = new ArrayList<>();
+        Iterator<JsonNode> node = jsonNodeIterator(trendingMovieUrl);
+        List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
         }
         return movieList;
     }
 
-    public List<Movie> getPopularMovies() throws JsonProcessingException {
+    public List<Media> getPopularMovies() throws JsonProcessingException {
         String popularMovieUrl = url + "/movie/popular" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
-        String json = restTemplate.getForObject(popularMovieUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<Movie> movieList = new ArrayList<>();
+        Iterator<JsonNode> node = jsonNodeIterator(popularMovieUrl);
+        List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
             Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
@@ -131,49 +127,34 @@ public class APIService {
         return movieList;
     }
 
-    public List<Movie> getUpcomingMovies() throws JsonProcessingException {
+    public List<Media> getUpcomingMovies() throws JsonProcessingException {
         String upcomingMovieUrl = url + "/movie/upcoming" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
-        String json = restTemplate.getForObject(upcomingMovieUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<Movie> movieList = new ArrayList<>();
+        Iterator<JsonNode> node = jsonNodeIterator(upcomingMovieUrl);
+        List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
         }
         return movieList;
     }
 
-    public List<Movie> getTopRatedMovies() throws JsonProcessingException {
+    public List<Media> getTopRatedMovies() throws JsonProcessingException {
         String topRatedMovieUrl = url + "/movie/top_rated" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
-        String json = restTemplate.getForObject(topRatedMovieUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<Movie> movieList = new ArrayList<>();
+        Iterator<JsonNode> node = jsonNodeIterator(topRatedMovieUrl);
+        List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
         }
         return movieList;
     }
 
-    public List<TV> getTrendingTV() throws JsonProcessingException {
+    public List<Media> getTrendingTV() throws JsonProcessingException {
         String trendingTVUrl = url + "trending/tv/day" + String.format("?api_key=%s",apiKey);
-        String json = restTemplate.getForObject(trendingTVUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<TV> tvList = new ArrayList<>();
+        Iterator<JsonNode> node = jsonNodeIterator(trendingTVUrl);
+        List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
             TV tv = objectMapper.treeToValue(movieNode,TV.class);
@@ -182,52 +163,42 @@ public class APIService {
         return tvList;
     }
 
-    public List<TV> getTopRatedTV() throws JsonProcessingException {
-        String TopRatedTVUrl = url + "/tv/top_rated" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
-        String json = restTemplate.getForObject(TopRatedTVUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<TV> tvList = new ArrayList<>();
+    public List<Media> getTopRatedTV() throws JsonProcessingException {
+        String topRatedTVUrl = url + "/tv/top_rated" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
+        Iterator<JsonNode> node = jsonNodeIterator(topRatedTVUrl);
+        List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            TV tv = objectMapper.treeToValue(movieNode,TV.class);
+            Media tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
         }
         return tvList;
     }
 
-    public List<TV> getOnAirTV() throws JsonProcessingException {
+    public List<Media> getOnAirTV() throws JsonProcessingException {
         String onAirTVUrl = url + "/tv/on_the_air" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
-        String json = restTemplate.getForObject(onAirTVUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<TV> tvList = new ArrayList<>();
+        Iterator<JsonNode> node = jsonNodeIterator(onAirTVUrl);
+        List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            TV tv = objectMapper.treeToValue(movieNode,TV.class);
+            Media tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
         }
         return tvList;
+    }
+
+    private Iterator<JsonNode> jsonNodeIterator(String url) throws JsonProcessingException {
+        String json = restTemplate.getForObject(url,String.class);
+        JsonNode root = objectMapper.readTree(json);
+        ArrayNode arrayNode = (ArrayNode) root.get("results");
+        return arrayNode.elements();
     }
 
     public List<Media> search(String term) throws JsonProcessingException {
         // https://api.themoviedb.org/3/search/multi?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&query=far%20from%20home&page=1&include_adult=false
         String searchUrl = url + "search/multi" + String.format("?api_key=%s&language=en-US&query=%s&page=1&include_adult=false",apiKey,term);
-        String json = restTemplate.getForObject(searchUrl,String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> node = arrayNode.elements();
-
+        Iterator<JsonNode> node = jsonNodeIterator(searchUrl);
         List<Media> mediaList = new ArrayList<>();
-
         while (node.hasNext()){
             JsonNode mediaNode = node.next();
             if (mediaNode.get("media_type").asText().equalsIgnoreCase("movie") || mediaNode.get("media_type").asText().equalsIgnoreCase("tv")){
@@ -238,46 +209,16 @@ public class APIService {
         return mediaList;
     }
 
-    public Media movieToMedia(Movie movie){
-        return new Media(
-                movie.getId(),
-                movie.getTitle(),
-                movie.getTitle(),
-                movie.getOverview(),
-                movie.getLangugae(),
-                movie.getReleaseDate(),
-                movie.getReleaseDate(),
-                movie.getPoster(),
-                "movie"
-        );
-    }
-
-    public Media tvToMedia(TV tv){
-        return new Media(
-                tv.getId(),
-                tv.getTitle(),
-                tv.getTitle(),
-                tv.getOverview(),
-                tv.getLangugae(),
-                tv.getReleaseDate(),
-                tv.getReleaseDate(),
-                tv.getPoster(),
-                "tv"
-        );
-    }
-
     public List<Media> getPostsOfUser(Long userId){
         List<Post> posts = postService.getUserPosts(userId);
         List<Media> mediaList = new ArrayList<>();
         for (Post post : posts) {
             if (post.getMediaType().equalsIgnoreCase("movie")){
-                Movie movie = getMovie(post.getMediaId());
-                Media media = movieToMedia(movie);
-                mediaList.add(media);
+                Media movie = getMovie(post.getMediaId());
+                mediaList.add(movie);
             }else if (post.getMediaType().equalsIgnoreCase("tv")){
-                TV tv = getTV(post.getMediaId());
-                Media media = tvToMedia(tv);
-                mediaList.add(media);
+                Media tv = getTV(post.getMediaId());
+                mediaList.add(tv);
             }
         }
         return mediaList;

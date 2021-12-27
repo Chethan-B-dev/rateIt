@@ -53,33 +53,11 @@ public class ListService {
         List<Media> mediaList = new ArrayList<>();
         for (WatchList watchList: watchLists) {
             if (watchList.getMediaType().equalsIgnoreCase("movie")){
-                Movie movie = apiService.getMovie(watchList.getMediaId());
-                Media media = new Media(
-                        movie.getId(),
-                        movie.getTitle(),
-                        movie.getTitle(),
-                        movie.getOverview(),
-                        movie.getLangugae(),
-                        movie.getReleaseDate(),
-                        movie.getReleaseDate(),
-                        movie.getPoster(),
-                        "movie"
-                );
-                mediaList.add(media);
+                Media movie = apiService.getMovie(watchList.getMediaId());
+                mediaList.add(movie);
             }else if (watchList.getMediaType().equalsIgnoreCase("tv")){
-                TV tv = apiService.getTV(watchList.getMediaId());
-                Media media = new Media(
-                        tv.getId(),
-                        tv.getTitle(),
-                        tv.getTitle(),
-                        tv.getOverview(),
-                        tv.getLangugae(),
-                        tv.getReleaseDate(),
-                        tv.getReleaseDate(),
-                        tv.getPoster(),
-                        "tv"
-                );
-                mediaList.add(media);
+                Media tv = apiService.getTV(watchList.getMediaId());
+                mediaList.add(tv);
             }
         }
         return mediaList;
@@ -90,33 +68,11 @@ public class ListService {
         List<Media> mediaList = new ArrayList<>();
         for (WishList wishList: wishLists) {
             if (wishList.getMediaType().equalsIgnoreCase("movie")){
-                Movie movie = apiService.getMovie(wishList.getMediaId());
-                Media media = new Media(
-                        movie.getId(),
-                        movie.getTitle(),
-                        movie.getTitle(),
-                        movie.getOverview(),
-                        movie.getLangugae(),
-                        movie.getReleaseDate(),
-                        movie.getReleaseDate(),
-                        movie.getPoster(),
-                        "movie"
-                );
-                mediaList.add(media);
+                Media movie = apiService.getMovie(wishList.getMediaId());
+                mediaList.add(movie);
             }else if (wishList.getMediaType().equalsIgnoreCase("tv")){
-                TV tv = apiService.getTV(wishList.getMediaId());
-                Media media = new Media(
-                        tv.getId(),
-                        tv.getTitle(),
-                        tv.getTitle(),
-                        tv.getOverview(),
-                        tv.getLangugae(),
-                        tv.getReleaseDate(),
-                        tv.getReleaseDate(),
-                        tv.getPoster(),
-                        "tv"
-                );
-                mediaList.add(media);
+                Media tv = apiService.getTV(wishList.getMediaId());
+                mediaList.add(tv);
             }
         }
         return mediaList;

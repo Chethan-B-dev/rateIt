@@ -18,8 +18,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class WatchList {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,4 +36,5 @@ public class WatchList {
         this.mediaType = mediaType;
         this.mediaId = mediaId;
     }
+
 }

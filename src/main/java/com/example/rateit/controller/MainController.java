@@ -30,15 +30,18 @@ public class MainController {
     private PostService postService;
 
 
+    @ModelAttribute("user")
+    public User getUser(){
+        return new User();
+    }
 
     @GetMapping
     public ModelAndView home() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("index");
-        List<Movie> trendingMovies = apiService.getTrendingMovies();
-        List<TV> trendingTv = apiService.getTrendingTV();
+        List<Media> trendingMovies = apiService.getTrendingMovies();
+        List<Media> trendingTv = apiService.getTrendingTV();
         mav.addObject("trendingMovies",trendingMovies);
         mav.addObject("trendingTv",trendingTv);
-        mav.addObject("user",new User());
         return mav;
     }
 
@@ -64,7 +67,7 @@ public class MainController {
     @GetMapping("/movie/{id}")
     public ModelAndView movie(@PathVariable int id,@AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("movie");
-        Movie movie = apiService.getMovie(id);
+        Media movie = apiService.getMovie(id);
         if (movie == null) return new ModelAndView("redirect:/?error");
         List movieDetails = apiService.getMovieCastReviewsAndSimilarMovies(id);
         List<Cast> casts = (List<Cast>) movieDetails.get(0);
@@ -92,7 +95,7 @@ public class MainController {
     @GetMapping("/tv/{id}")
     public ModelAndView tv(@PathVariable int id) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("tv");
-        TV tv = apiService.getTV(id);
+        Media tv = apiService.getTV(id);
         mav.addObject("tv",tv);
         return mav;
     }
@@ -100,7 +103,7 @@ public class MainController {
     @GetMapping("/list/movie/popular")
     public ModelAndView getPopularMovies() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("list");
-        List<Movie> movieList = apiService.getPopularMovies();
+        List<Media> movieList = apiService.getPopularMovies();
         mav.addObject("movieList",movieList);
         mav.addObject("topic","Popular Movies");
         return mav;
@@ -109,7 +112,7 @@ public class MainController {
     @GetMapping("/list/movie/top")
     public ModelAndView getTopRatedMovies() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("list");
-        List<Movie> movieList = apiService.getTopRatedMovies();
+        List<Media> movieList = apiService.getTopRatedMovies();
         mav.addObject("movieList",movieList);
         mav.addObject("topic","Top Rated Movies");
         return mav;
@@ -118,7 +121,7 @@ public class MainController {
     @GetMapping("/list/movie/upcoming")
     public ModelAndView getUpcomingMovies() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("list");
-        List<Movie> movieList = apiService.getUpcomingMovies();
+        List<Media> movieList = apiService.getUpcomingMovies();
         mav.addObject("movieList",movieList);
         mav.addObject("topic","Upcoming Movies");
         return mav;
@@ -127,7 +130,7 @@ public class MainController {
     @GetMapping("/list/tv/top")
     public ModelAndView getTopRatedTv() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("list");
-        List<TV> tvList = apiService.getTopRatedTV();
+        List<Media> tvList = apiService.getTopRatedTV();
         mav.addObject("tvList",tvList);
         mav.addObject("topic","Top Rated TV Shows");
         return mav;
@@ -136,7 +139,7 @@ public class MainController {
     @GetMapping("/list/tv/air")
     public ModelAndView getOnAirTv() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("list");
-        List<TV> tvList = apiService.getOnAirTV();
+        List<Media> tvList = apiService.getOnAirTV();
         mav.addObject("tvList",tvList);
         mav.addObject("topic","On Air TV Shows");
         return mav;
@@ -227,12 +230,7 @@ public class MainController {
 
     @GetMapping("/myposts")
     public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            return new ModelAndView("redirect:/");
-        }
+        User user = myUserDetails.getUser();
         List<Media> mediaList = apiService.getPostsOfUser(user.getId());
         ModelAndView mav = new ModelAndView("post");
         mav.addObject("mediaList",mediaList);

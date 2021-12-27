@@ -1,8 +1,6 @@
 package com.example.rateit.controller;
 
 import com.example.rateit.model.Media;
-import com.example.rateit.model.Movie;
-import com.example.rateit.model.TV;
 import com.example.rateit.service.APIService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
@@ -24,22 +22,22 @@ public class APIController {
     private final APIService apiService;
 
     @GetMapping("/movie/{id}")
-    private Movie getMovie(@PathVariable int id){
+    private Media getMovie(@PathVariable int id){
         return apiService.getMovie(id);
     }
 
     @GetMapping("/tv/{id}")
-    private TV getTV(@PathVariable int id){
+    private Media getTV(@PathVariable int id){
         return apiService.getTV(id);
     }
 
     @GetMapping("/movie/trending")
-    private List<Movie> getTrendingMovies() throws JsonProcessingException {
+    private List<Media> getTrendingMovies() throws JsonProcessingException {
         return apiService.getTrendingMovies();
     }
 
     @GetMapping("/tv/trending")
-    private List<TV> getTrendingTV() throws JsonProcessingException {
+    private List<Media> getTrendingTV() throws JsonProcessingException {
         return apiService.getTrendingTV();
     }
 
