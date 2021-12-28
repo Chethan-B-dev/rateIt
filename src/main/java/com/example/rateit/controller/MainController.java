@@ -1,9 +1,11 @@
 package com.example.rateit.controller;
 
+import com.example.rateit.MyUtilities;
 import com.example.rateit.model.*;
 import com.example.rateit.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,6 +71,7 @@ public class MainController {
     public ModelAndView movie(@PathVariable int id,@AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("movie");
         Media movie = apiService.getMovie(id);
+        System.out.println(movie);
         if (movie == null) return new ModelAndView("redirect:/?error");
         List movieDetails = apiService.getMovieCastReviewsAndSimilarMovies(id);
         List<Cast> casts = (List<Cast>) movieDetails.get(0);
@@ -77,17 +81,21 @@ public class MainController {
             User user = myUserDetails.getUser();
             boolean hasWatched = listService.hasWatched(user.getId(),id);
             boolean hasWished = listService.hasWished(user.getId(),id);
-            System.out.println(hasWatched + " " + hasWished);
+            boolean hasPosted = postService.hasPosted(user.getId(), id);
             mav.addObject("hasWatched",hasWatched);
             mav.addObject("hasWished",hasWished);
+            mav.addObject("hasPosted",hasPosted);
         }catch (NullPointerException ex){
             System.out.println("user not logged in from /movie/id");
         }
         mav.addObject("movie",movie);
+        mav.addObject("runtime", MyUtilities.minToHours(((Movie) movie).getRuntime()));
+        mav.addObject("releaseYear",movie.getReleaseDate().getYear());
         mav.addObject("customPost",new PostRequestBody());
         mav.addObject("casts",casts);
         mav.addObject("similarMovies",similarMovies);
         mav.addObject("movieReviews",movieReviews);
+        mav.addObject("isReviewsEmpty",movieReviews.isEmpty());
         mav.addObject("numberOfReviews",movieReviews.size());
         return mav;
     }
@@ -217,25 +225,58 @@ public class MainController {
         } catch (NullPointerException ex){
             return new ModelAndView("redirect:/");
         }
+
+        Media media = apiService.getMediaByType(
+                postRequestBody.getMediaType(),
+                Integer.parseInt(postRequestBody.getMediaId())
+        );
+
+        System.out.println(media);
+
         Post post = new Post(
                 user,
                 postRequestBody.getContent(),
+                LocalDateTime.now(),
+                postRequestBody.getRating(),
                 postRequestBody.getMediaType(),
-                Integer.parseInt(postRequestBody.getMediaId()),
-                LocalDateTime.now()
+                Integer.parseInt(postRequestBody.getMediaId())
         );
+
         postService.save(post);
-        return new ModelAndView("redirect:/");
+        String redirectTo = "/" + postRequestBody.getMediaType() + "/" + postRequestBody.getMediaId();
+        return new ModelAndView(String.format("redirect:%s", redirectTo));
     }
 
     @GetMapping("/myposts")
-    public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails){
+    public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails,@RequestParam(required = false) Integer pageNo){
+        System.out.println("page no is " + pageNo);
         User user = myUserDetails.getUser();
-        List<Media> mediaList = apiService.getPostsOfUser(user.getId());
         ModelAndView mav = new ModelAndView("post");
-        mav.addObject("mediaList",mediaList);
-        mav.addObject("username",user.getUsername());
+        if (pageNo == null){
+            pageNo = 1;
+        }
+        Page<Post> posts = apiService.getPostsOfUser(user.getId(),pageNo);
+        List<DisplayPost> displayPosts = new ArrayList<>();
+        for (Post post : posts.getContent()) {
+            Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
+            DisplayPost displayPost = DisplayPost.builder()
+                    .post(post)
+                    .media(media)
+                    .build();
+            displayPosts.add(displayPost);
+        }
+        mav.addObject("displayPosts", displayPosts);
+        mav.addObject("username", user.getUsername());
+        mav.addObject("currentPage", pageNo);
+        mav.addObject("totalPages", posts.getTotalPages());
+        mav.addObject("totalItems", posts.getTotalElements());
         return mav;
     }
+
+    @GetMapping("/login")
+    public ModelAndView redirectToHome(){
+        return new ModelAndView("redirect:/");
+    }
+
 }
 

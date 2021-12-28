@@ -18,4 +18,5 @@ public class PostRequestBody {
     private String content;
     private String mediaType;
     private String mediaId;
+    private int rating;
 }

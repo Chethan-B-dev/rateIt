@@ -11,7 +11,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Genre {
+public class Genre{
     private int id;
     private String name;
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -209,19 +210,14 @@ public class APIService {
         return mediaList;
     }
 
-    public List<Media> getPostsOfUser(Long userId){
-        List<Post> posts = postService.getUserPosts(userId);
-        List<Media> mediaList = new ArrayList<>();
-        for (Post post : posts) {
-            if (post.getMediaType().equalsIgnoreCase("movie")){
-                Media movie = getMovie(post.getMediaId());
-                mediaList.add(movie);
-            }else if (post.getMediaType().equalsIgnoreCase("tv")){
-                Media tv = getTV(post.getMediaId());
-                mediaList.add(tv);
-            }
-        }
-        return mediaList;
+    public Page<Post> getPostsOfUser(Long userId,int pageNumber){
+        return postService.getUserPosts(userId,pageNumber);
+    }
+
+    public Media getMediaByType(String mediaType,int mediaId){
+        if (mediaType.equalsIgnoreCase("movie"))
+            return getMovie(mediaId);
+        return getTV(mediaId);
     }
 
 }

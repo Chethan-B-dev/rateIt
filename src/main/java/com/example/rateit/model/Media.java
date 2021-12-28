@@ -18,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Media {
+public class Media{
+
     private int id;
     @JsonAlias("name")
     private String title;

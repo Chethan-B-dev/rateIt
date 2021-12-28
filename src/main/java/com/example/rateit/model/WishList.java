@@ -25,7 +25,6 @@ public class WishList {
     private User user;
 
     private String mediaType;
-
     private int mediaId;
 
     public WishList(User user, String mediaType, int mediaId) {
@@ -33,4 +32,5 @@ public class WishList {
         this.mediaType = mediaType;
         this.mediaId = mediaId;
     }
+
 }

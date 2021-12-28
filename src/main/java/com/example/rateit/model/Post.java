@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "user_posts")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,17 +26,21 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
+
     private String content;
+    private LocalDateTime createdAt;
+    private int rating;
+
     private String mediaType;
+    @Column(unique = true)
     private int mediaId;
 
-    private LocalDateTime createdAt;
-
-    public Post(User user, String content, String mediaType, int mediaId, LocalDateTime createdAt) {
+    public Post(User user, String content, LocalDateTime createdAt, int rating, String mediaType, int mediaId) {
         this.user = user;
         this.content = content;
+        this.createdAt = createdAt;
+        this.rating = rating;
         this.mediaType = mediaType;
         this.mediaId = mediaId;
-        this.createdAt = createdAt;
     }
 }
