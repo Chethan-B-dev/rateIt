@@ -67,8 +67,8 @@
                 <img
                   class="img-fluid"
                   th:src="'https://image.tmdb.org/t/p/original' + ${media.poster}"
-                  th:alt="${media.title != null} ? ${media.title} : ${media.name}"/>
-                <a>
+                  th:alt="${media.title}"/>
+                <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">
                   <div class="mask rgba-white-slight"></div>
                 </a>
               </div>
@@ -78,16 +78,17 @@
             <!-- Grid column -->
             <div class="col-md-9 text-md-left mt-3">
              
-              <h4 class="h4 mb-4" th:text="${media.title != null} ? ${media.title} : ${media.name}">media title</h4>
+              <h4 class="h4 mb-4 text-danger" th:text="${media.title}">media title</h4>
 
               <p class="font-weight-normal text-wrap" th:text="${media.overview}">
                 media overview
               </p>
-              <p class="font-weight-normal" th:text="${media.releaseDate != null} ? ${media.releaseDate.toString()} : ${media.firstAirDate.toString()}">
-                19/08/2016
+
+              <p class="font-weight-normal" th:text="${media.releaseDate.getYear()}">
+                year
               </p>
 
-              <a class="btn btn-danger btn-sm mb-2" th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">Read more</a>
+              <a class="btn btn-danger btn-sm ml-0" th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">Read more</a>
 
             </div>
             <!-- Grid column -->

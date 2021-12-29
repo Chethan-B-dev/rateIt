@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Post {
 
+    // TODO: fix posts not working for other users or other posts
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

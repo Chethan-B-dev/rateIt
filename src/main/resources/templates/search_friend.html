@@ -66,12 +66,13 @@
         <!-- News jumbotron -->
         <div class="text-center hoverable bg-dark text-white p-2 mb-3">
           <!-- Grid row -->
-          <div class="row" th:each="friend : ${friends}">
+          <div class="row my-1" th:each="friend : ${friends}">
             <!-- Grid column -->
             <div class="col-md-3">
               <!-- Featured image -->
               <div class="view overlay zoom flex-center flex-column">
                   <h4 th:text="${friend.username}">friend name</h4>
+                  <h6 class="text-muted" th:text="${friend.email}">email</h6>
               </div>
             </div>
             <!-- Grid column -->
@@ -80,8 +81,8 @@
             <div class="col-md-9 text-md-left mt-3">
              
               <div>
-                <a class="btn btn-md btn-outline-danger mr-2">Watchlist</a>
-                <a class="btn btn-md btn-outline-danger mr-2">WishList</a>
+                <a th:href="'/watchlist/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2">Watchlist</a>
+                <a th:href="'/wishlist/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2">WishList</a>
                 <a class="btn btn-md btn-outline-danger mr-2">Posts</a>
               </div>
 

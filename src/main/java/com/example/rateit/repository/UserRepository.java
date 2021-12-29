@@ -14,6 +14,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value = "select * from users u where u.id != :myId",nativeQuery = true)
     List<User> getUsersOtherThanMe(Long myId);
 
-    List<User> findByUsernameContains(String username);
+    List<User> findByUsernameContainsAndIdNot(String username,Long id);
 
 }

@@ -319,12 +319,71 @@ public class MainController {
     }
 
     @GetMapping("/searchfriend")
-    public ModelAndView searchFriend(@RequestParam String query) throws JsonProcessingException {
+    public ModelAndView searchFriend(@RequestParam String query,
+        @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) throws JsonProcessingException {
+        if (query.isBlank())
+            return new ModelAndView("redirect:/myfriends");
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
         ModelAndView mav = new ModelAndView("search_friends_results");
-        List<User> users = friendService.searchFriends(query);
+        List<User> users = friendService.searchFriends(query,user.getId());
         mav.addObject("search",query);
         mav.addObject("users", users);
         mav.addObject("noUsers", users.isEmpty());
+        return mav;
+    }
+
+    @GetMapping("/addfriend/{id}")
+    public ModelAndView addFriend(@PathVariable Long id,
+                                  @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
+
+        friendService.saveFriend(user,id);
+        return new ModelAndView("redirect:/myfriends");
+    }
+
+    @GetMapping("/watchlist/{friendID}")
+    public ModelAndView friendWatchList(
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @PathVariable Long friendID
+    ){
+        User user = myUserDetails.getUser();
+        User friend = userService.getUser(friendID);
+        if (friend == null) return new ModelAndView("redirect:/myfriends");
+        boolean isMyFriend = friendService.isMyFriend(user,friend);
+        if (!isMyFriend) return new ModelAndView("redirect:/myfriends");
+        List<Media> mediaList = listService.getWatchListMedia(friend.getId());
+        ModelAndView mav = new ModelAndView("media_list");
+        mav.addObject("mediaList",mediaList);
+        mav.addObject("topic",String.format("%s's Watch list",friend.getUsername()));
+        return mav;
+    }
+
+    @GetMapping("/wishlist/{friendID}")
+    public ModelAndView friendWishList(
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @PathVariable Long friendID
+    ){
+        User user = myUserDetails.getUser();
+        User friend = userService.getUser(friendID);
+        if (friend == null) return new ModelAndView("redirect:/myfriends");
+        boolean isMyFriend = friendService.isMyFriend(user,friend);
+        if (!isMyFriend) return new ModelAndView("redirect:/myfriends");
+        List<Media> mediaList = listService.getWishListMedia(friend.getId());
+        ModelAndView mav = new ModelAndView("media_list");
+        mav.addObject("mediaList",mediaList);
+        mav.addObject("topic",String.format("%s's Wish list",friend.getUsername()));
         return mav;
     }
 

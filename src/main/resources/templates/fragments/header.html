@@ -63,10 +63,27 @@
             </div>
           </li>
 
-<!--          th:if="${#authorization.expression('isAuthenticated()')}"-->
+          <li th:if="${#authorization.expression('isAuthenticated()')}"><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-user"></i>
+            Profile
+            <i class="fas fa-angle-down rotate-icon"></i></a>
+            <div class="collapsible-body">
+              <ul>
+                <li><a th:href="@{/myfriends}" class="waves-effect">Friends</a>
+                </li>
+                <li><a th:href="@{/mywatchlist}" class="waves-effect">My WatchList</a>
+                </li>
+                <li><a th:href="@{/mywishlist}" class="waves-effect">My WishList</a>
+                </li>
+                <li><a th:href="@{/myposts}" class="waves-effect">My Posts</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+
 
           <li th:if="${#authorization.expression('isAuthenticated()')}">
-              <a class="text-white bg-dark waves-effect" th:href="@{/logout}">Logout</a>
+              <a class="text-white bg-grey waves-effect" th:href="@{/logout}">Logout</a>
           </li>
 
         </ul>
@@ -107,11 +124,12 @@
              aria-haspopup="true" aria-expanded="false">
             TV Shows
           </a>
-          <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
+          <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink2">
             <a class="dropdown-item" href="/list/tv/air">On TV</a>
             <a class="dropdown-item" href="/list/tv/top">Top Rated</a>
           </div>
         </li>
+
       </ul>
     </div>
 
@@ -142,10 +160,10 @@
         </a>
 
         <div class="dropdown-menu dropdown-menu-right dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/myfriends" th:if="${#authorization.expression('isAuthenticated()')}">Friends</a>
-          <a class="dropdown-item" href="/mywatchlist">My WatchList</a>
-          <a class="dropdown-item" href="/mywishlist">My WishList</a>
-          <a class="dropdown-item" href="/myposts">My Posts</a>
+          <a class="dropdown-item" th:href="@{/myfriends}">Friends</a>
+          <a class="dropdown-item" th:href="@{/mywatchlist}">My WatchList</a>
+          <a class="dropdown-item" th:href="@{/mywishlist}">My WishList</a>
+          <a class="dropdown-item" th:href="@{/myposts}">My Posts</a>
         </div>
 
       </li>

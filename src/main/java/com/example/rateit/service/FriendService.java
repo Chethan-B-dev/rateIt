@@ -66,8 +66,12 @@ public class FriendService {
         return friendUsers;
     }
 
-    public List<User> searchFriends(String query){
-        return userRepository.findByUsernameContains(query);
+    public List<User> searchFriends(String query,Long id){
+        return userRepository.findByUsernameContainsAndIdNot(query,id);
+    }
+
+    public boolean isMyFriend(User from,User to){
+        return friendRepository.existsByFromAndTo(from,to) || friendRepository.existsByToAndFrom(from,to);
     }
 
 }
