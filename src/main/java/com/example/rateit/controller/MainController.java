@@ -31,6 +31,8 @@ public class MainController {
     private ListService listService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private FriendService friendService;
 
 
     @ModelAttribute("user")
@@ -305,7 +307,26 @@ public class MainController {
     /* TODO: implement post delete feature only for my post and not for other posts, same goes for wish
     and watch list */
 
+    @GetMapping("/myfriends")
+    public ModelAndView getFriends(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user = myUserDetails.getUser();
+        List<User> friends = friendService.getFriends(user);
+        ModelAndView mav = new ModelAndView("search_friend");
+        mav.addObject("friends",friends);
+        mav.addObject("noFriends",friends.isEmpty());
+        mav.addObject("username",user.getUsername());
+        return mav;
+    }
 
+    @GetMapping("/searchfriend")
+    public ModelAndView searchFriend(@RequestParam String query) throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("search_friends_results");
+        List<User> users = friendService.searchFriends(query);
+        mav.addObject("search",query);
+        mav.addObject("users", users);
+        mav.addObject("noUsers", users.isEmpty());
+        return mav;
+    }
 
 }
 

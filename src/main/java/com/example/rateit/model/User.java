@@ -1,5 +1,6 @@
 package com.example.rateit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class User {
     private String username;
 
     @NotBlank(message = "password is mandatory")
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -40,8 +42,9 @@ public class User {
         this.email = email;
     }
 
+    @JsonIgnore
     public String getFirstLetterOfUsername(){
-        return username.substring(0);
+        return username.substring(0,1);
     }
 
 }
