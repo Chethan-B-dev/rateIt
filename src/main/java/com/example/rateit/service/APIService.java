@@ -88,7 +88,7 @@ public class APIService {
         List<Media> similarMovies = new ArrayList<>();
         while (nodes.hasNext()){
             JsonNode movieNode = nodes.next();
-            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Media movie = objectMapper.treeToValue(movieNode,Media.class);
             similarMovies.add(movie);
         }
         return similarMovies;

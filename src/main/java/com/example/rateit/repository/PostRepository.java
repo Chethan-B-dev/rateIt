@@ -18,8 +18,15 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     Page<Post> findByUserId(Long userId,Pageable pageable);
 
     @Query(
-            value = "SELECT * from user_posts u where u.user_id = :userId and u.media_id = :mediaId order by u.created_at desc",
+            value = "SELECT * from user_posts u where u.user_id = :userId and u.media_id = :mediaId",
             nativeQuery = true
     )
     Optional<Post> findPostByUserAndMedia(Long userId, int mediaId);
+
+    @Query(
+            value = "SELECT * from user_posts u where u.user_id = :userId and u.id = :postId",
+            nativeQuery = true
+    )
+    Optional<Post> findPostByUserAndPost(Long userId, Long postId);
+
 }

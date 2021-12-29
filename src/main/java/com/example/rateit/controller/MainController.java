@@ -210,12 +210,7 @@ public class MainController {
 
     @GetMapping("/mywatchlist")
     public ModelAndView myWatchList(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            return new ModelAndView("redirect:/");
-        }
+        User user = myUserDetails.getUser();
         List<Media> mediaList = listService.getWatchListMedia(user.getId());
         ModelAndView mav = new ModelAndView("media_list");
         mav.addObject("mediaList",mediaList);
@@ -225,12 +220,7 @@ public class MainController {
 
     @GetMapping("/mywishlist")
     public ModelAndView myWishList(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            return new ModelAndView("redirect:/");
-        }
+        User user = myUserDetails.getUser();
         List<Media> mediaList = listService.getWishListMedia(user.getId());
         ModelAndView mav = new ModelAndView("media_list");
         mav.addObject("mediaList",mediaList);
@@ -253,8 +243,6 @@ public class MainController {
                 Integer.parseInt(postRequestBody.getMediaId())
         );
 
-        System.out.println(media);
-
         Post post = new Post(
                 user,
                 postRequestBody.getContent(),
@@ -271,19 +259,18 @@ public class MainController {
 
     @GetMapping("/myposts")
     public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails,@RequestParam(required = false) Integer pageNo){
-        System.out.println("page no is " + pageNo);
         User user = myUserDetails.getUser();
         ModelAndView mav = new ModelAndView("post");
-        if (pageNo == null){
-            pageNo = 1;
-        }
+        if (pageNo == null) pageNo = 1;
         Page<Post> posts = apiService.getPostsOfUser(user.getId(),pageNo);
         List<DisplayPost> displayPosts = new ArrayList<>();
         for (Post post : posts.getContent()) {
             Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
+            boolean isMyPost = postService.isMyPost(user.getId(), post.getId());
             DisplayPost displayPost = DisplayPost.builder()
                     .post(post)
                     .media(media)
+                    .isMyPost(isMyPost)
                     .build();
             displayPosts.add(displayPost);
         }
@@ -300,7 +287,23 @@ public class MainController {
         return new ModelAndView("redirect:/");
     }
 
-    // TODO: implement post delete feature only for my post and not for other posts
+    @GetMapping("/post/delete/{id}")
+    public ModelAndView deletePost(@PathVariable Long id,
+                                   @AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        boolean isMyPost = postService.isMyPost(user.getId(), id);
+        if (isMyPost)
+            postService.deletePost(id);
+        return new ModelAndView("redirect:/myposts");
+    }
+
+    /* TODO: implement post delete feature only for my post and not for other posts, same goes for wish
+    and watch list */
 
 
 

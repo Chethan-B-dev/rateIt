@@ -37,6 +37,10 @@ public class PostService {
         return postRepository.findPostByUserAndMedia(userId,mediaId).isPresent();
     }
 
+    public boolean isMyPost(Long userId,Long postId){
+        return postRepository.findPostByUserAndPost(userId,postId).isPresent();
+    }
+
     public void deletePost(Long id){
         postRepository.deleteById(id);
     }

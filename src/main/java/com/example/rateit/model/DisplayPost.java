@@ -15,4 +15,5 @@ import lombok.*;
 public class DisplayPost {
     private Post post;
     private Media media;
+    private boolean isMyPost = false;
 }
