@@ -107,7 +107,7 @@
                     <img class="card-img-top media-image"
                          th:src="'https://image.tmdb.org/t/p/original' + ${tv.poster}"
                          th:alt="${tv.title}">
-                    <a>
+                    <a th:href="'/tv/' + ${tv.id}">
                         <div class="mask rgba-white-slight"></div>
                     </a>
                 </div>

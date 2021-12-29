@@ -58,55 +58,21 @@ public class APIService {
         }
     }
 
-    public List getMovieCastReviewsAndSimilarMovies(int id) throws JsonProcessingException {
-        // https://api.themoviedb.org/3/movie/557/credits?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US
-        String movieCastUrl = url + "movie/" + id + String.format("/credits?api_key=%s&language=en-US",apiKey);
-        String json = restTemplate.getForObject(movieCastUrl,String.class);
-        JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("cast");
-        Iterator<JsonNode> node = arrayNode.elements();
-        List<Cast> castList = new ArrayList<>();
-        while (node.hasNext()){
-            JsonNode castNode = node.next();
-            Cast cast = objectMapper.treeToValue(castNode,Cast.class);
-            castList.add(cast);
-        }
-        // https://api.themoviedb.org/3/movie/557/similar?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&page=1
-        String similarMoviesUrl = url + "movie/" + id + String.format("/similar?api_key=%s&language=en-US&page=1",apiKey);
-        json = restTemplate.getForObject(similarMoviesUrl,String.class);
-        root = objectMapper.readTree(json);
-        arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> nodes = arrayNode.elements();
-        List<Media> similarMovies = new ArrayList<>();
-        while (nodes.hasNext()){
-            JsonNode movieNode = nodes.next();
-            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
-            similarMovies.add(movie);
-        }
-        // https://api.themoviedb.org/3/movie/557/reviews?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&page=1
-        String movieReviewUrl = url + "movie/" + id + String.format("/reviews?api_key=%s&language=en-US&page=1",apiKey);
-        json = restTemplate.getForObject(movieReviewUrl,String.class);
-        root = objectMapper.readTree(json);
-        arrayNode = (ArrayNode) root.get("results");
-        Iterator<JsonNode> reviewNodes = arrayNode.elements();
+    public List<Review> getMediaReviews(int id,String mediaType) throws JsonProcessingException {
+        String movieReviewUrl = url + mediaType + "/" + id + String.format("/reviews?api_key=%s&language=en-US&page=1",apiKey);
+        Iterator<JsonNode> reviewNodes = jsonNodeIterator(movieReviewUrl,"results");
         List<Review> movieReviews = new ArrayList<>();
         while (reviewNodes.hasNext()){
             JsonNode reviewNode = reviewNodes.next();
             Review review = objectMapper.treeToValue(reviewNode,Review.class);
             movieReviews.add(review);
         }
-        return new ArrayList<>(){
-            {
-                add(castList);
-                add(similarMovies);
-                add(movieReviews);
-            }
-        };
+        return movieReviews;
     }
 
     public List<Media> getTrendingMovies() throws JsonProcessingException {
         String trendingMovieUrl = url + "trending/movie/day" + String.format("?api_key=%s",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(trendingMovieUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(trendingMovieUrl,"results");
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -116,9 +82,33 @@ public class APIService {
         return movieList;
     }
 
+    public List<Media> getSimilarMedia(int id,String mediaType) throws JsonProcessingException{
+        String similarMoviesUrl = url + mediaType + "/" + id + String.format("/similar?api_key=%s&language=en-US&page=1",apiKey);
+        Iterator<JsonNode> nodes = jsonNodeIterator(similarMoviesUrl,"results");
+        List<Media> similarMovies = new ArrayList<>();
+        while (nodes.hasNext()){
+            JsonNode movieNode = nodes.next();
+            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
+            similarMovies.add(movie);
+        }
+        return similarMovies;
+    }
+
+    public List<Cast> getMediaCast(int id,String mediaType) throws JsonProcessingException{
+        String movieCastUrl = url + mediaType + "/" + id + String.format("/credits?api_key=%s&language=en-US",apiKey);
+        Iterator<JsonNode> node = jsonNodeIterator(movieCastUrl,"cast");
+        List<Cast> castList = new ArrayList<>();
+        while (node.hasNext()){
+            JsonNode castNode = node.next();
+            Cast cast = objectMapper.treeToValue(castNode,Cast.class);
+            castList.add(cast);
+        }
+        return castList;
+    }
+
     public List<Media> getPopularMovies() throws JsonProcessingException {
         String popularMovieUrl = url + "/movie/popular" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(popularMovieUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(popularMovieUrl,"results");
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -130,7 +120,7 @@ public class APIService {
 
     public List<Media> getUpcomingMovies() throws JsonProcessingException {
         String upcomingMovieUrl = url + "/movie/upcoming" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(upcomingMovieUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(upcomingMovieUrl,"results");
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -142,7 +132,7 @@ public class APIService {
 
     public List<Media> getTopRatedMovies() throws JsonProcessingException {
         String topRatedMovieUrl = url + "/movie/top_rated" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(topRatedMovieUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(topRatedMovieUrl,"results");
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -154,7 +144,7 @@ public class APIService {
 
     public List<Media> getTrendingTV() throws JsonProcessingException {
         String trendingTVUrl = url + "trending/tv/day" + String.format("?api_key=%s",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(trendingTVUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(trendingTVUrl,"results");
         List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -166,7 +156,7 @@ public class APIService {
 
     public List<Media> getTopRatedTV() throws JsonProcessingException {
         String topRatedTVUrl = url + "/tv/top_rated" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(topRatedTVUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(topRatedTVUrl,"results");
         List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -178,7 +168,7 @@ public class APIService {
 
     public List<Media> getOnAirTV() throws JsonProcessingException {
         String onAirTVUrl = url + "/tv/on_the_air" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
-        Iterator<JsonNode> node = jsonNodeIterator(onAirTVUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(onAirTVUrl,"results");
         List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
@@ -188,17 +178,17 @@ public class APIService {
         return tvList;
     }
 
-    private Iterator<JsonNode> jsonNodeIterator(String url) throws JsonProcessingException {
+    private Iterator<JsonNode> jsonNodeIterator(String url,String topic) throws JsonProcessingException {
         String json = restTemplate.getForObject(url,String.class);
         JsonNode root = objectMapper.readTree(json);
-        ArrayNode arrayNode = (ArrayNode) root.get("results");
+        ArrayNode arrayNode = (ArrayNode) root.get(topic);
         return arrayNode.elements();
     }
 
     public List<Media> search(String term) throws JsonProcessingException {
         // https://api.themoviedb.org/3/search/multi?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&query=far%20from%20home&page=1&include_adult=false
         String searchUrl = url + "search/multi" + String.format("?api_key=%s&language=en-US&query=%s&page=1&include_adult=false",apiKey,term);
-        Iterator<JsonNode> node = jsonNodeIterator(searchUrl);
+        Iterator<JsonNode> node = jsonNodeIterator(searchUrl,"results");
         List<Media> mediaList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode mediaNode = node.next();

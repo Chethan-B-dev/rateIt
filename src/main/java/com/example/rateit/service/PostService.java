@@ -37,4 +37,8 @@ public class PostService {
         return postRepository.findPostByUserAndMedia(userId,mediaId).isPresent();
     }
 
+    public void deletePost(Long id){
+        postRepository.deleteById(id);
+    }
+
 }

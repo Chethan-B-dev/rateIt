@@ -71,12 +71,10 @@ public class MainController {
     public ModelAndView movie(@PathVariable int id,@AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("movie");
         Media movie = apiService.getMovie(id);
-        System.out.println(movie);
         if (movie == null) return new ModelAndView("redirect:/?error");
-        List movieDetails = apiService.getMovieCastReviewsAndSimilarMovies(id);
-        List<Cast> casts = (List<Cast>) movieDetails.get(0);
-        List<Movie> similarMovies = (List<Movie>) movieDetails.get(1);
-        List<Review> movieReviews = (List<Review>) movieDetails.get(2);
+        List<Cast> casts = apiService.getMediaCast(id,"movie");
+        List<Media> similarMovies = apiService.getSimilarMedia(id,"movie");
+        List<Review> movieReviews = apiService.getMediaReviews(id,"movie");
         try{
             User user = myUserDetails.getUser();
             boolean hasWatched = listService.hasWatched(user.getId(),id);
@@ -101,10 +99,34 @@ public class MainController {
     }
 
     @GetMapping("/tv/{id}")
-    public ModelAndView tv(@PathVariable int id) throws JsonProcessingException {
+    public ModelAndView tv(@PathVariable int id,@AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("tv");
         Media tv = apiService.getTV(id);
+        if (tv == null) return new ModelAndView("redirect:/?error");
+        List<Cast> casts = apiService.getMediaCast(id,"tv");
+        List<Media> similarTv = apiService.getSimilarMedia(id,"tv");
+        List<Review> tvReviews = apiService.getMediaReviews(id,"tv");
+        try{
+            User user = myUserDetails.getUser();
+            boolean hasWatched = listService.hasWatched(user.getId(),id);
+            boolean hasWished = listService.hasWished(user.getId(),id);
+            boolean hasPosted = postService.hasPosted(user.getId(), id);
+            mav.addObject("hasWatched",hasWatched);
+            mav.addObject("hasWished",hasWished);
+            mav.addObject("hasPosted",hasPosted);
+        }catch (NullPointerException ex){
+            System.out.println("user not logged in from /tv/id");
+        }
         mav.addObject("tv",tv);
+
+        mav.addObject("runtime", MyUtilities.minToHours(((TV) tv).getEpisodeRuntime().get(0)));
+        mav.addObject("releaseYear",tv.getReleaseDate().getYear());
+        mav.addObject("customPost",new PostRequestBody());
+        mav.addObject("casts",casts);
+        mav.addObject("similarTv",similarTv);
+        mav.addObject("tvReviews",tvReviews);
+        mav.addObject("isReviewsEmpty",tvReviews.isEmpty());
+        mav.addObject("numberOfReviews",tvReviews.size());
         return mav;
     }
 
@@ -164,7 +186,7 @@ public class MainController {
         } catch (NullPointerException ex){
             return new ModelAndView("redirect:/" + media + "/" + id);
         }
-        WatchList newMedia = new WatchList(user,media,id);
+        WatchList newMedia = new WatchList(user,media,id,LocalDateTime.now());
         listService.saveWatchList(newMedia);
         return new ModelAndView("redirect:/" + media + "/" + id);
     }
@@ -181,7 +203,7 @@ public class MainController {
             return new ModelAndView("redirect:/" + media + "/" + id);
         }
 
-        WishList newMedia = new WishList(user,media,id);
+        WishList newMedia = new WishList(user,media,id,LocalDateTime.now());
         listService.saveWishList(newMedia);
         return new ModelAndView("redirect:/" + media + "/" + id);
     }
@@ -277,6 +299,10 @@ public class MainController {
     public ModelAndView redirectToHome(){
         return new ModelAndView("redirect:/");
     }
+
+    // TODO: implement post delete feature only for my post and not for other posts
+
+
 
 }
 

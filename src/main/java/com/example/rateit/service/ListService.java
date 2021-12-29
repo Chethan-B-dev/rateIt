@@ -37,16 +37,13 @@ public class ListService {
         return wishListRepository.findMediaInWishList(userId,mediaId).isPresent();
     }
 
-
     public List<WatchList> getUserWatchList(Long userId){
         return  watchListRepository.userWatchList(userId);
     }
 
-
     public List<WishList> getUserWishList(Long userId){
         return  wishListRepository.userWishList(userId);
     }
-
 
     public List<Media> getWatchListMedia(Long userId){
         List<WatchList> watchLists = getUserWatchList(userId);
@@ -77,5 +74,4 @@ public class ListService {
         }
         return mediaList;
     }
-
 }

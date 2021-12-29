@@ -3,6 +3,7 @@ package com.example.rateit.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * created by chethan on 21-12-2021
@@ -27,10 +28,12 @@ public class WishList {
     private String mediaType;
     private int mediaId;
 
-    public WishList(User user, String mediaType, int mediaId) {
+    private LocalDateTime addedAt;
+
+    public WishList(User user, String mediaType, int mediaId, LocalDateTime addedAt) {
         this.user = user;
         this.mediaType = mediaType;
         this.mediaId = mediaId;
+        this.addedAt = addedAt;
     }
-
 }

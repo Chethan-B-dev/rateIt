@@ -14,14 +14,14 @@ import java.util.Optional;
 @Repository
 public interface WatchListRepository extends JpaRepository<WatchList,Long> {
     @Query(
-            value = "SELECT * from user_watch_list u where u.user_id = :userId and u.media_id = :mediaId",
+            value = "SELECT * from user_watch_list u where u.user_id = :userId and u.media_id = :mediaId order by added_at desc",
             nativeQuery = true
     )
     Optional<WatchList> findMediaInWatchList(Long userId, int mediaId);
 
 
     @Query(
-            value = "SELECT * from user_watch_list u where u.user_id = :userId",
+            value = "SELECT * from user_watch_list u where u.user_id = :userId order by added_at desc",
             nativeQuery = true
     )
     List<WatchList> userWatchList(Long userId);
