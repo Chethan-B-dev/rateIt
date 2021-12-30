@@ -29,15 +29,13 @@ public class FriendService {
         Friend friend = new Friend();
         User user1 = currentUser;
         User user2 = userRepository.findById(id).get();
-        System.out.println(user1);
-        System.out.println(user2);
         User firstuser = user1;
         User seconduser = user2;
         if(user1.getId() > user2.getId()){
             firstuser = user2;
             seconduser = user1;
         }
-        if(!(friendRepository.existsByFromAndTo(firstuser,seconduser)) ){
+        if(!(friendRepository.existsByFromAndTo(firstuser,seconduser))){
             friend.setCreatedAt(LocalDateTime.now());
             friend.setFrom(firstuser);
             friend.setTo(seconduser);

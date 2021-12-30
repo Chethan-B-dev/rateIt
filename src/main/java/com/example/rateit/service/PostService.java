@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * created by chethan on 21-12-2021
  **/
@@ -43,6 +45,13 @@ public class PostService {
 
     public void deletePost(Long id){
         postRepository.deleteById(id);
+    }
+
+    public Page<Post> getFeed(List<Long> userIds, Long myId,int pageNum){
+        int pageSize = 5;
+        Sort sort = Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        return postRepository.findByUserIdInAndUserIdNot(userIds, myId,pageable);
     }
 
 }

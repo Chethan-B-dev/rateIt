@@ -288,11 +288,10 @@ public class MainController {
         List<DisplayPost> displayPosts = new ArrayList<>();
         for (Post post : posts.getContent()) {
             Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
-            boolean isMyPost = postService.isMyPost(user.getId(), post.getId());
             DisplayPost displayPost = DisplayPost.builder()
                     .post(post)
                     .media(media)
-                    .isMyPost(isMyPost)
+                    .isMyPost(true)
                     .build();
             displayPosts.add(displayPost);
         }
@@ -326,17 +325,54 @@ public class MainController {
         List<DisplayPost> displayPosts = new ArrayList<>();
         for (Post post : posts.getContent()) {
             Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
-            boolean isMyPost = postService.isMyPost(user.getId(), post.getId());
             DisplayPost displayPost = DisplayPost.builder()
                     .post(post)
                     .media(media)
-                    .isMyPost(isMyPost)
+                    .isMyPost(false)
                     .build();
             displayPosts.add(displayPost);
         }
         mav.addObject("displayPosts", displayPosts);
         mav.addObject("noPosts",displayPosts.isEmpty());
         mav.addObject("username", username);
+        mav.addObject("currentPage", pageNo);
+        mav.addObject("totalPages", posts.getTotalPages());
+        mav.addObject("totalItems", posts.getTotalElements());
+        return mav;
+    }
+
+
+    @GetMapping("/myfeed")
+    public ModelAndView feedPosts(
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @RequestParam(required = false) Integer pageNo
+    ){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        ModelAndView mav = new ModelAndView("post");
+        if (pageNo == null) pageNo = 1;
+        List<User> friends = friendService.getFriends(user);
+        List<Long> userIds = new ArrayList<>();
+        for (User friend : friends)
+            userIds.add(friend.getId());
+        Page<Post> posts = postService.getFeed(userIds,user.getId(),pageNo);
+        List<DisplayPost> displayPosts = new ArrayList<>();
+        for (Post post : posts.getContent()) {
+            Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
+            DisplayPost displayPost = DisplayPost.builder()
+                    .post(post)
+                    .media(media)
+                    .isMyPost(false)
+                    .build();
+            displayPosts.add(displayPost);
+        }
+        mav.addObject("displayPosts", displayPosts);
+        mav.addObject("noPosts",displayPosts.isEmpty());
+        mav.addObject("username", user.getUsername());
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
         mav.addObject("totalItems", posts.getTotalElements());
@@ -364,7 +400,7 @@ public class MainController {
     }
 
     @GetMapping("/list/{list}/{mediaId}")
-    public ModelAndView deletePost(
+    public ModelAndView deleteList(
             @PathVariable int mediaId,
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @PathVariable String list

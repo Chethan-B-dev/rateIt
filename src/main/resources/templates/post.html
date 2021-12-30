@@ -137,7 +137,7 @@
 
                           <p class="font-small font-weight-bold mb-1">
                             <span th:text="${#temporals.format(displayPost.post.createdAt, 'dd-MMMM-yyyy', new java.util.Locale('en', 'EN'))}">27/08/2017</span></p>
-                          <p class="font-small  mb-0 font-weight-bold" th:text="${username}">Anna Smith</p>
+                          <p class="font-small  mb-0 font-weight-bold" th:text="${displayPost.post.user.username}">Anna Smith</p>
 
                         </div>
 

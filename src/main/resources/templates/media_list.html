@@ -55,6 +55,10 @@
         Watch/Wish List
       </h3>
 
+      <div class="no-friends flex-center my-3" th:if="${mediaDTOList.isEmpty()}">
+        <h4 class="text-white">there are no Media to show right now</h4>
+      </div>
+
       <div class="result-section container-fluid">
 
         <div th:each="mediaDTO : ${mediaDTOList}" class="text-center hoverable bg-dark text-white p-2 mb-3">

@@ -62,11 +62,11 @@
       <!-- if no friends -->
     
 
-      <div class="result-section container-fluid">
+      <div class="result-section container-fluid" th:unless="${noFriends}">
         <!-- News jumbotron -->
         <div class="text-center hoverable bg-dark text-white p-2 mb-3">
           <!-- Grid row -->
-          <div class="row my-1" th:each="friend : ${friends}">
+          <div class="row my-3" th:each="friend : ${friends}">
             <!-- Grid column -->
             <div class="col-md-3">
               <!-- Featured image -->
