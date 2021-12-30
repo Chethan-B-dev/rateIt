@@ -305,6 +305,44 @@ public class MainController {
         return mav;
     }
 
+    @GetMapping("/posts/{userId}")
+    public ModelAndView friendPosts(
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @RequestParam(required = false) Integer pageNo,
+            @PathVariable Long userId
+    ){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        ModelAndView mav = new ModelAndView("post");
+        if (pageNo == null) pageNo = 1;
+        boolean isMyFriend = friendService.isMyFriend(user.getId(),userId);
+        if (!isMyFriend) return new ModelAndView("redirect:/");
+        Page<Post> posts = apiService.getPostsOfUser(userId,pageNo);
+        String username = userService.getUser(userId).getUsername();
+        List<DisplayPost> displayPosts = new ArrayList<>();
+        for (Post post : posts.getContent()) {
+            Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
+            boolean isMyPost = postService.isMyPost(user.getId(), post.getId());
+            DisplayPost displayPost = DisplayPost.builder()
+                    .post(post)
+                    .media(media)
+                    .isMyPost(isMyPost)
+                    .build();
+            displayPosts.add(displayPost);
+        }
+        mav.addObject("displayPosts", displayPosts);
+        mav.addObject("noPosts",displayPosts.isEmpty());
+        mav.addObject("username", username);
+        mav.addObject("currentPage", pageNo);
+        mav.addObject("totalPages", posts.getTotalPages());
+        mav.addObject("totalItems", posts.getTotalElements());
+        return mav;
+    }
+
     @GetMapping("/login")
     public ModelAndView redirectToHome(){
         return new ModelAndView("redirect:/");

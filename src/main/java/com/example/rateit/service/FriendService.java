@@ -74,4 +74,10 @@ public class FriendService {
         return friendRepository.existsByFromAndTo(from,to) || friendRepository.existsByToAndFrom(from,to);
     }
 
+    public boolean isMyFriend(Long fromId,Long toId){
+        User from = userRepository.getById(fromId);
+        User to = userRepository.getById(toId);
+        return friendRepository.existsByFromAndTo(from,to) || friendRepository.existsByToAndFrom(from,to);
+    }
+
 }

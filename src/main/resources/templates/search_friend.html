@@ -83,7 +83,7 @@
               <div>
                 <a th:href="'/watchlist/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2">Watchlist</a>
                 <a th:href="'/wishlist/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2">WishList</a>
-                <a class="btn btn-md btn-outline-danger mr-2">Posts</a>
+                <a th:href="'/posts/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2">Posts</a>
               </div>
 
             </div>
