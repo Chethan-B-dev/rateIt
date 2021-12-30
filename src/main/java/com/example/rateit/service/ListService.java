@@ -75,5 +75,21 @@ public class ListService {
         return mediaList;
     }
 
+    public boolean isMyWatchList(Long userId,int mediaId){
+        return watchListRepository.existsByUserIdAndMediaId(userId,mediaId);
+    }
+
+    public boolean isMyWishList(Long userId,int mediaId){
+        return wishListRepository.existsByUserIdAndMediaId(userId,mediaId);
+    }
+
+    public void deleteWatchListByMediaAndUser(Long userId,int mediaId){
+        watchListRepository.deleteByMediaIdAndUserId(mediaId,userId);
+    }
+
+    public void deleteWishListByMediaAndUser(Long userId,int mediaId){
+        wishListRepository.deleteByMediaIdAndUserId(mediaId,userId);
+    }
+
 
 }

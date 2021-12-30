@@ -57,7 +57,7 @@
 
       <div class="result-section container-fluid">
 
-        <div th:each="media : ${mediaList}" class="text-center hoverable bg-dark text-white p-2 mb-3">
+        <div th:each="mediaDTO : ${mediaDTOList}" class="text-center hoverable bg-dark text-white p-2 mb-3">
           <!-- Grid row -->
           <div class="row">
             <!-- Grid column -->
@@ -66,9 +66,9 @@
               <div class="view overlay zoom">
                 <img
                   class="img-fluid"
-                  th:src="'https://image.tmdb.org/t/p/original' + ${media.poster}"
-                  th:alt="${media.title}"/>
-                <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">
+                  th:src="'https://image.tmdb.org/t/p/original' + ${mediaDTO.media.poster}"
+                  th:alt="${mediaDTO.media.title}"/>
+                <a th:href="@{'/' + ${mediaDTO.media.mediaType} + '/' + ${mediaDTO.media.id}}">
                   <div class="mask rgba-white-slight"></div>
                 </a>
               </div>
@@ -78,17 +78,18 @@
             <!-- Grid column -->
             <div class="col-md-9 text-md-left mt-3">
              
-              <h4 class="h4 mb-4 text-danger" th:text="${media.title}">media title</h4>
+              <h4 class="h4 mb-4 text-danger" th:text="${mediaDTO.media.title}">media title</h4>
+              <a th:if="${mediaDTO.isMyMedia()}" th:href="'/list/' + ${list} + '/' + ${mediaDTO.media.id}" type="button" class="btn-floating btn-sm bg-danger float-right"><i class="fas fa-trash text-white"></i></a>
 
-              <p class="font-weight-normal text-wrap" th:text="${media.overview}">
+              <p class="font-weight-normal text-wrap" th:text="${mediaDTO.media.overview}">
                 media overview
               </p>
 
-              <p class="font-weight-normal" th:text="${media.releaseDate.getYear()}">
+              <p class="font-weight-normal" th:text="${mediaDTO.media.releaseDate.getYear()}">
                 year
               </p>
 
-              <a class="btn btn-danger btn-sm ml-0" th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">Read more</a>
+              <a class="btn btn-danger btn-sm ml-0" th:href="@{'/' + ${mediaDTO.media.mediaType} + '/' + ${mediaDTO.media.id}}">Read more</a>
 
             </div>
             <!-- Grid column -->

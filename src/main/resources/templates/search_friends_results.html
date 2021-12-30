@@ -41,7 +41,7 @@
       <!-- if no search -->
     
 
-      <div class="result-section container-fluid">
+      <div th:unless="${noUsers}" class="result-section container-fluid">
         <!-- News jumbotron -->
         <div class="text-center bg-dark text-white p-2 mb-3">
           <!-- Grid row -->
@@ -75,10 +75,7 @@
       </div>
 
 
-      
     </section>
-
-
 
   </main>
 

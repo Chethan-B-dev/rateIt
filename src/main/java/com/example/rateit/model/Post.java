@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Post {
 
-    // TODO: fix posts not working for other users or other posts
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +32,6 @@ public class Post {
     private int rating;
 
     private String mediaType;
-    @Column(unique = true)
     private int mediaId;
 
     public Post(User user, String content, LocalDateTime createdAt, int rating, String mediaType, int mediaId) {

@@ -2,9 +2,11 @@ package com.example.rateit.repository;
 
 import com.example.rateit.model.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 @Repository
@@ -21,4 +23,11 @@ public interface WishListRepository extends JpaRepository<WishList,Long> {
             nativeQuery = true
     )
     List<WishList> userWishList(Long userId);
+
+    boolean existsByUserIdAndMediaId(Long userId,int mediaId);
+
+    @Transactional
+    @Modifying
+    void deleteByMediaIdAndUserId(int mediaId,Long userId);
+
 }

@@ -80,6 +80,13 @@
         </div>
       </section>
 
+
+
+    <div class="no-friends flex-center my-3" th:if="${noPosts}">
+      <h4 class="text-white">there are no posts to show right now</h4>
+    </div>
+
+
       <section>
         <div class="container-fluid">
           <hr class="my-5">
@@ -123,6 +130,7 @@
                             <a th:href="'/post/delete/' + ${displayPost.post.id}" th:if="${displayPost.isMyPost()}" type="button" class="btn-floating btn-sm bg-danger float-right"><i class="fas fa-trash text-white"></i></a>
                           </h4>
 
+
                           <div class="card-header-title">
                             <p class="mb-4" th:text="${displayPost.post.content}"> review </p>
                           </div>
@@ -163,7 +171,7 @@
       </section>
 
     <!--    pagination-->
-    <section class="flex-center">
+    <section class="flex-center" th:unless="${noPosts}">
       <nav class="text-white">
         <ul class="pagination pg-red">
 

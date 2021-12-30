@@ -8,8 +8,8 @@ import java.util.List;
 public class MyUtilities {
 
     public static void print(List list){
-        for (int i = 0; i < list.size(); i++){
-            System.out.println(list.get(i));
+        for (Object o : list) {
+            System.out.println(o);
         }
     }
 
@@ -20,6 +20,9 @@ public class MyUtilities {
     public static String minToHours(int runtime){
         int hours = runtime / 60;
         int minutes = runtime % 60;
-        return String.format("%dh %dm",hours,minutes);
+        if (hours > 0)
+            return String.format("%dh %dm",hours,minutes);
+        else
+            return String.format("%dm",minutes);
     }
 }

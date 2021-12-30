@@ -121,7 +121,13 @@ public class MainController {
         }
         mav.addObject("tv",tv);
 
-        mav.addObject("runtime", MyUtilities.minToHours(((TV) tv).getEpisodeRuntime().get(0)));
+        int runTime = 0;
+        List<Integer> runTimes = ((TV) tv).getEpisodeRuntime();
+        if (!runTimes.isEmpty()){
+            runTime = runTimes.get(0);
+        }
+
+        mav.addObject("runtime", MyUtilities.minToHours(runTime));
         mav.addObject("releaseYear",tv.getReleaseDate().getYear());
         mav.addObject("customPost",new PostRequestBody());
         mav.addObject("casts",casts);
@@ -214,9 +220,16 @@ public class MainController {
     public ModelAndView myWatchList(@AuthenticationPrincipal MyUserDetails myUserDetails){
         User user = myUserDetails.getUser();
         List<Media> mediaList = listService.getWatchListMedia(user.getId());
+        List<MediaDTO> mediaDTOList = new ArrayList<>();
+        for (Media media : mediaList) {
+            boolean isMyMedia = listService.isMyWatchList(user.getId(),media.getId());
+            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            mediaDTOList.add(mediaDTO);
+        }
         ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaList",mediaList);
+        mav.addObject("mediaDTOList",mediaDTOList);
         mav.addObject("topic","My WatchList");
+        mav.addObject("list","watchlist");
         return mav;
     }
 
@@ -224,9 +237,16 @@ public class MainController {
     public ModelAndView myWishList(@AuthenticationPrincipal MyUserDetails myUserDetails){
         User user = myUserDetails.getUser();
         List<Media> mediaList = listService.getWishListMedia(user.getId());
+        List<MediaDTO> mediaDTOList = new ArrayList<>();
+        for (Media media : mediaList) {
+            boolean isMyMedia = listService.isMyWishList(user.getId(),media.getId());
+            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            mediaDTOList.add(mediaDTO);
+        }
         ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaList",mediaList);
+        mav.addObject("mediaDTOList",mediaDTOList);
         mav.addObject("topic","My WishList");
+        mav.addObject("list","wishlist");
         return mav;
     }
 
@@ -277,6 +297,7 @@ public class MainController {
             displayPosts.add(displayPost);
         }
         mav.addObject("displayPosts", displayPosts);
+        mav.addObject("noPosts",displayPosts.isEmpty());
         mav.addObject("username", user.getUsername());
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
@@ -302,6 +323,35 @@ public class MainController {
         if (isMyPost)
             postService.deletePost(id);
         return new ModelAndView("redirect:/myposts");
+    }
+
+    @GetMapping("/list/{list}/{mediaId}")
+    public ModelAndView deletePost(
+            @PathVariable int mediaId,
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @PathVariable String list
+    ){
+        User user;
+        try {
+            user = myUserDetails.getUser();
+        } catch (NullPointerException ex){
+            return new ModelAndView("redirect:/");
+        }
+        if (list.equals("watchlist")){
+            boolean isMyWatchList = listService.isMyWatchList(user.getId(),mediaId);
+            if (isMyWatchList){
+                listService.deleteWatchListByMediaAndUser(user.getId(),mediaId);
+            }
+
+        } else{
+            boolean isMyWishList = listService.isMyWishList(user.getId(),mediaId);
+            if (isMyWishList){
+                listService.deleteWishListByMediaAndUser(user.getId(),mediaId);
+            }
+        }
+
+        String redirectTo = "/my" + list;
+        return new ModelAndView("redirect:" + redirectTo);
     }
 
     /* TODO: implement post delete feature only for my post and not for other posts, same goes for wish
@@ -358,14 +408,27 @@ public class MainController {
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @PathVariable Long friendID
     ){
-        User user = myUserDetails.getUser();
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
         User friend = userService.getUser(friendID);
         if (friend == null) return new ModelAndView("redirect:/myfriends");
         boolean isMyFriend = friendService.isMyFriend(user,friend);
         if (!isMyFriend) return new ModelAndView("redirect:/myfriends");
         List<Media> mediaList = listService.getWatchListMedia(friend.getId());
+        List<MediaDTO> mediaDTOList = new ArrayList<>();
+
+        for (Media media : mediaList) {
+            boolean isMyMedia = listService.isMyWatchList(user.getId(),media.getId());
+            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            mediaDTOList.add(mediaDTO);
+        }
+
         ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaList",mediaList);
+        mav.addObject("mediaDTOList",mediaDTOList);
         mav.addObject("topic",String.format("%s's Watch list",friend.getUsername()));
         return mav;
     }
@@ -375,14 +438,27 @@ public class MainController {
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @PathVariable Long friendID
     ){
-        User user = myUserDetails.getUser();
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
         User friend = userService.getUser(friendID);
         if (friend == null) return new ModelAndView("redirect:/myfriends");
         boolean isMyFriend = friendService.isMyFriend(user,friend);
         if (!isMyFriend) return new ModelAndView("redirect:/myfriends");
         List<Media> mediaList = listService.getWishListMedia(friend.getId());
+        List<MediaDTO> mediaDTOList = new ArrayList<>();
+
+        for (Media media : mediaList) {
+            boolean isMyMedia = listService.isMyWishList(user.getId(),media.getId());
+            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            mediaDTOList.add(mediaDTO);
+        }
+
         ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaList",mediaList);
+        mav.addObject("mediaDTOList",mediaDTOList);
         mav.addObject("topic",String.format("%s's Wish list",friend.getUsername()));
         return mav;
     }
