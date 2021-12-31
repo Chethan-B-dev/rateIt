@@ -80,12 +80,14 @@
             </div>
           </li>
 
+
+
           <li th:if="${#authorization.expression('isAuthenticated()')}">
-            <a class="text-white bg-grey waves-effect" th:href="@{/myfeed}">Feed</a>
+             <a class="text-white bg-grey waves-effect" th:href="@{/myfeed}"><i class="fas fa-comment"></i> Feed</a>
           </li>
 
           <li th:if="${#authorization.expression('isAuthenticated()')}">
-              <a class="text-white bg-grey waves-effect" th:href="@{/logout}">Logout</a>
+             <a class="text-white bg-grey waves-effect" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </li>
        </ul>
       </li>
@@ -143,8 +145,9 @@
 
     <ul class="nav navbar-nav nav-flex-icons ml-auto text-white">
 
-      <li class="nav-item">
-        <a class="nav-link "><i class="fas fa-bell text-danger animated swing infinite slow delay-1s"></i> <span class="clearfix d-none d-sm-inline-block">Notifications</span></a>
+      <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+        <a th:if="${hasPendingFriends}" th:href="@{/myfriendrequests}" class="nav-link "><i class="fas fa-bell text-danger animated swing infinite slow delay-1s"></i> <span class="clearfix d-none d-sm-inline-block">Friend Requests</span></a>
+        <a th:unless="${hasPendingFriends}" th:href="@{/myfriendrequests}" class="nav-link "><i class="fas fa-bell text-danger"></i> <span class="clearfix d-none d-sm-inline-block">Friend Requests</span></a>
       </li>
 
       <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}">
@@ -157,7 +160,7 @@
       </li>
 
       <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-        <a class="btn-sm btn-danger nav-link" th:href="@{/logout}">Logout</a>
+         <a class="btn-sm btn-danger nav-link" th:href="@{/logout}"><i class="fas fa-sign-out-alt text-dark"></i> Logout</a>
       </li>
 
       <li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}">

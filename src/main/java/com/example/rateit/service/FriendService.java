@@ -25,22 +25,15 @@ public class FriendService {
     @Autowired
     private UserRepository userRepository;
 
-    public Friend saveFriend(User user1, Long id) throws NullPointerException{
+    public Friend saveFriend(User from, Long id) throws NullPointerException{
 
         Friend friend = new Friend();
-        User user2 = userRepository.findById(id).get();
-        User firstuser = user1;
-        User seconduser = user2;
+        User to = userRepository.findById(id).get();
 
-        if(user1.getId() > user2.getId()){
-            firstuser = user2;
-            seconduser = user1;
-        }
-
-        if(!(friendRepository.existsByFromAndTo(firstuser,seconduser))){
+        if(!isMyFriend(from,to)){
             friend.setCreatedAt(LocalDateTime.now());
-            friend.setFrom(firstuser);
-            friend.setTo(seconduser);
+            friend.setFrom(from);
+            friend.setTo(to);
             friend.setStatus(Status.pending);
             return friendRepository.save(friend);
         }
@@ -55,19 +48,25 @@ public class FriendService {
         List<User> friendUsers = new ArrayList<>();
 
         /*
-            suppose there are 3 users with id 1,2,3.
-            if user1 add user2 as friend database record will be first user = user1 second user = user2
-            if user3 add user2 as friend database record will be first user = user2 second user = user3
+            suppose there are 4 users with id 1,2,3,4.
+
+            1) if user1 add user2 as friend database record will be first user = user1 second user = user2
+            2) if user2 add user3 as friend database record will be first user = user2 second user = user3
+            3) if user3 add user1 as friend database record will be first user = user3 second user = user1
+            3) if user4 add user2 as friend database record will be first user = user4 second user = user2
+
+
             it is because of lexicographical order
             while calling get friends of user 2 we need to check as a both first user and the second user
 
-            first user = user1 second user = user2
-            first user = user2 second user = user3
+          1  first user = user1 second user = user2
+          2  first user = user2 second user = user3
+          3  first user = user4 second user = user2
 
             now i want to get friends of user2
 
-            List<Friend> findbyFirst = [(Friendid = 1,from = user2,to = user3)];
-            List<Friend> findbySecond = [(Friendid = 2,from = user1,to = user2)];
+            List<Friend> findbyFirst = [(Friendid = 2,from = user2,to = user3)];
+            List<Friend> findbySecond = [(Friendid = 1,from = user1,to = user2),(Friendid = 3,from = user4,to = user2)];
 
             List<User> friends = [];
 
@@ -89,12 +88,12 @@ public class FriendService {
 
         for (Friend friend : friendsByFirstUser) {
             if (friend.getStatus() == Status.accepted)
-                friendUsers.add(userRepository.findById(friend.getTo().getId()).get());
+                friendUsers.add(friend.getTo());
         }
 
         for (Friend friend : friendsBySecondUser) {
             if (friend.getStatus() == Status.accepted)
-                friendUsers.add(userRepository.findById(friend.getFrom().getId()).get());
+                friendUsers.add(friend.getFrom());
         }
 
         return friendUsers;
@@ -105,88 +104,84 @@ public class FriendService {
     }
 
     public boolean isMyFriend(User from,User to){
-        User firstUser = from;
-        User secondUser = to;
-        if (from.getId() > to.getId()){
-            firstUser = to;
-            secondUser = from;
-        }
-        return isFriendRequestAccepted(firstUser,secondUser);
+
+        /*
+        suppose there are 4 users with id 1,2,3,4.
+
+        1) if user1 add user2 as friend database record will be first user = user1 second user = user2
+        2) if user2 add user3 as friend database record will be first user = user2 second user = user3
+        3) if user3 add user1 as friend database record will be first user = user3 second user = user1
+        3) if user4 add user2 as friend database record will be first user = user4 second user = user2
+
+
+        it is because of lexicographical order
+        while calling get friends of user 2 we need to check as a both first user and the second user
+
+        1  first user = user1 second user = user2
+        2  first user = user2 second user = user3
+        3  first user = user4 second user = user2
+
+       */
+
+
+        return friendRepository.isMyFriend(from.getId(),to.getId()).isPresent();
     }
 
     public boolean isMyFriend(Long fromId,Long toId){
-        User from = userRepository.getById(fromId);
-        User to = userRepository.getById(toId);
-        User firstUser = from;
-        User secondUser = to;
-        if (from.getId() > to.getId()){
-            firstUser = to;
-            secondUser = from;
-        }
-        return isFriendRequestAccepted(firstUser,secondUser);
+        return friendRepository.isMyFriend(fromId,toId).isPresent();
     }
 
     public boolean hasRequested(User from,User to){
-
-        User firstUser = from;
-        User secondUser = to;
-
-        if (from.getId() > to.getId()){
-            firstUser = to;
-            secondUser = from;
-        }
-
-        return isFriendRequestPending(firstUser,secondUser);
+        return friendRepository.hasRequested(from.getId(),to.getId()).isPresent();
     }
 
     public boolean hasRequested(Long fromId,Long toId){
-
-        User from = userRepository.getById(fromId);
-        User to = userRepository.getById(toId);
-        User firstUser = from;
-        User secondUser = to;
-        if (from.getId() > to.getId()){
-            firstUser = to;
-            secondUser = from;
-        }
-
-        return isFriendRequestPending(firstUser,secondUser);
+        return friendRepository.hasRequested(fromId,toId).isPresent();
     }
 
     public boolean hasRequested(User from,Long toId){
-
-        User to = userRepository.getById(toId);
-        User firstUser = from;
-        User secondUser = to;
-
-        if (from.getId() > to.getId()){
-            firstUser = to;
-            secondUser = from;
-        }
-
-        return isFriendRequestPending(firstUser,secondUser);
+        return friendRepository.hasRequested(from.getId(),toId).isPresent();
     }
 
     private boolean isFriendRequestPending(User firstUser,User secondUser){
-        Optional<Friend> friendShip = friendRepository.findByFromAndTo(firstUser,secondUser);
-
-        if (friendShip.isPresent()){
-            Friend friend = friendShip.get();
-            return friend.getStatus() == Status.pending;
-        }
-
-        return false;
+        return friendRepository.hasRequested(firstUser.getId(),secondUser.getId()).isPresent();
     }
 
     private boolean isFriendRequestAccepted(User firstUser,User secondUser){
-        Optional<Friend> friendShip = friendRepository.findByFromAndTo(firstUser,secondUser);
+        return isMyFriend(firstUser,secondUser);
+    }
 
-        if (friendShip.isPresent()){
-            Friend friend = friendShip.get();
-            return friend.getStatus() == Status.accepted;
+    public List<User> getPendingFriends(User currentUser){
+        List<Friend> pendingFriends = friendRepository.getPendingFriends(currentUser.getId());
+        List<User> pendingUsers = new ArrayList<>();
+
+        for (Friend friend : pendingFriends) {
+            pendingUsers.add(friend.getFrom());
         }
+        return pendingUsers;
+    }
 
+    public boolean haveRecived(User me,User friend){
+        return friendRepository.haveReceived(me.getId(), friend.getId()).isPresent();
+    }
+
+    public void deleteFriend(Long fromId,Long toId){
+        friendRepository.deleteByFromIdAndToId(fromId,toId);
+    }
+
+    public boolean acceptFriend(Long fromId,Long toId){
+        Optional<Friend> pendingFriend = friendRepository.findByFromIdAndToIdAndStatus(fromId,toId,Status.pending);
+        if (pendingFriend.isPresent()){
+            Friend friend = pendingFriend.get();
+            friend.setStatus(Status.accepted);
+            friendRepository.save(friend);
+            return true;
+        }
         return false;
+    }
+
+    public boolean hasPendingRequests(Long myId){
+        return !friendRepository.getPendingFriends(myId).isEmpty();
     }
 
 }

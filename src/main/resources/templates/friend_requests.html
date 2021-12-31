@@ -28,29 +28,24 @@
     
     <section class="search-result-section">
       
-      <h3 class="pt-2 pl-4 font-weight-bold text-white pb-2 my-3">
-        <span>People who match </span> <span class="text-danger">Query</span>
-      </h3>
-
-
       <!-- if no search -->
-      <div class="no-friends flex-center my-3">
+      <div th:if="${noFriends}" class="no-friends flex-center my-3">
           <h4 class="text-white">there are no Friend requests right now</h4>
       </div>
       <!-- if no search -->
     
 
-      <div class="result-section container-fluid">
+      <div th:unless="${noFriends}" class="result-section container-fluid">
         <!-- News jumbotron -->
         <div class="text-center bg-dark text-white p-2 mb-3">
           <!-- Grid row -->
-          <div class="row">
+          <div class="row my-3" th:each="friend : ${friends}">
             <!-- Grid column -->
             <div class="col-md-3">
               <!-- Featured image -->
               <div class="view overlay zoom flex-center flex-column">
-                  <h4>friend name</h4>
-                  <h4>some other info</h4>
+                <h4 th:text="${friend.username}">friend name</h4>
+                <h6 class="text-muted" th:text="${friend.email}">email</h6>
               </div>
             </div>
             <!-- Grid column -->
@@ -59,8 +54,8 @@
             <div class="col-md-9 text-md-left mt-3">
              
               <div class="float-right">
-                <a class="btn btn-md btn-outline-danger mr-2"><i class="fas fa-check"></i> Accept Friend Request</a>
-                <a class="btn btn-md btn-outline-danger mr-2"> <i class="fas fa-times"></i> Reject Friend Request</a>
+                <a th:href="'/acceptfriend/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2"><i class="fas fa-check"></i> Accept Friend Request</a>
+                <a th:href="'/rejectfriend/' + ${friend.id}" class="btn btn-md btn-outline-danger mr-2"> <i class="fas fa-times"></i> Reject Friend Request</a>
               </div>
 
             </div>

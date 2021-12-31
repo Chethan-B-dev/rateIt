@@ -47,4 +47,9 @@ public class User {
         return username.substring(0,1);
     }
 
+    @JsonIgnore
+    public String getCustomUsername(){
+        return username;
+    }
+
 }

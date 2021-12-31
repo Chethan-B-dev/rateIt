@@ -45,13 +45,13 @@
         <!-- News jumbotron -->
         <div class="text-center bg-dark text-white p-2 mb-3">
           <!-- Grid row -->
-          <div class="row my-1" th:each="user : ${users}">
+          <div class="row my-1" th:each="searchFriend : ${searchFriendDTOS}">
             <!-- Grid column -->
             <div class="col-md-3">
               <!-- Featured image -->
               <div class="view overlay zoom flex-center flex-column">
-                  <h4 th:text="${user.username}">friend name</h4>
-                  <h6 class="text-muted" th:text="${user.email}">email</h6>
+                  <h4 th:text="${searchFriend.user.username}">friend name</h4>
+                  <h6 class="text-muted" th:text="${searchFriend.user.email}">email</h6>
               </div>
             </div>
             <!-- Grid column -->
@@ -59,9 +59,21 @@
             <!-- Grid column -->
             <div class="col-md-9 text-md-left mt-3">
              
-              <div class="float-right">
-                <a class="btn btn-md btn-outline-danger mr-2" th:href="'/addfriend/' + ${user.id}"><i class="fas fa-plus-circle"></i> Add Friend</a>
-                <a class="btn btn-md btn-outline-danger mr-2 disabled"> <i class="fas fa-check"></i> Already Sent</a>
+              <div class="float-right" >
+                <a th:if="${!searchFriend.isPending() && !searchFriend.isAccepted() && !searchFriend.isReceived()}" class="btn btn-md btn-outline-danger mr-2" th:href="'/addfriend/' + ${searchFriend.user.id}">
+                  <i class="fas fa-plus-circle"></i> Add Friend
+                </a>
+                <a th:if="${searchFriend.isPending()}" class="btn btn-md btn-outline-danger mr-2 disabled">
+                  <i class="fas fa-check"></i> Already Sent
+                </a>
+                <a th:if="${searchFriend.isAccepted()}" class="btn btn-md btn-outline-danger mr-2 disabled">
+                  <i class="fas fa-check"></i> Already Friends
+                </a>
+
+                <a th:if="${searchFriend.isReceived()}" class="btn btn-md btn-outline-danger mr-2 disabled">
+                  <i class="fas fa-check"></i> Received Request
+                </a>
+
               </div>
 
             </div>

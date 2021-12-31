@@ -11,7 +11,7 @@ describe user_friends;
 select * from users;
 select * from user_posts;
 
-select * from user_friends;
+
 
 
 -- get all my friends
@@ -26,6 +26,13 @@ select * from user_friends;
 -- or user_id in ((SELECT to_id FROM user_friends u where (u.from_id = 2 or u.to_id = 2) and status = 1)))
 -- and user_id != 1;
 
+select id,username from users;
+
+select * from user_friends;
+
+-- chethan's friends = rohan,test
+-- rohan's friends = chethan,test 
+-- test's friends = chethan,rohan
 
 
 

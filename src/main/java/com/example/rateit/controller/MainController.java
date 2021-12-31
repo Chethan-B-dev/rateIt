@@ -42,10 +42,19 @@ public class MainController {
     }
 
     @GetMapping
-    public ModelAndView home() throws JsonProcessingException {
+    public ModelAndView home(@AuthenticationPrincipal MyUserDetails myUserDetails) throws JsonProcessingException {
+
         ModelAndView mav = new ModelAndView("index");
         List<Media> trendingMovies = apiService.getTrendingMovies();
         List<Media> trendingTv = apiService.getTrendingTV();
+
+        try {
+            User user = myUserDetails.getUser();
+            mav.addObject("hasPendingFriends",friendService.hasPendingRequests(user.getId()));
+            mav.addObject("username",user.getUsername());
+        } catch (NullPointerException ex){
+            // do nothing if the user is not logged in
+        }
         mav.addObject("trendingMovies",trendingMovies);
         mav.addObject("trendingTv",trendingTv);
         return mav;
@@ -446,9 +455,21 @@ public class MainController {
         return mav;
     }
 
+    @GetMapping("/myfriendrequests")
+    public ModelAndView getPendingFriends(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user = myUserDetails.getUser();
+        List<User> friends = friendService.getPendingFriends(user);
+        ModelAndView mav = new ModelAndView("friend_requests");
+        mav.addObject("friends",friends);
+        mav.addObject("noFriends",friends.isEmpty());
+        mav.addObject("username",user.getUsername());
+        return mav;
+    }
+
     @GetMapping("/searchfriend")
-    public ModelAndView searchFriend(@RequestParam String query,
-        @AuthenticationPrincipal MyUserDetails myUserDetails
+    public ModelAndView searchFriend(
+            @RequestParam String query,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
         if (query.isBlank())
             return new ModelAndView("redirect:/myfriends");
@@ -460,8 +481,21 @@ public class MainController {
         }
         ModelAndView mav = new ModelAndView("search_friends_results");
         List<User> users = friendService.searchFriends(query,user.getId());
+        List<SearchFriendDTO> searchFriendDTOS = new ArrayList<>();
+        for (User friend : users) {
+            boolean isAccepted = friendService.isMyFriend(user,friend);
+            boolean isPending = friendService.hasRequested(user,friend);
+            boolean isReceived = friendService.haveRecived(user,friend);
+            SearchFriendDTO searchFriendDTO = SearchFriendDTO.builder()
+                    .user(friend)
+                    .isAccepted(isAccepted)
+                    .isPending(isPending)
+                    .isReceived(isReceived)
+                    .build();
+            searchFriendDTOS.add(searchFriendDTO);
+        }
         mav.addObject("search",query);
-        mav.addObject("users", users);
+        mav.addObject("searchFriendDTOS", searchFriendDTOS);
         mav.addObject("noUsers", users.isEmpty());
         return mav;
     }
@@ -478,6 +512,38 @@ public class MainController {
         }
 
         friendService.saveFriend(user,id);
+        return new ModelAndView("redirect:/myfriends");
+    }
+
+    @GetMapping("/acceptfriend/{id}")
+    public ModelAndView acceptFriend(
+            @PathVariable Long id,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
+
+        friendService.acceptFriend(id,user.getId());
+        return new ModelAndView("redirect:/myfriends");
+    }
+
+    @GetMapping("/rejectfriend/{id}")
+    public ModelAndView rejectFriend(
+            @PathVariable Long id,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
+
+        friendService.deleteFriend(id,user.getId());
         return new ModelAndView("redirect:/myfriends");
     }
 
@@ -502,8 +568,7 @@ public class MainController {
         List<MediaDTO> mediaDTOList = new ArrayList<>();
 
         for (Media media : mediaList) {
-            boolean isMyMedia = listService.isMyWatchList(user.getId(),media.getId());
-            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            MediaDTO mediaDTO = new MediaDTO(media,false);
             mediaDTOList.add(mediaDTO);
         }
 
@@ -534,8 +599,7 @@ public class MainController {
         List<MediaDTO> mediaDTOList = new ArrayList<>();
 
         for (Media media : mediaList) {
-            boolean isMyMedia = listService.isMyWishList(user.getId(),media.getId());
-            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            MediaDTO mediaDTO = new MediaDTO(media,false);
             mediaDTOList.add(mediaDTO);
         }
 
