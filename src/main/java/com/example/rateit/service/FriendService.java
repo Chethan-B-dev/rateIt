@@ -169,15 +169,13 @@ public class FriendService {
         friendRepository.deleteByFromIdAndToId(fromId,toId);
     }
 
-    public boolean acceptFriend(Long fromId,Long toId){
+    public void acceptFriend(Long fromId,Long toId){
         Optional<Friend> pendingFriend = friendRepository.findByFromIdAndToIdAndStatus(fromId,toId,Status.pending);
         if (pendingFriend.isPresent()){
             Friend friend = pendingFriend.get();
             friend.setStatus(Status.accepted);
             friendRepository.save(friend);
-            return true;
         }
-        return false;
     }
 
     public boolean hasPendingRequests(Long myId){

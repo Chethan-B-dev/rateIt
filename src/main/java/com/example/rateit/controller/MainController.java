@@ -4,6 +4,8 @@ import com.example.rateit.MyUtilities;
 import com.example.rateit.model.*;
 import com.example.rateit.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,17 +64,22 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute User user) {
+    public ModelAndView processRegister(@Valid @ModelAttribute User user) {
+        User existingUser = userService.getUserByEmail(user.getEmail());
+        if (existingUser != null)
+            return new ModelAndView("redirect:/?failure-register");
+        user.setUsername(Jsoup.clean(user.getUsername(),Safelist.basic()));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userService.save(user);
-        return "redirect:/?sucess-register";
+        return new ModelAndView("redirect:/?sucess-register");
     }
 
 
     @GetMapping("/search")
     public ModelAndView search(@RequestParam String query) throws JsonProcessingException {
+        query = Jsoup.clean(query, Safelist.basic());
         ModelAndView mav = new ModelAndView("search");
         List<Media> mediaList = apiService.search(query);
         mav.addObject("search",query);
@@ -274,16 +282,16 @@ public class MainController {
         }
 
         Media media = apiService.getMediaByType(
-                postRequestBody.getMediaType(),
+                Jsoup.clean(postRequestBody.getMediaType(),Safelist.basic()),
                 Integer.parseInt(postRequestBody.getMediaId())
         );
 
         Post post = new Post(
                 user,
-                postRequestBody.getContent(),
+                Jsoup.clean(postRequestBody.getContent(),Safelist.basic()),
                 LocalDateTime.now(),
                 postRequestBody.getRating(),
-                postRequestBody.getMediaType(),
+                Jsoup.clean(postRequestBody.getMediaType(),Safelist.basic()),
                 Integer.parseInt(postRequestBody.getMediaId())
         );
 
@@ -479,6 +487,7 @@ public class MainController {
         } catch (NullPointerException err){
             return new ModelAndView("redirect:/");
         }
+        query = Jsoup.clean(query,Safelist.basic());
         ModelAndView mav = new ModelAndView("search_friends_results");
         List<User> users = friendService.searchFriends(query,user.getId());
         List<SearchFriendDTO> searchFriendDTOS = new ArrayList<>();
@@ -608,9 +617,6 @@ public class MainController {
         mav.addObject("topic",String.format("%s's Wish list",friend.getUsername()));
         return mav;
     }
-
-
-
 
 }
 

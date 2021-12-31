@@ -140,11 +140,8 @@
                         </div>
 
                         <div class="card-footer">
-
-
                             <span  th:each="i: ${#numbers.sequence(1, displayPost.post.rating)}" class="fas fa-sm fa-star"></span>
                             <span th:each="i: ${#numbers.sequence(1, 10 - displayPost.post.rating)}" class="far fa-sm fa-star"></span>
-
                         </div>
 
                       </div>

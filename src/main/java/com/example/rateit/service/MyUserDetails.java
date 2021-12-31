@@ -37,8 +37,8 @@ public class MyUserDetails implements UserDetails {
         return user.getEmail();
     }
 
-    public String getCustomUsername(){
-        return user.getCustomUsername();
+    public String getFirstLetterOfUsername(){
+        return user.getFirstLetterOfUsername();
     }
 
     @Override
