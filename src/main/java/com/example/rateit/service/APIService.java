@@ -31,16 +31,22 @@ public class APIService {
     private final RestTemplate restTemplate = new RestTemplate();
     @Autowired
     private PostService postService;
+    @Autowired
+    private MediaCacheService mediaCacheService;
 
     static {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
     public Media getMovie(int id){
+        Media media = mediaCacheService.findById(String.valueOf(id),"movie");
+        if (media != null) return media;
         String movieUrl = url + "movie/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         try {
             Media movie =  restTemplate.getForObject(movieUrl, Movie.class);
+            System.out.println("made api call in movie");
             movie.setMediaType("movie");
+            mediaCacheService.save(movie);
             return movie;
         } catch (HttpClientErrorException | NullPointerException err){
             return null;
@@ -48,10 +54,14 @@ public class APIService {
     }
 
     public Media getTV(int id){
+        Media media = mediaCacheService.findById(String.valueOf(id),"tv");
+        if (media != null) return media;
         String tvUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         try {
             Media tv =  restTemplate.getForObject(tvUrl, TV.class);
+            System.out.println("made api call in tv");
             tv.setMediaType("tv");
+            mediaCacheService.save(tv);
             return tv;
         }catch (HttpClientErrorException | NullPointerException err){
             return null;

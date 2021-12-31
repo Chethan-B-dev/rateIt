@@ -19,12 +19,17 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private PostCacheService postCacheService;
 
     public Post save(Post post){
+        postCacheService.save(post);
         return postRepository.save(post);
     }
 
     public Post getPost(Long id){
+        Post cachedPost = postCacheService.findById(String.valueOf(id));
+        if (cachedPost != null) return cachedPost;
         return postRepository.getById(id);
     }
 

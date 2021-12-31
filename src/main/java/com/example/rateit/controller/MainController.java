@@ -281,11 +281,6 @@ public class MainController {
             return new ModelAndView("redirect:/");
         }
 
-        Media media = apiService.getMediaByType(
-                Jsoup.clean(postRequestBody.getMediaType(),Safelist.basic()),
-                Integer.parseInt(postRequestBody.getMediaId())
-        );
-
         Post post = new Post(
                 user,
                 Jsoup.clean(postRequestBody.getContent(),Safelist.basic()),
