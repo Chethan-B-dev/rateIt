@@ -57,7 +57,7 @@
               <div class="col-lg-4 col-md-12 mb-4 text-center view overlay zoom">
                 <img
                         class="img-fluid z-depth-2 rounded"
-                        th:src="'https://image.tmdb.org/t/p/original' + ${tv.poster}"
+                        th:src="${tv.poster} != null ? 'https://image.tmdb.org/t/p/original' + ${tv.poster} : '/img/media.png'"
                         th:alt="${tv.title}">
               </div>
              
@@ -203,12 +203,8 @@
               <div th:each="review : ${tvReviews}" class="row mb-5 ">
                 <!-- Image column -->
                 <div class="col-sm-2 col-12 mb-3">
-                  <!-- TODO: onerror render a default avatar image -->
 
-<!--                  th:src="'https://image.tmdb.org/t/p/original' + ${review?.author?.avatar}"-->
-
-
-                  <img
+                <img
                     class="avatar rounded-circle z-depth-1-half"
                     th:src="${review.author.avatar} != null ? 'https://image.tmdb.org/t/p/original' + ${review.author.avatar} : '/img/avatar.png'"
                     th:alt="${review?.author?.username}"/>

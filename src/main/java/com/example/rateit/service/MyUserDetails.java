@@ -4,7 +4,7 @@ package com.example.rateit.service;
  * created by chethan on 21-12-2021
  **/
 
-import com.example.rateit.model.User;
+import com.example.rateit.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

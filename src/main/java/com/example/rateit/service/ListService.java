@@ -1,6 +1,8 @@
 package com.example.rateit.service;
 
 import com.example.rateit.model.*;
+import com.example.rateit.model.entity.WatchList;
+import com.example.rateit.model.entity.WishList;
 import com.example.rateit.repository.WatchListRepository;
 import com.example.rateit.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;

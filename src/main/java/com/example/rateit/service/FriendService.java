@@ -1,8 +1,8 @@
 package com.example.rateit.service;
 
-import com.example.rateit.model.Friend;
+import com.example.rateit.model.entity.Friend;
 import com.example.rateit.model.Status;
-import com.example.rateit.model.User;
+import com.example.rateit.model.entity.User;
 import com.example.rateit.repository.FriendRepository;
 import com.example.rateit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

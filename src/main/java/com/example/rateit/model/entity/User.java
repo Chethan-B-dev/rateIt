@@ -1,4 +1,4 @@
-package com.example.rateit.model;
+package com.example.rateit.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

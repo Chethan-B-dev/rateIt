@@ -1,6 +1,7 @@
 package com.example.rateit.service;
 
 import com.example.rateit.model.*;
+import com.example.rateit.model.entity.Post;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -210,7 +211,7 @@ public class APIService {
         return mediaList;
     }
 
-    public Page<Post> getPostsOfUser(Long userId,int pageNumber){
+    public Page<Post> getPostsOfUser(Long userId, int pageNumber){
         return postService.getUserPosts(userId,pageNumber);
     }
 

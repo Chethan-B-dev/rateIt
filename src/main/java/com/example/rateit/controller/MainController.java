@@ -2,6 +2,10 @@ package com.example.rateit.controller;
 
 import com.example.rateit.MyUtilities;
 import com.example.rateit.model.*;
+import com.example.rateit.model.entity.Post;
+import com.example.rateit.model.entity.User;
+import com.example.rateit.model.entity.WatchList;
+import com.example.rateit.model.entity.WishList;
 import com.example.rateit.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jsoup.Jsoup;

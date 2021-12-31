@@ -1,4 +1,4 @@
-package com.example.rateit.model;
+package com.example.rateit.model.entity;
 
 import lombok.*;
 
@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
  * created by chethan on 21-12-2021
  **/
 
+
 @Entity
-@Table(name = "user_posts")
+@Table(name = "user_watch_list")
 @Getter
 @Setter
-@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class WatchList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,20 +27,17 @@ public class Post {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
-    private LocalDateTime createdAt;
-    private int rating;
-
     private String mediaType;
+
     private int mediaId;
 
-    public Post(User user, String content, LocalDateTime createdAt, int rating, String mediaType, int mediaId) {
+    private LocalDateTime addedAt;
+
+
+    public WatchList(User user, String mediaType, int mediaId, LocalDateTime addedAt) {
         this.user = user;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.rating = rating;
         this.mediaType = mediaType;
         this.mediaId = mediaId;
+        this.addedAt = addedAt;
     }
 }

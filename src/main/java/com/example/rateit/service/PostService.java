@@ -1,6 +1,6 @@
 package com.example.rateit.service;
 
-import com.example.rateit.model.Post;
+import com.example.rateit.model.entity.Post;
 import com.example.rateit.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

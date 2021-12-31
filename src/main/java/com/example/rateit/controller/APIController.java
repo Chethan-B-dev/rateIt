@@ -1,7 +1,7 @@
 package com.example.rateit.controller;
 
 import com.example.rateit.model.Media;
-import com.example.rateit.model.User;
+import com.example.rateit.model.entity.User;
 import com.example.rateit.service.APIService;
 import com.example.rateit.service.FriendService;
 import com.example.rateit.service.MyUserDetails;

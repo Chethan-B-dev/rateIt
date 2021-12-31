@@ -1,6 +1,6 @@
 package com.example.rateit.repository;
 
-import com.example.rateit.model.WishList;
+import com.example.rateit.model.entity.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

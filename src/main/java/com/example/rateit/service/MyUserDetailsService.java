@@ -1,6 +1,6 @@
 package com.example.rateit.service;
 
-import com.example.rateit.model.User;
+import com.example.rateit.model.entity.User;
 import com.example.rateit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

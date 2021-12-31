@@ -1,5 +1,6 @@
 package com.example.rateit.model;
 
+import com.example.rateit.model.entity.User;
 import lombok.*;
 
 /**

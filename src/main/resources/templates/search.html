@@ -45,9 +45,12 @@
               <div class="col-md-3">
                 <!-- Featured image -->
                 <div class="view overlay zoom">
+
+<!--                  TODO: onerror display a default media image-->
+
                   <img
                     class="img-fluid"
-                    th:src="'https://image.tmdb.org/t/p/original' + ${media.poster}"
+                    th:src="${media.poster} != null ? 'https://image.tmdb.org/t/p/original' + ${media.poster} : '/img/media.png'"
                     th:alt="${media.title}"/>
 
                   <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">

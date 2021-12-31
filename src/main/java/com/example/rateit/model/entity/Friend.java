@@ -1,5 +1,6 @@
-package com.example.rateit.model;
+package com.example.rateit.model.entity;
 
+import com.example.rateit.model.Status;
 import lombok.*;
 
 import javax.persistence.*;
