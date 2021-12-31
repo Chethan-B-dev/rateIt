@@ -7,16 +7,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FriendRepository extends JpaRepository<Friend,Long> {
 
     boolean existsByFromAndTo(User first, User second);
-    boolean existsByToAndFrom(User second,User first);
+
+    //    boolean existsByToAndFrom(User second,User first);
 
     boolean existsByTo(User to);
 
     List<Friend> findByFrom(User user);
+
     List<Friend> findByTo(User user);
 
     @Query(
@@ -24,5 +27,9 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
             nativeQuery = true
     )
     List<Friend> getMyPendingFriends(Long myId);
+
+    Optional<Friend> findByFromAndTo(User from, User to);
+
+    Optional<Friend> findByFromIdAndToId(Long fromId,Long toId);
 
 }

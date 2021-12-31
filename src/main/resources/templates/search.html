@@ -50,7 +50,7 @@
                     th:src="'https://image.tmdb.org/t/p/original' + ${media.poster}"
                     th:alt="${media.title}"/>
 
-                  <a>
+                  <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}">
                     <div class="mask rgba-white-slight"></div>
                   </a>
                 </div>
@@ -60,7 +60,7 @@
               <!-- Grid column -->
               <div class="col-md-9 text-md-left mt-3">
                
-                <h4 th:text="${media.title}" class="h4 mb-4">media title</h4>
+                <h4 th:text="${media.title}" class="h4 mb-4 text-danger">media title</h4>
 
                 <p class="font-weight-normal text-wrap" th:text="${media.overview}">
                   media overview
@@ -69,7 +69,7 @@
                    date
                 </p>
 
-                <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}" class="btn btn-danger btn-sm mb-2" >Read more</a>
+                <a th:href="@{'/' + ${media.mediaType} + '/' + ${media.id}}" class="btn btn-danger btn-sm ml-0" >Read more</a>
 
               </div>
               <!-- Grid column -->

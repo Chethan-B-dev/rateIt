@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * created by chethan on 19-12-2021
@@ -119,10 +120,13 @@ public class MainController {
         }catch (NullPointerException ex){
             System.out.println("user not logged in from /tv/id");
         }
+
         mav.addObject("tv",tv);
 
         int runTime = 0;
+
         List<Integer> runTimes = ((TV) tv).getEpisodeRuntime();
+
         if (!runTimes.isEmpty()){
             runTime = runTimes.get(0);
         }
@@ -316,6 +320,8 @@ public class MainController {
         } catch (NullPointerException ex){
             return new ModelAndView("redirect:/");
         }
+        if (Objects.equals(userId, user.getId()))
+            return new ModelAndView("redirect:/myposts");
         ModelAndView mav = new ModelAndView("post");
         if (pageNo == null) pageNo = 1;
         boolean isMyFriend = friendService.isMyFriend(user.getId(),userId);
@@ -428,8 +434,6 @@ public class MainController {
         return new ModelAndView("redirect:" + redirectTo);
     }
 
-    /* TODO: implement post delete feature only for my post and not for other posts, same goes for wish
-    and watch list */
 
     @GetMapping("/myfriends")
     public ModelAndView getFriends(@AuthenticationPrincipal MyUserDetails myUserDetails){
@@ -445,7 +449,7 @@ public class MainController {
     @GetMapping("/searchfriend")
     public ModelAndView searchFriend(@RequestParam String query,
         @AuthenticationPrincipal MyUserDetails myUserDetails
-    ) throws JsonProcessingException {
+    ) {
         if (query.isBlank())
             return new ModelAndView("redirect:/myfriends");
         User user;
@@ -488,6 +492,8 @@ public class MainController {
         } catch (NullPointerException err){
             return new ModelAndView("redirect:/");
         }
+        if (Objects.equals(friendID, user.getId()))
+            return new ModelAndView("redirect:/mywatchlist");
         User friend = userService.getUser(friendID);
         if (friend == null) return new ModelAndView("redirect:/myfriends");
         boolean isMyFriend = friendService.isMyFriend(user,friend);
@@ -518,6 +524,8 @@ public class MainController {
         } catch (NullPointerException err){
             return new ModelAndView("redirect:/");
         }
+        if (Objects.equals(friendID, user.getId()))
+            return new ModelAndView("redirect:/mywishlist");
         User friend = userService.getUser(friendID);
         if (friend == null) return new ModelAndView("redirect:/myfriends");
         boolean isMyFriend = friendService.isMyFriend(user,friend);
@@ -536,6 +544,9 @@ public class MainController {
         mav.addObject("topic",String.format("%s's Wish list",friend.getUsername()));
         return mav;
     }
+
+
+
 
 }
 

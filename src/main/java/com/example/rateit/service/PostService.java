@@ -51,7 +51,7 @@ public class PostService {
         int pageSize = 5;
         Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
-        return postRepository.findByUserIdInAndUserIdNot(userIds, myId,pageable);
+        return postRepository.findByUserIdInAndUserIdNot(userIds, myId, pageable);
     }
 
 }

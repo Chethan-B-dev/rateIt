@@ -53,7 +53,7 @@
                               <!-- Title -->
                               <h6 class="card-title" th:text="${movie.title}">title</h6>
 
-                              <P class="text-muted" th:text="${movie.releaseDate.toString()}">Date</P>
+                              <P class="text-muted" th:text="${#temporals.format(movie.releaseDate, 'd MMM yyyy', new java.util.Locale('en', 'EN'))}">Date</P>
 
                             </div>
 
@@ -88,7 +88,9 @@
                             <!-- Title -->
                             <h6 class="card-title" th:text="${tv.title}">title</h6>
 
-                            <P class="text-muted" th:text="${tv.releaseDate.toString()}">Date</P>
+<!--                            <p class="text-muted" th:text="${tv.releaseDate.toString()}">Date</p> -->
+<!--                            -->
+                            <p class="text-muted" th:text="${#temporals.format(tv.releaseDate, 'd MMM yyyy', new java.util.Locale('en', 'EN'))}">Date</p>
 
                         </div>
 
@@ -97,9 +99,6 @@
                 </div>
             </div>
         </section>
-
-
-        
 
     </main>
 

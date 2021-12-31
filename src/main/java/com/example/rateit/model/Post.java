@@ -27,6 +27,7 @@ public class Post {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
     private LocalDateTime createdAt;
     private int rating;
