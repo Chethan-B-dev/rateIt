@@ -319,6 +319,7 @@ public class MainController {
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
         mav.addObject("totalItems", posts.getTotalElements());
+        mav.addObject("page","myposts");
         return mav;
     }
 
@@ -358,6 +359,7 @@ public class MainController {
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
         mav.addObject("totalItems", posts.getTotalElements());
+        mav.addObject("page","posts/" + String.valueOf(userId));
         return mav;
     }
 
@@ -396,6 +398,7 @@ public class MainController {
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
         mav.addObject("totalItems", posts.getTotalElements());
+        mav.addObject("page","myfeed");
         return mav;
     }
 
