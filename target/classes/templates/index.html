@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>rateIT</title>
+    <!-- MDB icon -->
+    <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+</head>
+<body class="hidden-sn elegant-color">
+
+<!-- header -->
+<header th:replace="fragments/header :: header"></header>
+<!-- header -->
+
+<main class="pt-4">
+
+    <!-- search -->
+    <section class="search-section">
+
+        <div class="jumbotron jumbotron-fluid main-bg">
+            <div class="container">
+                <h2 class="display-4 text-white">Welcome <span th:if="${#authorization.expression('isAuthenticated()')}" th:text="${username}"></span></h2>
+                <p class="lead text-white font-weight-bolder">
+                    Millions of movies, TV shows to discover. Explore now.
+                </p>
+                <form action="/search" method="get">
+                    <div class="wrap">
+                        <div class="search">
+                            <input type="text" class="searchTerm" name="query" placeholder="What are you looking for?">
+                            <button type="submit" class="searchButton">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- search -->
+
+    <!-- trending movies-->
+    <section class="movie-catalog-section">
+
+        <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">Movies</span></h3>
+
+        <div class="row container-fluid">
+
+        <div th:each="movie : ${trendingMovies}" class="horizontal-catalog col-lg-3 col-md-4 col-sm-2">
+
+            <div class="card media-card bg-dark rounded hoverable">
+
+                <!-- Card image -->
+                <div class="view overlay zoom">
+                    <img class="card-img-top media-image"
+                         th:src="'https://image.tmdb.org/t/p/original' + ${movie.poster}"
+                         th:alt="${movie.title}">
+                    <a th:href="'/movie/' + ${movie.id}">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+                <!-- Card image -->
+
+
+                <!-- Card content -->
+                <div class="card-body bg-dark white-text rounded-bottom">
+                    <a th:href="'/movie/' + ${movie.id}" class="activator waves-effect mr-4"></a>
+                    <h6 class="card-title" th:text="${movie.title}"></h6>
+                    <P class="text-muted" th:text="${#temporals.format(movie.releaseDate, 'd MMM yyyy', new java.util.Locale('en', 'EN'))}"></P>
+                </div>
+                <!-- Card content -->
+
+            </div>
+
+        </div>
+        </div>
+
+    </section>
+    <!-- trending movies -->
+
+    <hr class="bg-white">
+
+    <!-- trending tv -->
+    <section class="tv-catalog-section">
+
+        <h3 class="pt-2 pl-3 font-weight-bold text-white">Trending <span class="text-danger">TV Shows</span></h3>
+
+        <div class="row container-fluid">
+
+        <div th:each="tv : ${trendingTv}" class="horizontal-catalog col-lg-3 col-md-4 col-sm-2">
+
+            <div class="card media-card bg-dark hoverable">
+
+                <!-- Card image -->
+                <div class="view overlay zoom">
+                    <img class="card-img-top media-image"
+                         th:src="'https://image.tmdb.org/t/p/original' + ${tv.poster}"
+                         th:alt="${tv.title}">
+                    <a th:href="'/tv/' + ${tv.id}">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body bg-dark white-text rounded-bottom">
+
+                    <a class="activator waves-effect mr-4"></a>
+                    <h6 class="card-title" th:text="${tv.title}"></h6>
+                    <P class="text-muted" th:text="${#temporals.format(tv.releaseDate, 'd MMM yyyy', new java.util.Locale('en', 'EN'))}"></P>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        </div>
+
+
+    </section>
+    <!-- trending tv -->
+
+</main>
+
+<!-- Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+<!-- Footer -->
+
+
+<!-- jQuery -->
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/script.js}"></script>
+
+<!-- Your custom scripts (optional) -->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // SideNav Button Initialization
+        $(".button-collapse").sideNav();
+        // SideNav Scrollbar Initialization
+        var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+        var ps = new PerfectScrollbar(sideNavScrollbar);
+    })
+</script>
+
+</body>
+</html>

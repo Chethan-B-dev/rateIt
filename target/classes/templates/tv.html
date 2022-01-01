@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>rateIT</title>
+  <!-- MDB icon -->
+  <link rel="icon" th:href="@{img/mdb-favicon.ico}" type="image/x-icon">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{/css/bootstrap.min.css}" type="text/css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link th:href="@{/css/mdb.min.css}" type="text/css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: darkred;
+    }
+
+  </style>
+</head>
+  <body class="hidden-sn elegant-color">
+
+  <!-- header -->
+  <header th:replace="fragments/header :: header"></header>
+  <!-- header -->
+
+  <main class="pt-4">
+
+    <!-- movie details -->
+    <div class="container-fluid">
+      <section>
+
+            <div class="row my-4 pt-5 wow fadeIn" data-wow-delay="0.4s">
+  
+              <div class="col-lg-4 col-md-12 mb-4 text-center view overlay zoom">
+                <img
+                        class="img-fluid z-depth-2 rounded"
+                        th:src="${tv.poster} != null ? 'https://image.tmdb.org/t/p/original' + ${tv.poster} : '/img/media.png'"
+                        th:alt="${tv.title}">
+              </div>
+             
+              <div class="col-lg-8 col-md-12 mb-4 text-left">
+  
+                <h2 class="mb-3 text-danger wow fadeIn" data-wow-delay="0.2s">
+                  <strong class="font-weight-bold" th:text="${tv.title}">
+                    title
+                  </strong>
+                  <span th:text="'(' + ${releaseYear} + ')'" class="text-white">release year</span>
+                </h2>
+
+
+                <div class="py-2 pl-0 ml-0 mb-2">
+                  <a class="btn-sm btn-grey disabled text-white mr-2" th:each="genre: ${tv.getGenres()}" th:text="${genre.name}">Genre</a>
+                  <a class="btn-sm btn-danger text-white mr-2" th:text="${tv.userRating}">rating</a>
+                  <a class="text-white mr-2" th:text="${runtime}">runtime</a>
+                </div>
+
+                <h6 class="text-white py-2">Overview</h6>
+                <p class="grey-text mb-4" th:text="${tv.overview}">overview</p>
+
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                  <a class="btn-sm btn-grey disabled text-white" th:if="${hasWatched}" th:href="@{'/watchlist/tv/' + ${tv.id}}">WatchList</a>
+                  <a class="btn-sm btn-danger" th:unless="${hasWatched}" th:href="@{'/watchlist/tv/' + ${tv.id}}">WatchList</a>
+                  <a class="btn-sm btn-outline-grey disabled text-white" th:if="${hasWished}" th:href="@{'/wishlist/tv/' + ${tv.id}}">WishList</a>
+                  <a class="btn-sm btn-outline-danger" th:unless="${hasWished}" th:href="@{'/wishlist/tv/' + ${tv.id}}">WishList</a>
+                  <button type="button" class="btn-sm btn-danger" th:unless="${hasPosted}" data-toggle="modal" data-target="#basicExampleModal">
+                    Add Post
+                  </button>
+                  <button type="button" class="btn-sm btn-outline-grey disabled" th:if="${hasPosted}" data-toggle="modal" data-target="#basicExampleModal">
+                    Add Post
+                  </button>
+                </div>
+
+                <!-- post Modal -->
+                <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-danger font-weight-bold" id="exampleModalLabel">Post A Review</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <form th:action="@{/addPost}" th:object="${customPost}" method="post">
+                      <div class="modal-body">
+
+                          <div class="md-form">
+                            <textarea id="content" class="md-textarea form-control" rows="3" th:field="*{content}"></textarea>
+                            <label for="content">Review</label>
+
+                            <h5>Rate</h5>
+                            <div class="d-flex justify-content-center my-4">
+                              <span class="font-weight-bold indigo-text mr-2 mt-1">1</span>
+                              <div class="range-field w-25">
+                                <input th:field="*{rating}" class="border-0" type="range" min="1" max="10" />
+                              </div>
+                              <span class="font-weight-bold indigo-text ml-2 mt-1">10</span>
+                            </div>
+
+                            <input name="mediaType" type="hidden" th:value="'tv'" >
+                            <input name="mediaId" type="hidden" th:value="${tv.id}">
+                          </div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Save changes</button>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- post Modal -->
+
+              </div>
+
+
+              
+  
+            </div>
+            
+          </section>
+    </div>
+
+    <hr class="bg-white">
+
+    <!-- cast -->
+    <div class="container-fluid">
+      <section class="cast-catalog-section">
+
+        <h3 class="pt-2 pl-3 font-weight-bold text-white"> <span th:text="${tv.title}"></span> <span class="text-danger">Cast</span></h3>
+
+        <div class="horizontal-catalog scrollmenu">
+
+          <div th:each="cast : ${casts}"  class="card media-card bg-dark rounded hoverable">
+
+            <!-- Card image -->
+            <div class="view overlay zoom">
+              <img class="card-img-top media-image"
+                   th:src="${cast.profile} != null ? 'https://image.tmdb.org/t/p/original' + ${cast.profile} : '/img/avatar.png'"
+                   th:alt="${cast.name}"/>
+            </div>
+
+            <!-- Card content -->
+            <div class="card-body bg-dark white-text rounded-bottom">
+
+              <h6 class="card-title" th:text="${cast.name}">title</h6>
+
+              <P class="text-muted" th:text="${cast.character}"></P>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+    </div>
+    <!-- cast -->
+
+    <hr class="bg-white">
+
+    <!-- reviews -->
+    <div class="container">
+        <section>
+          <!-- Main wrapper -->
+            <div class="comments-list text-center text-md-left text-white">
+              <div class="text-center my-5">
+                <h3 class="font-weight-bold text-danger"> Reviews
+                  <span class="badge indigo" th:text="${numberOfReviews}">0</span>
+                </h3>
+              </div>
+
+              <div th:if="${isReviewsEmpty}" class="pt-3">
+                <h4 class="text-white">There are no reviews for this media</h4>
+              </div>
+
+              <!-- First row -->
+              <div th:each="review : ${tvReviews}" class="row mb-5 ">
+                <!-- Image column -->
+                <div class="col-sm-2 col-12 mb-3">
+
+                <img
+                    class="avatar rounded-circle z-depth-1-half"
+                    th:src="${review.author.avatar} != null ? 'https://image.tmdb.org/t/p/original' + ${review.author.avatar} : '/img/avatar.png'"
+                    th:alt="${review?.author?.username}"/>
+                </div>
+                <!-- Image column -->
+
+                <!-- Content column -->
+                <div class="col-sm-10 col-12">
+                  <a>
+                    <h5 class="user-name font-weight-bold" th:text="${review?.author?.username}">John Doe</h5>
+                  </a>
+                  <div class="card-data">
+                    <ul class="list-unstyled">
+                      <li class="comment-date font-small" th:text="${review.createdAt.substring(0,10)}">
+                        <i class="far fa-clock-o"></i> Date</li>
+                    </ul>
+                  </div>
+                  <p class="article" th:text="${review.content}">content
+                  </p>
+                </div>
+                <!-- Content column -->
+              </div>
+              <!-- First row -->
+
+            </div>
+            <!-- Main wrapper -->
+
+          </section>
+    </div>
+    <!-- reviews -->
+
+    <hr class="bg-white">
+
+    <!-- similar movies -->
+    <div class="container-fluid">
+        <section class="movie-catalog-section">
+
+            <h3 class="pt-2 pl-3 font-weight-bold text-white">Similar <span class="text-danger">TV Shows</span></h3>
+    
+            <div class="horizontal-catalog scrollmenu">
+            
+              <div th:each="tvSimilar : ${similarTv}" class="card media-card bg-dark rounded hoverable">
+    
+                <!-- Card image -->
+                <div class="view overlay zoom">
+                  <img class="card-img-top media-image"
+                       th:src="'https://image.tmdb.org/t/p/original' + ${tvSimilar.poster}"
+                       th:alt="${tvSimilar.title}">
+                  <a th:href="'/tv/' + ${tvSimilar.id}">
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+              
+                <!-- Card content -->
+                <div class="card-body bg-dark white-text rounded-bottom">
+              
+                  <!-- Social shares button -->
+                  <a th:href="'/tv/' + ${tvSimilar.id}" class="activator waves-effect mr-4"></a>
+                  <!-- Title -->
+                  <h6 class="card-title" th:text="${tvSimilar.title}">title</h6>
+    
+                  <P class="text-muted" th:text="${tvSimilar?.releaseDate?.toString()}"></P>
+                
+                </div>
+              
+              </div>
+             
+            </div>
+    
+      </section>
+    </div>
+    <!-- similar movies -->
+
+
+</main>
+
+  <!-- Footer -->
+  <footer th:replace="fragments/footer :: footer"></footer>
+  <!-- Footer -->
+
+  <!-- jQuery -->
+  <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" th:src="@{/js/popper.min.js}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" th:src="@{/js/mdb.min.js}"></script>
+
+  <script type="text/javascript" th:src="@{/js/script.js}"></script>
+
+  <!-- Your custom scripts (optional) -->
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+      // SideNav Button Initialization
+      $(".button-collapse").sideNav();
+      // SideNav Scrollbar Initialization
+      var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+      var ps = new PerfectScrollbar(sideNavScrollbar);
+    })
+
+  </script>
+
+</body>
+</html>
