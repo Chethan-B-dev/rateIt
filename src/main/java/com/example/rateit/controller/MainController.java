@@ -247,8 +247,7 @@ public class MainController {
         List<Media> mediaList = listService.getWatchListMedia(user.getId());
         List<MediaDTO> mediaDTOList = new ArrayList<>();
         for (Media media : mediaList) {
-            boolean isMyMedia = listService.isMyWatchList(user.getId(),media.getId());
-            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            MediaDTO mediaDTO = new MediaDTO(media,true);
             mediaDTOList.add(mediaDTO);
         }
         ModelAndView mav = new ModelAndView("media_list");
@@ -264,8 +263,7 @@ public class MainController {
         List<Media> mediaList = listService.getWishListMedia(user.getId());
         List<MediaDTO> mediaDTOList = new ArrayList<>();
         for (Media media : mediaList) {
-            boolean isMyMedia = listService.isMyWishList(user.getId(),media.getId());
-            MediaDTO mediaDTO = new MediaDTO(media,isMyMedia);
+            MediaDTO mediaDTO = new MediaDTO(media,true);
             mediaDTOList.add(mediaDTO);
         }
         ModelAndView mav = new ModelAndView("media_list");
@@ -536,6 +534,22 @@ public class MainController {
         }
 
         friendService.acceptFriend(id,user.getId());
+        return new ModelAndView("redirect:/myfriends");
+    }
+
+    @GetMapping("/unfriend/{id}")
+    public ModelAndView unFriend(
+            @PathVariable Long id,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ) {
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
+
+        friendService.unFriend(user.getId(),id);
         return new ModelAndView("redirect:/myfriends");
     }
 
