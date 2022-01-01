@@ -78,4 +78,6 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
 
     Optional<Friend> findByFromIdAndToIdAndStatus(Long fromId, Long toId, Status status);
 
+
+
 }

@@ -182,4 +182,12 @@ public class FriendService {
         return !friendRepository.getPendingFriends(myId).isEmpty();
     }
 
+//    public void unFriend(Long myId,Long friendId){
+//        Optional<Friend> existingFriend = friendRepository.findByFromIdAndToIdAndStatus(myId,friendId,Status.accepted);
+//        if (existingFriend.isPresent()){
+//            Friend friend = existingFriend.get();
+//            friendRepository.delete(friend);
+//        }
+//    }
+
 }
