@@ -20,8 +20,8 @@ public class Movie extends Media {
 
     private int runtime;
 
-    public Movie(int id, String title, String backdrop, String overview, double userRating, String poster, String language, List<Genre> genres, LocalDate releaseDate, int runtime) {
-        super(id, title, backdrop, overview, userRating, poster, language, "movie", genres, releaseDate);
+    public Movie(int id, String title, String backdrop, String overview, double userRating, String poster, String language, List<Genre> genres, LocalDate releaseDate, String link, int runtime) {
+        super(id, title, backdrop, overview, userRating, poster, language, "movie", genres, releaseDate,link);
         this.runtime = runtime;
     }
 }

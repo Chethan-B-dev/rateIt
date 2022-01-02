@@ -75,6 +75,7 @@
                   <a class="btn-sm btn-grey disabled text-white mr-2" th:each="genre: ${tv.getGenres()}" th:text="${genre.name}">Genre</a>
                   <a class="btn-sm btn-danger text-white mr-2" th:text="${tv.userRating}">rating</a>
                   <a class="text-white mr-2" th:text="${runtime}">runtime</a>
+                  <a class="btn-sm btn-floating btn-dark m-0" th:if="${tv.link != null}" th:href="${tv.link}" target="_blank"><i class="fas fa-play"></i></a>
                 </div>
 
                 <h6 class="text-white py-2">Overview</h6>

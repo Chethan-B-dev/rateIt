@@ -41,5 +41,7 @@ public class Media implements Serializable {
     @JsonProperty("release_date")
     @JsonAlias("first_air_date")
     private LocalDate releaseDate;
+    @JsonProperty("homepage")
+    private String link;
 
 }
