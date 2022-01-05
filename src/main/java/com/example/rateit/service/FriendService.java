@@ -49,7 +49,9 @@ public class FriendService {
 
         /*
             suppose there are 4 users with id 1,2,3,4.
-
+List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
+        List<Friend> friendsBySecondUser = friendRepository.findByTo(currentUser);
+        List<User> friendUsers = new ArrayList<>()
             1) if user1 add user2 as friend database record will be first user = user1 second user = user2
             2) if user2 add user3 as friend database record will be first user = user2 second user = user3
             3) if user3 add user1 as friend database record will be first user = user3 second user = user1
@@ -188,6 +190,12 @@ public class FriendService {
             Friend friend = existingFriend.get();
             friendRepository.delete(friend);
         }
+    }
+
+    public void deleteMyFriendship(User currentUser){
+        List<Friend> myFriendships = friendRepository.findByFrom(currentUser);
+        myFriendships.addAll(friendRepository.findByTo(currentUser));
+        friendRepository.deleteAll(myFriendships);
     }
 
 }

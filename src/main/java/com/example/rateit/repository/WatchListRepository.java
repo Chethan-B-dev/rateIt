@@ -1,5 +1,6 @@
 package com.example.rateit.repository;
 
+import com.example.rateit.model.entity.User;
 import com.example.rateit.model.entity.WatchList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -33,5 +34,7 @@ public interface WatchListRepository extends JpaRepository<WatchList,Long> {
     @Transactional
     @Modifying
     void deleteByMediaIdAndUserId(int mediaId,Long userId);
+
+    List<WatchList> findAllByUser(User user);
 
 }

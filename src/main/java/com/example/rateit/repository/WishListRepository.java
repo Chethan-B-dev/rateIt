@@ -1,5 +1,6 @@
 package com.example.rateit.repository;
 
+import com.example.rateit.model.entity.User;
 import com.example.rateit.model.entity.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,5 +30,7 @@ public interface WishListRepository extends JpaRepository<WishList,Long> {
     @Transactional
     @Modifying
     void deleteByMediaIdAndUserId(int mediaId,Long userId);
+
+    List<WishList> findAllByUser(User user);
 
 }

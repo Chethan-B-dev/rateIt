@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -487,7 +488,7 @@ public class MainController {
         } catch (NullPointerException err){
             return new ModelAndView("redirect:/");
         }
-        query = Jsoup.clean(query,Safelist.basic());
+        query = Jsoup.clean(query.toLowerCase(),Safelist.basic());
         ModelAndView mav = new ModelAndView("search_friends_results");
         List<User> users = friendService.searchFriends(query,user.getId());
         List<SearchFriendDTO> searchFriendDTOS = new ArrayList<>();
@@ -632,6 +633,25 @@ public class MainController {
         mav.addObject("mediaDTOList",mediaDTOList);
         mav.addObject("topic",String.format("%s's Wish list",friend.getUsername()));
         return mav;
+    }
+
+    @GetMapping("/deleteprofile")
+    @Transactional
+    public ModelAndView deleteProfile(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user;
+        try{
+            user = myUserDetails.getUser();
+        } catch (NullPointerException err){
+            return new ModelAndView("redirect:/");
+        }
+
+        friendService.deleteMyFriendship(user);
+        postService.deleteAllMyPosts(user);
+        listService.deleteMyLists(user);
+        userService.deleteUser(user);
+
+        return new ModelAndView("redirect:/logout");
+
     }
 
 }

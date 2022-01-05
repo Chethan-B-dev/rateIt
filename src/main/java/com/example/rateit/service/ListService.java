@@ -1,6 +1,7 @@
 package com.example.rateit.service;
 
 import com.example.rateit.model.*;
+import com.example.rateit.model.entity.User;
 import com.example.rateit.model.entity.WatchList;
 import com.example.rateit.model.entity.WishList;
 import com.example.rateit.repository.WatchListRepository;
@@ -8,6 +9,7 @@ import com.example.rateit.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +93,15 @@ public class ListService {
 
     public void deleteWishListByMediaAndUser(Long userId,int mediaId){
         wishListRepository.deleteByMediaIdAndUserId(mediaId,userId);
+    }
+
+
+    @Transactional
+    public void deleteMyLists(User currentUser){
+        List<WatchList> myWatchlists = watchListRepository.findAllByUser(currentUser);
+        List<WishList> myWishLists = wishListRepository.findAllByUser(currentUser);
+        watchListRepository.deleteAll(myWatchlists);
+        wishListRepository.deleteAll(myWishLists);
     }
 
 }

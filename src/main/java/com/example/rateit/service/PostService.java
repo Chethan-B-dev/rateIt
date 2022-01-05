@@ -1,6 +1,7 @@
 package com.example.rateit.service;
 
 import com.example.rateit.model.entity.Post;
+import com.example.rateit.model.entity.User;
 import com.example.rateit.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,6 +54,11 @@ public class PostService {
         Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         return postRepository.findByUserIdInAndUserIdNot(userIds, myId, pageable);
+    }
+
+    public void deleteAllMyPosts(User currentUser){
+        List<Post> myPosts = postRepository.findAllByUser(currentUser);
+        postRepository.deleteAll(myPosts);
     }
 
 }
