@@ -8,6 +8,7 @@ import com.example.rateit.model.entity.WatchList;
 import com.example.rateit.model.entity.WishList;
 import com.example.rateit.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import java.util.Objects;
  **/
 @Controller
 @RequestMapping("/")
+@Slf4j
 public class MainController {
 
     @Autowired
@@ -42,7 +44,6 @@ public class MainController {
     private PostService postService;
     @Autowired
     private FriendService friendService;
-
 
     @ModelAttribute("user")
     public User getUser(){
@@ -78,12 +79,14 @@ public class MainController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userService.save(user);
+        log.debug("user {} has registered",user.getUsername());
         return new ModelAndView("redirect:/?sucess-register");
     }
 
 
     @GetMapping("/search")
     public ModelAndView search(@RequestParam String query) throws JsonProcessingException {
+        log.debug("searched for {}",query);
         query = Jsoup.clean(query, Safelist.basic());
         ModelAndView mav = new ModelAndView("search");
         List<Media> mediaList = apiService.search(query);
@@ -488,6 +491,7 @@ public class MainController {
         } catch (NullPointerException err){
             return new ModelAndView("redirect:/");
         }
+        log.debug("user {} searched for {}",user.getUsername(),query);
         query = Jsoup.clean(query.toLowerCase(),Safelist.basic());
         ModelAndView mav = new ModelAndView("search_friends_results");
         List<User> users = friendService.searchFriends(query,user.getId());
@@ -644,6 +648,8 @@ public class MainController {
         } catch (NullPointerException err){
             return new ModelAndView("redirect:/");
         }
+
+        log.debug("user {} is deleting account",user.getUsername());
 
         friendService.deleteMyFriendship(user);
         postService.deleteAllMyPosts(user);

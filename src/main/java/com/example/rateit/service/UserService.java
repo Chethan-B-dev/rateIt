@@ -5,8 +5,6 @@ import com.example.rateit.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 /**
  * created by chethan on 21-12-2021
  **/
@@ -20,8 +18,7 @@ public class UserService {
     }
 
     public User getUser(Long id){
-        Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.orElse(null);
+        return userRepository.findById(id).orElse(null);
     }
 
     public User getUserByEmail(String email){
@@ -31,5 +28,4 @@ public class UserService {
     public void deleteUser(User currentUser){
         userRepository.delete(currentUser);
     }
-
 }

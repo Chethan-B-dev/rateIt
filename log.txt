@@ -1,0 +1,4 @@
+2022-01-05 20:49:09.834 DEBUG 17908 --- [http-nio-8080-exec-4] c.e.rateit.controller.MainController     : searched for hello
+2022-01-05 20:49:59.162 DEBUG 17908 --- [http-nio-8080-exec-10] c.e.rateit.controller.MainController     : user chethan searched for ${7+7}
+2022-01-05 22:22:15.022  INFO 17908 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-01-05 22:22:15.035  INFO 17908 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
