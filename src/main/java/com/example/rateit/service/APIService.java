@@ -44,9 +44,8 @@ public class APIService {
         if (media != null) return media;
         String movieUrl = url + "movie/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         try {
-            Media movie =  restTemplate.getForObject(movieUrl, Movie.class);
+            Movie movie =  restTemplate.getForObject(movieUrl, Movie.class);
             System.out.println("made api call in movie");
-            movie.setMediaType("movie");
             mediaCacheService.save(movie);
             return movie;
         } catch (HttpClientErrorException | NullPointerException err){
@@ -59,9 +58,8 @@ public class APIService {
         if (media != null) return media;
         String tvUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         try {
-            Media tv =  restTemplate.getForObject(tvUrl, TV.class);
+            TV tv =  restTemplate.getForObject(tvUrl, TV.class);
             System.out.println("made api call in tv");
-            tv.setMediaType("tv");
             mediaCacheService.save(tv);
             return tv;
         }catch (HttpClientErrorException | NullPointerException err){
@@ -87,7 +85,7 @@ public class APIService {
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
         }
         return movieList;
@@ -135,7 +133,7 @@ public class APIService {
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
         }
         return movieList;
@@ -147,7 +145,7 @@ public class APIService {
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Media movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
         }
         return movieList;
@@ -171,7 +169,7 @@ public class APIService {
         List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Media tv = objectMapper.treeToValue(movieNode,TV.class);
+            TV tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
         }
         return tvList;
@@ -183,7 +181,7 @@ public class APIService {
         List<Media> tvList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Media tv = objectMapper.treeToValue(movieNode,TV.class);
+            TV tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
         }
         return tvList;
