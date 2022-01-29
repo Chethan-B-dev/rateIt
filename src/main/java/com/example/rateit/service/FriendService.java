@@ -137,22 +137,6 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
         return friendRepository.hasRequested(from.getId(),to.getId()).isPresent();
     }
 
-    public boolean hasRequested(Long fromId,Long toId){
-        return friendRepository.hasRequested(fromId,toId).isPresent();
-    }
-
-    public boolean hasRequested(User from,Long toId){
-        return friendRepository.hasRequested(from.getId(),toId).isPresent();
-    }
-
-    private boolean isFriendRequestPending(User firstUser,User secondUser){
-        return friendRepository.hasRequested(firstUser.getId(),secondUser.getId()).isPresent();
-    }
-
-    private boolean isFriendRequestAccepted(User firstUser,User secondUser){
-        return isMyFriend(firstUser,secondUser);
-    }
-
     public List<User> getPendingFriends(User currentUser){
         List<Friend> pendingFriends = friendRepository.getPendingFriends(currentUser.getId());
         List<User> pendingUsers = new ArrayList<>();

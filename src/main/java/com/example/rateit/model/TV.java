@@ -27,7 +27,7 @@ public class TV extends Media {
     public TV(int id, String title, String backdrop, String overview, double userRating, String poster, String language, List<Genre> genres, LocalDate releaseDate,String link, List<Integer> episodeRuntime, int numberOfSeasons, int numberOfEpisodes) {
         super(id, title, backdrop, overview, userRating, poster, language, "tv", genres, releaseDate,link);
         this.episodeRuntime = episodeRuntime;
-        NumberOfSeasons = numberOfSeasons;
-        NumberOfEpisodes = numberOfEpisodes;
+        this.NumberOfSeasons = numberOfSeasons;
+        this.NumberOfEpisodes = numberOfEpisodes;
     }
 }

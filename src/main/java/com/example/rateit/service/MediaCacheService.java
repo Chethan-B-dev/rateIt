@@ -20,7 +20,7 @@ public class MediaCacheService {
     private final String MEDIA_CACHE = "MEDIA";
 
     @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, Media> hashOperations;
 
     @PostConstruct

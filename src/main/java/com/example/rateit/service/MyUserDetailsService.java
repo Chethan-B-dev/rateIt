@@ -13,14 +13,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
-        if (user == null) {
+        if (user == null)
             throw new UsernameNotFoundException("invalid username/password");
-        }
         return new MyUserDetails(user);
     }
 }

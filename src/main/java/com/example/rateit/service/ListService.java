@@ -19,11 +19,11 @@ import java.util.List;
 @Service
 public class ListService {
     @Autowired
-    WatchListRepository watchListRepository;
+    private WatchListRepository watchListRepository;
     @Autowired
-    WishListRepository wishListRepository;
+    private WishListRepository wishListRepository;
     @Autowired
-    APIService apiService;
+    private APIService apiService;
 
     public WatchList saveWatchList(WatchList watchList){
         return watchListRepository.save(watchList);
