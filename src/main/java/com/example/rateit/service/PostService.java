@@ -16,7 +16,7 @@ import java.util.List;
  * created by chethan on 21-12-2021
  **/
 @Service
-public class PostService {
+public final class PostService {
 
     @Autowired
     private PostRepository postRepository;
