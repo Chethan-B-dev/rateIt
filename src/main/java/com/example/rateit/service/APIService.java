@@ -222,7 +222,7 @@ public class APIService {
     }
 
     public Media getMediaByType(String mediaType, int mediaId){
-        if (mediaType.equalsIgnoreCase("movie"))
+        if (mediaType.equals("movie"))
             return getMovie(mediaId);
         return getTV(mediaId);
     }

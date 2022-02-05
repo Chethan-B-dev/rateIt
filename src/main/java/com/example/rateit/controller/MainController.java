@@ -59,8 +59,8 @@ public class MainController {
 
         try {
             User user = myUserDetails.getUser();
-            mav.addObject("hasPendingFriends",friendService.hasPendingRequests(user.getId()));
-            mav.addObject("username",user.getUsername());
+            mav.addObject("hasPendingFriends", friendService.hasPendingRequests(user.getId()));
+            mav.addObject("username", user.getUsername());
         } catch (NullPointerException ex){
             // do nothing if the user is not logged in
         }
@@ -96,8 +96,8 @@ public class MainController {
         List<Media> mediaList = apiService.search(query);
 
         ModelAndView mav = new ModelAndView("search");
-        mav.addObject("search",query);
-        mav.addObject("mediaList",mediaList);
+        mav.addObject("search", query);
+        mav.addObject("mediaList", mediaList);
         return mav;
     }
 
@@ -346,18 +346,9 @@ public class MainController {
         ModelAndView mav = new ModelAndView("post");
         if (pageNo == null) pageNo = 1;
         Page<Post> posts = apiService.getPostsOfUser(user.getId(),pageNo);
-        List<DisplayPost> displayPosts = new ArrayList<>();
-        posts.getContent().forEach(post -> {
-            Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
-            DisplayPost displayPost = DisplayPost.builder()
-                    .post(post)
-                    .media(media)
-                    .isMyPost(true)
-                    .build();
-            displayPosts.add(displayPost);
-        });
-        mav.addObject("displayPosts", displayPosts);
-        mav.addObject("noPosts",displayPosts.isEmpty());
+        List<DisplayPost> myPosts = mapPostsToDisplayPosts(posts.getContent(), true);
+        mav.addObject("displayPosts", myPosts);
+        mav.addObject("noPosts", myPosts.isEmpty());
         mav.addObject("username", user.getUsername());
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
@@ -386,16 +377,7 @@ public class MainController {
         if (!isMyFriend) return new ModelAndView("redirect:/");
         Page<Post> posts = apiService.getPostsOfUser(userId,pageNo);
         String username = userService.getUser(userId).getUsername();
-        List<DisplayPost> displayPosts = new ArrayList<>();
-        posts.getContent().forEach(post -> {
-            Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
-            DisplayPost displayPost = DisplayPost.builder()
-                    .post(post)
-                    .media(media)
-                    .isMyPost(false)
-                    .build();
-            displayPosts.add(displayPost);
-        });
+        List<DisplayPost> displayPosts = mapPostsToDisplayPosts(posts.getContent(), false);
         mav.addObject("displayPosts", displayPosts);
         mav.addObject("noPosts",displayPosts.isEmpty());
         mav.addObject("username", username);
@@ -412,14 +394,9 @@ public class MainController {
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @RequestParam(required = false) Integer pageNo
     ){
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            return new ModelAndView("redirect:/");
-        }
-
+        User user = myUserDetails.getUser();;
         ModelAndView mav = new ModelAndView("post");
+
         if (pageNo == null)
             pageNo = 1;
 
@@ -429,18 +406,8 @@ public class MainController {
         friends.forEach(friend -> userIds.add(friend.getId()));
 
         Page<Post> posts = postService.getFeed(userIds, user.getId(), pageNo);
-        List<DisplayPost> displayPosts = new ArrayList<>();
 
-        posts.getContent().forEach(post -> {
-            Media media = apiService.getMediaByType(post.getMediaType(), post.getMediaId());
-            DisplayPost displayPost = DisplayPost.builder()
-                    .post(post)
-                    .media(media)
-                    .isMyPost(false)
-                    .build();
-            displayPosts.add(displayPost);
-        });
-
+        List<DisplayPost> displayPosts = mapPostsToDisplayPosts(posts.getContent(), true);
 
         mav.addObject("displayPosts", displayPosts);
         mav.addObject("noPosts", displayPosts.isEmpty());
@@ -450,6 +417,23 @@ public class MainController {
         mav.addObject("totalItems", posts.getTotalElements());
         mav.addObject("page","myfeed");
         return mav;
+    }
+
+    private List<DisplayPost> mapPostsToDisplayPosts(List<Post> posts, boolean isMyPost){
+
+        List<DisplayPost> displayPosts = new ArrayList<>();
+
+        posts.forEach(post -> {
+            Media media = apiService.getMediaByType(post.getMediaType().toLowerCase(), post.getMediaId());
+            DisplayPost displayPost = DisplayPost.builder()
+                    .post(post)
+                    .media(media)
+                    .isMyPost(isMyPost)
+                    .build();
+            displayPosts.add(displayPost);
+        });
+
+        return displayPosts;
     }
 
     @GetMapping("/login")

@@ -45,9 +45,6 @@ public class FriendService {
 
     public List<User> getFriends(User currentUser){
 
-//        List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
-//        List<Friend> friendsBySecondUser = friendRepository.findByTo(currentUser);
-//
         List<User> friendUsers = new ArrayList<>();
 
         friendRepository.getFriends(currentUser.getId()).forEach(friend -> {
@@ -99,16 +96,6 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
 
          */
 
-//        friendsByFirstUser.forEach(friend -> {
-//            if (friend.getStatus() == Status.accepted)
-//                friendUsers.add(friend.getTo());
-//        });
-//
-//        friendsBySecondUser.forEach(friend -> {
-//            if (friend.getStatus() == Status.accepted)
-//                friendUsers.add(friend.getFrom());
-//        });
-
         return friendUsers;
     }
 
@@ -135,8 +122,6 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
         3  first user = user4 second user = user2
 
        */
-
-
         return friendRepository.isMyFriend(from.getId(),to.getId()).isPresent();
     }
 
