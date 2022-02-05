@@ -75,5 +75,14 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     )
     List<Friend> getPendingFriends(Long myId);
 
+    @Query(
+            value = "SELECT *" +
+                    " FROM user_friends uf" +
+                    " where (uf.to_id = :myId OR uf.from_id = :myId)" +
+                    " AND uf.status = 1;",
+            nativeQuery = true
+    )
+    List<Friend> getFriends(Long myId);
+
     Optional<Friend> findByFromIdAndToIdAndStatus(Long fromId, Long toId, Status status);
 }

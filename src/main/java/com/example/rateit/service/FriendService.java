@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -28,9 +29,11 @@ public class FriendService {
     public void saveFriend(User from, Long id) {
 
         Friend friend = new Friend();
-        User to = userRepository.findById(id).get();
+        User to = userRepository.getOne(id);;
 
-        if(!isMyFriend(from,to)){
+        boolean isMyFriend = isMyFriend(from, to);
+
+        if(!isMyFriend){
             friend.setCreatedAt(LocalDateTime.now());
             friend.setFrom(from);
             friend.setTo(to);
@@ -42,9 +45,18 @@ public class FriendService {
 
     public List<User> getFriends(User currentUser){
 
-        List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
-        List<Friend> friendsBySecondUser = friendRepository.findByTo(currentUser);
+//        List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
+//        List<Friend> friendsBySecondUser = friendRepository.findByTo(currentUser);
+//
         List<User> friendUsers = new ArrayList<>();
+
+        friendRepository.getFriends(currentUser.getId()).forEach(friend -> {
+            if (Objects.equals(friend.getFrom().getId(), currentUser.getId()))
+                friendUsers.add(friend.getTo());
+            else
+                friendUsers.add(friend.getFrom());
+        });
+
 
         /*
             suppose there are 4 users with id 1,2,3,4.
@@ -87,21 +99,21 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
 
          */
 
-        for (Friend friend : friendsByFirstUser) {
-            if (friend.getStatus() == Status.accepted)
-                friendUsers.add(friend.getTo());
-        }
-
-        for (Friend friend : friendsBySecondUser) {
-            if (friend.getStatus() == Status.accepted)
-                friendUsers.add(friend.getFrom());
-        }
+//        friendsByFirstUser.forEach(friend -> {
+//            if (friend.getStatus() == Status.accepted)
+//                friendUsers.add(friend.getTo());
+//        });
+//
+//        friendsBySecondUser.forEach(friend -> {
+//            if (friend.getStatus() == Status.accepted)
+//                friendUsers.add(friend.getFrom());
+//        });
 
         return friendUsers;
     }
 
-    public List<User> searchFriends(String query,Long id){
-        return userRepository.findByUsernameContainsAndIdNot(query,id);
+    public List<User> searchFriends(String query, Long id){
+        return userRepository.findByUsernameContainsAndIdNot(query, id);
     }
 
     public boolean isMyFriend(User from,User to){
@@ -137,12 +149,12 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
     }
 
     public List<User> getPendingFriends(User currentUser){
+
         List<Friend> pendingFriends = friendRepository.getPendingFriends(currentUser.getId());
         List<User> pendingUsers = new ArrayList<>();
 
-        for (Friend friend : pendingFriends) {
-            pendingUsers.add(friend.getFrom());
-        }
+        pendingFriends.forEach(friend -> pendingUsers.add(friend.getFrom()));
+
         return pendingUsers;
     }
 
@@ -155,7 +167,7 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
     }
 
     public void acceptFriend(Long fromId,Long toId){
-        Optional<Friend> pendingFriend = friendRepository.findByFromIdAndToIdAndStatus(fromId,toId,Status.pending);
+        Optional<Friend> pendingFriend = friendRepository.findByFromIdAndToIdAndStatus(fromId, toId, Status.pending);
         if (pendingFriend.isPresent()){
             Friend friend = pendingFriend.get();
             friend.setStatus(Status.accepted);
@@ -169,10 +181,7 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
 
     public void unFriend(Long myId,Long friendId){
         Optional<Friend> existingFriend = friendRepository.isMyFriend(myId, friendId);
-        if (existingFriend.isPresent()){
-            Friend friend = existingFriend.get();
-            friendRepository.delete(friend);
-        }
+        existingFriend.ifPresent(friend -> friendRepository.delete(friend));
     }
 
     public void deleteMyFriendship(User currentUser){
