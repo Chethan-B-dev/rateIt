@@ -37,9 +37,13 @@ public class APIService {
     }
 
     public Media getMovie(int id){
+
         Media media = mediaCacheService.findById(String.valueOf(id),"movie");
-        if (media != null) return media;
-        String movieUrl = url + "movie/" + id + String.format("?api_key=%s&language=en-US",apiKey);
+        if (media != null)
+            return media;
+
+        String movieUrl = url + "movie/" + id + String.format("?api_key=%s&language=en-US", apiKey);
+
         try {
             Movie movie =  restTemplate.getForObject(movieUrl, Movie.class);
             System.out.println("made api call in movie");
@@ -48,18 +52,20 @@ public class APIService {
         } catch (HttpClientErrorException | NullPointerException err){
             return null;
         }
+
     }
 
     public Media getTV(int id){
         Media media = mediaCacheService.findById(String.valueOf(id),"tv");
-        if (media != null) return media;
+        if (media != null)
+            return media;
         String tvUrl = url + "tv/" + id + String.format("?api_key=%s&language=en-US",apiKey);
         try {
             TV tv =  restTemplate.getForObject(tvUrl, TV.class);
             System.out.println("made api call in tv");
             mediaCacheService.save(tv);
             return tv;
-        }catch (HttpClientErrorException | NullPointerException err){
+        } catch (HttpClientErrorException | NullPointerException err){
             return null;
         }
     }
@@ -68,11 +74,13 @@ public class APIService {
         String movieReviewUrl = url + mediaType + "/" + id + String.format("/reviews?api_key=%s&language=en-US&page=1",apiKey);
         Iterator<JsonNode> reviewNodes = jsonNodeIterator(movieReviewUrl,"results");
         List<Review> movieReviews = new ArrayList<>();
+
         while (reviewNodes.hasNext()){
             JsonNode reviewNode = reviewNodes.next();
-            Review review = objectMapper.treeToValue(reviewNode,Review.class);
+            Review review = objectMapper.treeToValue(reviewNode, Review.class);
             movieReviews.add(review);
         }
+
         return movieReviews;
     }
 
@@ -140,7 +148,7 @@ public class APIService {
         String topRatedMovieUrl = url + "/movie/top_rated" + String.format("?api_key=%s&page=1&language=en-US",apiKey);
         Iterator<JsonNode> node = jsonNodeIterator(topRatedMovieUrl,"results");
         List<Media> movieList = new ArrayList<>();
-        while (node.hasNext()){
+        while (node.hasNext()) {
             JsonNode movieNode = node.next();
             Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
             movieList.add(movie);
@@ -152,7 +160,7 @@ public class APIService {
         String trendingTVUrl = url + "trending/tv/day" + String.format("?api_key=%s",apiKey);
         Iterator<JsonNode> node = jsonNodeIterator(trendingTVUrl,"results");
         List<Media> tvList = new ArrayList<>();
-        while (node.hasNext()){
+        while (node.hasNext()) {
             JsonNode movieNode = node.next();
             TV tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
@@ -164,7 +172,7 @@ public class APIService {
         String topRatedTVUrl = url + "/tv/top_rated" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
         Iterator<JsonNode> node = jsonNodeIterator(topRatedTVUrl,"results");
         List<Media> tvList = new ArrayList<>();
-        while (node.hasNext()){
+        while (node.hasNext()) {
             JsonNode movieNode = node.next();
             TV tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
@@ -176,7 +184,7 @@ public class APIService {
         String onAirTVUrl = url + "/tv/on_the_air" + String.format("?api_key=%s&language=en-US&page=1",apiKey);
         Iterator<JsonNode> node = jsonNodeIterator(onAirTVUrl,"results");
         List<Media> tvList = new ArrayList<>();
-        while (node.hasNext()){
+        while (node.hasNext()) {
             JsonNode movieNode = node.next();
             TV tv = objectMapper.treeToValue(movieNode,TV.class);
             tvList.add(tv);
@@ -185,7 +193,7 @@ public class APIService {
     }
 
     private Iterator<JsonNode> jsonNodeIterator(String url,String topic) throws JsonProcessingException {
-        String json = restTemplate.getForObject(url,String.class);
+        String json = restTemplate.getForObject(url, String.class);
         JsonNode root = objectMapper.readTree(json);
         ArrayNode arrayNode = (ArrayNode) root.get(topic);
         return arrayNode.elements();
@@ -193,24 +201,27 @@ public class APIService {
 
     public List<Media> search(String term) throws JsonProcessingException {
         // https://api.themoviedb.org/3/search/multi?api_key=fc1f6677d898408bfc0966f089fc8088&language=en-US&query=far%20from%20home&page=1&include_adult=false
-        String searchUrl = url + "search/multi" + String.format("?api_key=%s&language=en-US&query=%s&page=1&include_adult=false",apiKey,term);
+        String searchUrl = url + "search/multi" + String.format("?api_key=%s&language=en-US&query=%s&page=1&include_adult=false", apiKey, term);
         Iterator<JsonNode> node = jsonNodeIterator(searchUrl,"results");
         List<Media> mediaList = new ArrayList<>();
+
         while (node.hasNext()){
             JsonNode mediaNode = node.next();
-            if (mediaNode.get("media_type").asText().equalsIgnoreCase("movie") || mediaNode.get("media_type").asText().equalsIgnoreCase("tv")){
+            if (mediaNode.get("media_type").asText().equalsIgnoreCase("movie")
+                    || mediaNode.get("media_type").asText().equalsIgnoreCase("tv")){
                 Media media = objectMapper.treeToValue(mediaNode, Media.class);
                 mediaList.add(media);
             }
         }
+
         return mediaList;
     }
 
     public Page<Post> getPostsOfUser(Long userId, int pageNumber){
-        return postService.getUserPosts(userId,pageNumber);
+        return postService.getUserPosts(userId, pageNumber);
     }
 
-    public Media getMediaByType(String mediaType,int mediaId){
+    public Media getMediaByType(String mediaType, int mediaId){
         if (mediaType.equalsIgnoreCase("movie"))
             return getMovie(mediaId);
         return getTV(mediaId);

@@ -49,7 +49,7 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    public Page<Post> getFeed(List<Long> userIds, Long myId,int pageNum){
+    public Page<Post> getFeed(List<Long> userIds, Long myId, int pageNum){
         int pageSize = 5;
         Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);

@@ -31,7 +31,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     )
     Optional<Post> findPostByUserAndPost(Long userId, Long postId);
 
-    Page<Post> findByUserIdInAndUserIdNot(List<Long> userIds,Long myId,Pageable pageable);
+    Page<Post> findByUserIdInAndUserIdNot(List<Long> userIds, Long myId, Pageable pageable);
 
     List<Post> findAllByUser(User user);
 

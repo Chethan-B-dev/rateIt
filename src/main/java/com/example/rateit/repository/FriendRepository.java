@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FriendRepository extends JpaRepository<Friend,Long> {
-
+public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     @Transactional
     @Modifying
@@ -77,7 +76,4 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
     List<Friend> getPendingFriends(Long myId);
 
     Optional<Friend> findByFromIdAndToIdAndStatus(Long fromId, Long toId, Status status);
-
-
-
 }

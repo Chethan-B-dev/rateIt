@@ -25,7 +25,7 @@ public class FriendService {
     @Autowired
     private UserRepository userRepository;
 
-    public Friend saveFriend(User from, Long id) throws NullPointerException{
+    public void saveFriend(User from, Long id) {
 
         Friend friend = new Friend();
         User to = userRepository.findById(id).get();
@@ -35,10 +35,9 @@ public class FriendService {
             friend.setFrom(from);
             friend.setTo(to);
             friend.setStatus(Status.pending);
-            return friendRepository.save(friend);
+            friendRepository.save(friend);
         }
 
-        return null;
     }
 
     public List<User> getFriends(User currentUser){
@@ -169,7 +168,7 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
     }
 
     public void unFriend(Long myId,Long friendId){
-        Optional<Friend> existingFriend = friendRepository.isMyFriend(myId,friendId);
+        Optional<Friend> existingFriend = friendRepository.isMyFriend(myId, friendId);
         if (existingFriend.isPresent()){
             Friend friend = existingFriend.get();
             friendRepository.delete(friend);

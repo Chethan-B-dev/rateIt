@@ -25,19 +25,19 @@ public class ListService {
     @Autowired
     private APIService apiService;
 
-    public WatchList saveWatchList(WatchList watchList){
-        return watchListRepository.save(watchList);
+    public void saveWatchList(WatchList watchList){
+        watchListRepository.save(watchList);
     }
 
-    public WishList saveWishList(WishList wishList){
-        return wishListRepository.save(wishList);
+    public void saveWishList(WishList wishList){
+        wishListRepository.save(wishList);
     }
 
-    public boolean hasWatched(Long userId,int mediaId){
+    public boolean hasWatched(Long userId, int mediaId){
         return watchListRepository.findMediaInWatchList(userId,mediaId).isPresent();
     }
 
-    public boolean hasWished(Long userId,int mediaId){
+    public boolean hasWished(Long userId, int mediaId){
         return wishListRepository.findMediaInWishList(userId,mediaId).isPresent();
     }
 
@@ -79,19 +79,19 @@ public class ListService {
         return mediaList;
     }
 
-    public boolean isMyWatchList(Long userId,int mediaId){
+    public boolean isMyWatchList(Long userId, int mediaId){
         return watchListRepository.existsByUserIdAndMediaId(userId,mediaId);
     }
 
-    public boolean isMyWishList(Long userId,int mediaId){
+    public boolean isMyWishList(Long userId, int mediaId){
         return wishListRepository.existsByUserIdAndMediaId(userId,mediaId);
     }
 
-    public void deleteWatchListByMediaAndUser(Long userId,int mediaId){
+    public void deleteWatchListByMediaAndUser(Long userId, int mediaId){
         watchListRepository.deleteByMediaIdAndUserId(mediaId,userId);
     }
 
-    public void deleteWishListByMediaAndUser(Long userId,int mediaId){
+    public void deleteWishListByMediaAndUser(Long userId, int mediaId){
         wishListRepository.deleteByMediaIdAndUserId(mediaId,userId);
     }
 
