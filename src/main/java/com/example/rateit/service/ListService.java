@@ -34,11 +34,11 @@ public class ListService {
     }
 
     public boolean hasWatched(Long userId, int mediaId){
-        return watchListRepository.findMediaInWatchList(userId,mediaId).isPresent();
+        return watchListRepository.findMediaInWatchList(userId, mediaId).isPresent();
     }
 
     public boolean hasWished(Long userId, int mediaId){
-        return wishListRepository.findMediaInWishList(userId,mediaId).isPresent();
+        return wishListRepository.findMediaInWishList(userId, mediaId).isPresent();
     }
 
     public List<WatchList> getUserWatchList(Long userId){
