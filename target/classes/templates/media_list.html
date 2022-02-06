@@ -83,7 +83,7 @@
             <div class="col-md-9 text-md-left mt-3">
              
               <h4 class="h4 mb-4 text-danger" th:text="${mediaDTO.media.title}">media title</h4>
-              <a th:if="${mediaDTO.isMyMedia()}" th:href="'/list/' + ${list} + '/' + ${mediaDTO.media.id}" type="button" class="btn-floating btn-sm bg-danger float-right"><i class="fas fa-trash text-white"></i></a>
+              <a th:if="${mediaDTO.isMyMedia()}" th:href="'/deletelist/' + ${list} + '/' + ${mediaDTO.media.id}" type="button" class="btn-floating btn-sm bg-danger float-right"><i class="fas fa-trash text-white"></i></a>
 
               <p class="font-weight-normal text-wrap" th:text="${mediaDTO.media.overview}">
                 media overview

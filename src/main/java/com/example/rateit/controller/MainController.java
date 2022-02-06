@@ -453,7 +453,7 @@ public class MainController {
         return new ModelAndView("redirect:/myposts");
     }
 
-    @GetMapping("/list/{list}/{mediaId}")
+    @GetMapping("/deletelist/{list}/{mediaId}")
     public ModelAndView deleteList(
             @PathVariable int mediaId,
             @AuthenticationPrincipal MyUserDetails myUserDetails,
