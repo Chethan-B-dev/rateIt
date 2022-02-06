@@ -262,7 +262,7 @@
                   <!-- Social shares button -->
                   <a th:href="'/movie/' + ${movie.id}" class="activator waves-effect mr-4"></a>
                   <!-- Title -->
-                  <h6 class="card-title" th:text="${movie.title}">title</h6>
+                  <h6 class="card-title" style="word-wrap: break-word;" th:text="${movie.title}">title</h6>
     
                   <p class="text-muted" th:text="${#temporals.format(movie.releaseDate, 'd MMM yyyy', new java.util.Locale('en', 'EN'))}"></p>
                 

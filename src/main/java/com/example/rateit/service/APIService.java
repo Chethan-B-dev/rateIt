@@ -138,7 +138,7 @@ public class APIService {
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()){
             JsonNode movieNode = node.next();
-            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Movie movie = objectMapper.treeToValue(movieNode, Movie.class);
             movieList.add(movie);
         }
         return movieList;
@@ -150,7 +150,7 @@ public class APIService {
         List<Media> movieList = new ArrayList<>();
         while (node.hasNext()) {
             JsonNode movieNode = node.next();
-            Movie movie = objectMapper.treeToValue(movieNode,Movie.class);
+            Movie movie = objectMapper.treeToValue(movieNode, Movie.class);
             movieList.add(movie);
         }
         return movieList;

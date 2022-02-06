@@ -17,7 +17,7 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     @Transactional
     @Modifying
-    void deleteByFromIdAndToId(Long fromId,Long toId);
+    void deleteByFromIdAndToId(Long fromId, Long toId);
 
     boolean existsByFromAndTo(User first, User second);
 
@@ -31,7 +31,7 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     Optional<Friend> findByFromAndTo(User from, User to);
 
-    Optional<Friend> findByFromIdAndToId(Long fromId,Long toId);
+    Optional<Friend> findByFromIdAndToId(Long fromId, Long toId);
 
     @Query(
             value = "SELECT * FROM user_friends uf where ( (uf.from_id = :fromId AND uf.to_id = :toId) OR (uf.from_id = :toId AND uf.to_id = :fromId) ) AND uf.status = 1;",

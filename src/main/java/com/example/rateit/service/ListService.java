@@ -80,11 +80,11 @@ public class ListService {
     }
 
     public boolean isMyWatchList(Long userId, int mediaId){
-        return watchListRepository.existsByUserIdAndMediaId(userId,mediaId);
+        return watchListRepository.existsByUserIdAndMediaId(userId, mediaId);
     }
 
     public boolean isMyWishList(Long userId, int mediaId){
-        return wishListRepository.existsByUserIdAndMediaId(userId,mediaId);
+        return wishListRepository.existsByUserIdAndMediaId(userId, mediaId);
     }
 
     public void deleteWatchListByMediaAndUser(Long userId, int mediaId){

@@ -28,16 +28,22 @@ public class FriendService {
 
     public void saveFriend(User from, Long id) {
 
-        Friend friend = new Friend();
-        User to = userRepository.getOne(id);;
+        Optional<User> to = userRepository.findById(id);
 
-        boolean isMyFriend = isMyFriend(from, to);
+        if (to.isEmpty())
+            return;
+
+        User toUser = to.get();
+
+        boolean isMyFriend = isMyFriend(from, toUser);
 
         if(!isMyFriend){
-            friend.setCreatedAt(LocalDateTime.now());
-            friend.setFrom(from);
-            friend.setTo(to);
-            friend.setStatus(Status.pending);
+            Friend friend = Friend.builder()
+                    .to(toUser)
+                    .from(from)
+                    .status(Status.pending)
+                    .createdAt(LocalDateTime.now())
+                    .build();
             friendRepository.save(friend);
         }
 
@@ -170,9 +176,7 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
     }
 
     public void deleteMyFriendship(User currentUser){
-        List<Friend> myFriendships = friendRepository.findByFrom(currentUser);
-        myFriendships.addAll(friendRepository.findByTo(currentUser));
+        List<Friend> myFriendships = friendRepository.getFriends(currentUser.getId());
         friendRepository.deleteAll(myFriendships);
     }
-
 }

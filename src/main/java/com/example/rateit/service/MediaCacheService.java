@@ -40,7 +40,7 @@ public class MediaCacheService {
         return hashOperations.entries(MEDIA_CACHE);
     }
 
-    public void delete(String id,String mediaType) {
+    public void delete(String id, String mediaType) {
         hashOperations.delete(MEDIA_CACHE, id + mediaType);
     }
 
