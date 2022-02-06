@@ -658,8 +658,8 @@ public class MainController {
 
 
         ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaDTOList",mediaDTOList);
-        mav.addObject("topic",String.format("%s's Watch list",friend.getUsername()));
+        mav.addObject("mediaDTOList", mediaDTOList);
+        mav.addObject("topic", String.format("%s's Watch list",friend.getUsername()));
         return mav;
     }
 
