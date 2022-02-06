@@ -186,48 +186,45 @@ public class MainController {
         return mav;
     }
 
-    @GetMapping("/list/movie/popular")
-    public ModelAndView getPopularMovies() throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("list");
-        List<Media> movieList = apiService.getPopularMovies();
-        mav.addObject("movieList",movieList);
-        mav.addObject("topic","Popular Movies");
-        return mav;
-    }
+    @GetMapping("/list/{mediaType}/{topic}")
+    public ModelAndView getTopicMedia(
+            @PathVariable String mediaType,
+            @PathVariable String topic
+    ) throws JsonProcessingException {
 
-    @GetMapping("/list/movie/top")
-    public ModelAndView getTopRatedMovies() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("list");
-        List<Media> movieList = apiService.getTopRatedMovies();
-        mav.addObject("movieList",movieList);
-        mav.addObject("topic","Top Rated Movies");
-        return mav;
-    }
+        if (mediaType.equals("movie")) {
+            List<Media> movieList = null;
+            switch (topic) {
+                case "top"-> {
+                    movieList = apiService.getTopRatedMovies();
+                    mav.addObject("topic", "Top Rated Movies");
+                }
+                case "upcoming" -> {
+                    movieList = apiService.getUpcomingMovies();
+                    mav.addObject("topic", "Upcoming Movies");
+                }
+                case "popular" -> {
+                    movieList = apiService.getPopularMovies();
+                    mav.addObject("topic", "Popular Movies");
+                }
+            }
+            mav.addObject("movieList", movieList);
 
-    @GetMapping("/list/movie/upcoming")
-    public ModelAndView getUpcomingMovies() throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("list");
-        List<Media> movieList = apiService.getUpcomingMovies();
-        mav.addObject("movieList",movieList);
-        mav.addObject("topic","Upcoming Movies");
-        return mav;
-    }
-
-    @GetMapping("/list/tv/top")
-    public ModelAndView getTopRatedTv() throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("list");
-        List<Media> tvList = apiService.getTopRatedTV();
-        mav.addObject("tvList",tvList);
-        mav.addObject("topic","Top Rated TV Shows");
-        return mav;
-    }
-
-    @GetMapping("/list/tv/air")
-    public ModelAndView getOnAirTv() throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("list");
-        List<Media> tvList = apiService.getOnAirTV();
-        mav.addObject("tvList",tvList);
-        mav.addObject("topic","On Air TV Shows");
+        } else if (mediaType.equals("tv")) {
+            List<Media> tvList = null;
+            switch (topic) {
+                case "top" -> {
+                    tvList = apiService.getTopRatedTV();
+                    mav.addObject("topic","Top Rated TV Shows");
+                }
+                case "air" -> {
+                    tvList = apiService.getOnAirTV();
+                    mav.addObject("topic","On Air TV Shows");
+                }
+            }
+            mav.addObject("tvList", tvList);
+        }
         return mav;
     }
 
