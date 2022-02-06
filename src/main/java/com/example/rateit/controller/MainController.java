@@ -208,6 +208,10 @@ public class MainController {
                     movieList = apiService.getPopularMovies();
                     mav.addObject("topic", "Popular Movies");
                 }
+                default -> {
+                    mav.setViewName("redirect:/");
+                    return mav;
+                }
             }
             mav.addObject("movieList", movieList);
 
@@ -221,6 +225,10 @@ public class MainController {
                 case "air" -> {
                     tvList = apiService.getOnAirTV();
                     mav.addObject("topic","On Air TV Shows");
+                }
+                default -> {
+                    mav.setViewName("redirect:/");
+                    return mav;
                 }
             }
             mav.addObject("tvList", tvList);
