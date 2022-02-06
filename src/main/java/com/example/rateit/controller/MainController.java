@@ -224,6 +224,8 @@ public class MainController {
                 }
             }
             mav.addObject("tvList", tvList);
+        } else {
+            mav.setViewName("redirect:/");
         }
         return mav;
     }
