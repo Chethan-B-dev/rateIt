@@ -97,7 +97,7 @@ public class APIService {
     }
 
     public List<Media> getSimilarMedia(int id,String mediaType) throws JsonProcessingException{
-        String similarMoviesUrl = url + mediaType + "/" + id + String.format("/similar?api_key=%s&language=en-US&page=1",apiKey);
+        String similarMoviesUrl = url + mediaType + "/" + id + String.format("/similar?api_key=%s&language=en-US&page=1", apiKey);
         Iterator<JsonNode> nodes = jsonNodeIterator(similarMoviesUrl,"results");
         List<Media> similarMovies = new ArrayList<>();
         while (nodes.hasNext()){
