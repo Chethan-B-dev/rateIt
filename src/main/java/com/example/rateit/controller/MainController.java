@@ -65,8 +65,8 @@ public class MainController {
             // do nothing if the user is not logged in
         }
 
-        mav.addObject("trendingMovies",trendingMovies);
-        mav.addObject("trendingTv",trendingTv);
+        mav.addObject("trendingMovies", trendingMovies);
+        mav.addObject("trendingTv", trendingTv);
         return mav;
     }
 
@@ -77,20 +77,25 @@ public class MainController {
 
         if (existingUser != null)
             return new ModelAndView("redirect:/?failure-register");
+
+        // sanitizing username
         user.setUsername(Jsoup.clean(user.getUsername(),Safelist.basic()));
 
+        // encrypting password because it goes in the DB
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
         userService.save(user);
         log.debug("user {} has registered", user.getUsername());
+
         return new ModelAndView("redirect:/?sucess-register");
     }
 
 
     @GetMapping("/search")
     public ModelAndView search(@RequestParam String query) throws JsonProcessingException {
+
         log.debug("searched for {}", query);
         query = Jsoup.clean(query, Safelist.basic());
         List<Media> mediaList = apiService.search(query);
@@ -157,7 +162,7 @@ public class MainController {
         try{
             User user = myUserDetails.getUser();
             boolean hasWatched = listService.hasWatched(user.getId(),id);
-            boolean hasWished = listService.hasWished(user.getId(),id);
+            boolean hasWished = listService.hasWished(user.getId(), id);
             boolean hasPosted = postService.hasPosted(user.getId(), id);
             mav.addObject("hasWatched", hasWatched);
             mav.addObject("hasWished", hasWished);
@@ -257,6 +262,7 @@ public class MainController {
                 id,
                 LocalDateTime.now()
         );
+
         listService.saveWatchList(newMedia);
         return new ModelAndView("redirect:/" + media + "/" + id);
     }
@@ -286,40 +292,33 @@ public class MainController {
         return new ModelAndView("redirect:/" + media + "/" + id);
     }
 
-    @GetMapping("/mywatchlist")
-    public ModelAndView myWatchList(@AuthenticationPrincipal MyUserDetails myUserDetails){
+    @GetMapping("/my{list}")
+    public ModelAndView myMediaList(
+            @AuthenticationPrincipal MyUserDetails myUserDetails,
+            @PathVariable String list
+    ){
 
+        ModelAndView mav = new ModelAndView("media_list");
         User user = myUserDetails.getUser();
-        List<Media> mediaList = listService.getWatchListMedia(user.getId());
-        List<MediaDTO> mediaDTOList = new ArrayList<>();
 
-        mediaList.forEach(media -> {
-            MediaDTO mediaDTO = new MediaDTO(media,true);
-            mediaDTOList.add(mediaDTO);
-        });
+        List<Media> mediaList = null;
+
+        if (list.equals("watchlist"))
+            mediaList = listService.getWatchListMedia(user.getId());
+        else if (list.equals("wishlist"))
+            mediaList = listService.getWishListMedia(user.getId());
+        else {
+            mav.setViewName("/");
+            return mav;
+        }
+
+        List<MediaDTO> mediaDTOList = mapMediaToMediaDTO(mediaList, true);
+
 
         ModelAndView mav = new ModelAndView("media_list");
         mav.addObject("mediaDTOList", mediaDTOList);
-        mav.addObject("topic","My WatchList");
-        mav.addObject("list","watchlist");
-        return mav;
-    }
-
-    @GetMapping("/mywishlist")
-    public ModelAndView myWishList(@AuthenticationPrincipal MyUserDetails myUserDetails){
-        User user = myUserDetails.getUser();
-        List<Media> mediaList = listService.getWishListMedia(user.getId());
-        List<MediaDTO> mediaDTOList = new ArrayList<>();
-
-        mediaList.forEach(media -> {
-            MediaDTO mediaDTO = new MediaDTO(media,true);
-            mediaDTOList.add(mediaDTO);
-        });
-
-        ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaDTOList",mediaDTOList);
-        mav.addObject("topic","My WishList");
-        mav.addObject("list","wishlist");
+        mav.addObject("topic","My " + list.substring(0,1).toUpperCase() + list.substring(1));
+        mav.addObject("list", list);
         return mav;
     }
 
