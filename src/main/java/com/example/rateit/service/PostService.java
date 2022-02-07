@@ -20,7 +20,7 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
-    private final int pageSize = 5;
+    private static final int pageSize = 5;
 
 
     public Post save(Post post){
@@ -37,11 +37,11 @@ public class PostService {
         return postRepository.findByUserId(userId,pageable);
     }
 
-    public boolean hasPosted(Long userId,int mediaId){
+    public boolean hasPosted(Long userId, int mediaId){
         return postRepository.findPostByUserAndMedia(userId, mediaId).isPresent();
     }
 
-    public boolean isMyPost(Long userId,Long postId){
+    public boolean isMyPost(Long userId, Long postId){
         return postRepository.findPostByUserAndPost(userId, postId).isPresent();
     }
 

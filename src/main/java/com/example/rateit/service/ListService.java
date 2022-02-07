@@ -50,17 +50,20 @@ public class ListService {
     }
 
     public List<Media> getWatchListMedia(Long userId){
+
         List<WatchList> watchLists = getUserWatchList(userId);
         List<Media> mediaList = new ArrayList<>();
-        for (WatchList watchList: watchLists) {
+
+        for (WatchList watchList : watchLists) {
             if (watchList.getMediaType().equalsIgnoreCase("movie")){
                 Media movie = apiService.getMovie(watchList.getMediaId());
                 mediaList.add(movie);
-            }else if (watchList.getMediaType().equalsIgnoreCase("tv")){
+            } else {
                 Media tv = apiService.getTV(watchList.getMediaId());
                 mediaList.add(tv);
             }
         }
+
         return mediaList;
     }
 
