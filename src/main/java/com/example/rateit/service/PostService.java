@@ -34,7 +34,7 @@ public class PostService {
     public Page<Post> getUserPosts(Long userId, int pageNum){
         Sort sort = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
-        return postRepository.findByUserId(userId,pageable);
+        return postRepository.findByUserId(userId, pageable);
     }
 
     public boolean hasPosted(Long userId, int mediaId){

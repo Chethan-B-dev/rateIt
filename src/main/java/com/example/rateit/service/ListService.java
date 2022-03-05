@@ -91,13 +91,12 @@ public class ListService {
     }
 
     public void deleteWatchListByMediaAndUser(Long userId, int mediaId){
-        watchListRepository.deleteByMediaIdAndUserId(mediaId,userId);
+        watchListRepository.deleteByMediaIdAndUserId(mediaId, userId);
     }
 
     public void deleteWishListByMediaAndUser(Long userId, int mediaId){
-        wishListRepository.deleteByMediaIdAndUserId(mediaId,userId);
+        wishListRepository.deleteByMediaIdAndUserId(mediaId, userId);
     }
-
 
     @Transactional
     public void deleteMyLists(User currentUser){

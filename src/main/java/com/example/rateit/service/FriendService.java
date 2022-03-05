@@ -58,7 +58,7 @@ public class FriendService {
                 friendUsers.add(friend.getTo());
             else
                 friendUsers.add(friend.getFrom());
-        });
+        }); 
 
 
         /*
@@ -109,7 +109,7 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
         return userRepository.findByUsernameContainsAndIdNot(query, id);
     }
 
-    public boolean isMyFriend(User from,User to){
+    public boolean isMyFriend(User from, User to){
 
         /*
         suppose there are 4 users with id 1,2,3,4.
@@ -128,11 +128,11 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
         3  first user = user4 second user = user2
 
        */
-        return friendRepository.isMyFriend(from.getId(),to.getId()).isPresent();
+        return friendRepository.isMyFriend(from.getId(), to.getId()).isPresent();
     }
 
     public boolean isMyFriend(Long fromId,Long toId){
-        return friendRepository.isMyFriend(fromId,toId).isPresent();
+        return friendRepository.isMyFriend(fromId, toId).isPresent();
     }
 
     public boolean hasRequested(User from,User to){
@@ -154,7 +154,7 @@ List<Friend> friendsByFirstUser = friendRepository.findByFrom(currentUser);
     }
 
     public void deleteFriend(Long fromId,Long toId){
-        friendRepository.deleteByFromIdAndToId(fromId,toId);
+        friendRepository.deleteByFromIdAndToId(fromId, toId);
     }
 
     public void acceptFriend(Long fromId,Long toId){

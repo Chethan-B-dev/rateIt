@@ -292,43 +292,44 @@ public class MainController {
         return new ModelAndView("redirect:/" + media + "/" + id);
     }
 
-    @GetMapping("/my{list}")
-    public ModelAndView myMediaList(
-            @AuthenticationPrincipal MyUserDetails myUserDetails,
-            @PathVariable String list
-    ){
+    @GetMapping("/mywatchlist")
+    public ModelAndView myWatchList(@AuthenticationPrincipal MyUserDetails myUserDetails){
 
-        ModelAndView mav = new ModelAndView("media_list");
         User user = myUserDetails.getUser();
-
-        List<Media> mediaList = null;
-
-        if (list.equals("watchlist"))
-            mediaList = listService.getWatchListMedia(user.getId());
-        else if (list.equals("wishlist"))
-            mediaList = listService.getWishListMedia(user.getId());
-        else {
-            mav.setViewName("/");
-            return mav;
-        }
-
+        List<Media> mediaList = listService.getWatchListMedia(user.getId());
         List<MediaDTO> mediaDTOList = mapMediaToMediaDTO(mediaList, true);
-
 
         ModelAndView mav = new ModelAndView("media_list");
         mav.addObject("mediaDTOList", mediaDTOList);
-        mav.addObject("topic","My " + list.substring(0,1).toUpperCase() + list.substring(1));
-        mav.addObject("list", list);
+        mav.addObject("topic","My WatchList");
+        mav.addObject("list","watchlist");
+        return mav;
+    }
+
+    @GetMapping("/mywishlist")
+    public ModelAndView myWishList(@AuthenticationPrincipal MyUserDetails myUserDetails){
+        User user = myUserDetails.getUser();
+        List<Media> mediaList = listService.getWishListMedia(user.getId());
+        List<MediaDTO> mediaDTOList = mapMediaToMediaDTO(mediaList, true);
+
+        ModelAndView mav = new ModelAndView("media_list");
+        mav.addObject("mediaDTOList",mediaDTOList);
+        mav.addObject("topic","My WishList");
+        mav.addObject("list","wishlist");
         return mav;
     }
 
     @PostMapping("/addPost")
-    public ModelAndView addPost(@ModelAttribute PostRequestBody postRequestBody,
-                                @AuthenticationPrincipal MyUserDetails myUserDetails){
+    public ModelAndView addPost(
+            @ModelAttribute PostRequestBody postRequestBody,
+            @AuthenticationPrincipal MyUserDetails myUserDetails
+    ){
         User user;
+        int mediaId;
         try {
             user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
+            mediaId = Integer.parseInt(postRequestBody.getMediaId());
+        } catch (NullPointerException | NumberFormatException ex){
             return new ModelAndView("redirect:/");
         }
 
@@ -338,7 +339,7 @@ public class MainController {
                 LocalDateTime.now(),
                 postRequestBody.getRating(),
                 Jsoup.clean(postRequestBody.getMediaType(),Safelist.basic()),
-                Integer.parseInt(postRequestBody.getMediaId())
+                mediaId
         );
 
         postService.save(post);
@@ -352,7 +353,7 @@ public class MainController {
         ModelAndView mav = new ModelAndView("post");
         if (pageNo == null)
             pageNo = 1;
-        Page<Post> posts = apiService.getPostsOfUser(user.getId(),pageNo);
+        Page<Post> posts = apiService.getPostsOfUser(user.getId(), pageNo);
         List<DisplayPost> myPosts = mapPostsToDisplayPosts(posts.getContent(), true);
 
         mav.addObject("displayPosts", myPosts);
@@ -424,7 +425,7 @@ public class MainController {
 
         Page<Post> posts = postService.getFeed(userIds, user.getId(), pageNo);
 
-        List<DisplayPost> displayPosts = mapPostsToDisplayPosts(posts.getContent(), true);
+        List<DisplayPost> displayPosts = mapPostsToDisplayPosts(posts.getContent(), false);
 
         mav.addObject("displayPosts", displayPosts);
         mav.addObject("noPosts", displayPosts.isEmpty());
@@ -501,7 +502,7 @@ public class MainController {
             boolean isMyWatchList = listService.isMyWatchList(user.getId(), mediaId);
             if (isMyWatchList)
                 listService.deleteWatchListByMediaAndUser(user.getId(),mediaId);
-        } else{
+        } else {
             boolean isMyWishList = listService.isMyWishList(user.getId(), mediaId);
             if (isMyWishList)
                 listService.deleteWishListByMediaAndUser(user.getId(),mediaId);
@@ -563,19 +564,21 @@ public class MainController {
         List<SearchFriendDTO> searchFriendDTOS = new ArrayList<>();
 
         users.forEach(friend -> {
-            boolean isAccepted = friendService.isMyFriend(user,friend);
-            boolean isPending = friendService.hasRequested(user,friend);
-            boolean isReceived = friendService.haveRecived(user,friend);
+            boolean isAccepted = friendService.isMyFriend(user, friend);
+            boolean isPending = friendService.hasRequested(user, friend);
+            boolean isReceived = friendService.haveRecived(user, friend);
+
             SearchFriendDTO searchFriendDTO = SearchFriendDTO.builder()
                     .user(friend)
                     .isAccepted(isAccepted)
                     .isPending(isPending)
                     .isReceived(isReceived)
                     .build();
+
             searchFriendDTOS.add(searchFriendDTO);
         });
 
-        mav.addObject("search",query);
+        mav.addObject("search", query);
         mav.addObject("searchFriendDTOS", searchFriendDTOS);
         mav.addObject("noUsers", users.isEmpty());
         return mav;
@@ -593,7 +596,7 @@ public class MainController {
             return new ModelAndView("redirect:/");
         }
 
-        friendService.saveFriend(user,id);
+        friendService.saveFriend(user, id);
         return new ModelAndView("redirect:/myfriends");
     }
 
@@ -698,7 +701,7 @@ public class MainController {
             return new ModelAndView("redirect:/");
         }
 
-        if (Objects.equals(friendID, user.getId()))
+        if (friendID.equals(user.getId()))
             return new ModelAndView("redirect:/mywishlist");
 
         User friend = userService.getUser(friendID);
