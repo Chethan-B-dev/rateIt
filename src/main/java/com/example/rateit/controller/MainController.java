@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * created by chethan on 19-12-2021
@@ -249,12 +248,10 @@ public class MainController {
             @PathVariable int id,
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ){
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            return new ModelAndView("redirect:/" + media + "/" + id);
-        }
+        if (myUserDetails == null)
+            return new ModelAndView("redirect:/");
+
+        User user = myUserDetails.getUser();
 
         WatchList newMedia = new WatchList(
                 user,
@@ -273,13 +270,10 @@ public class MainController {
             @PathVariable int id,
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ){
-        User user;
+        if (myUserDetails == null)
+            return new ModelAndView("redirect:/");
 
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            return new ModelAndView("redirect:/" + media + "/" + id);
-        }
+        User user = myUserDetails.getUser();
 
         WishList newMedia = new WishList(
                 user,
@@ -372,15 +366,12 @@ public class MainController {
             @RequestParam(required = false) Integer pageNo,
             @PathVariable Long userId
     ){
-        User user;
-
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
 
-        if (Objects.equals(userId, user.getId()))
+        User user = myUserDetails.getUser();
+
+        if (user.getId().equals(userId))
             return new ModelAndView("redirect:/myposts");
 
         ModelAndView mav = new ModelAndView("post");
@@ -467,13 +458,11 @@ public class MainController {
 
         ModelAndView mav = new ModelAndView("redirect:/myposts");
 
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
-            mav.setViewName("redirect:/");
-            return mav;
-        }
+        if (myUserDetails == null)
+            return new ModelAndView("redirect:/");
+
+        User user = myUserDetails.getUser();
+
         boolean isMyPost = postService.isMyPost(user.getId(), id);
         if (isMyPost)
             postService.deletePost(id);
@@ -486,12 +475,10 @@ public class MainController {
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @PathVariable String list
     ){
-        User user;
-        try {
-            user = myUserDetails.getUser();
-        } catch (NullPointerException ex){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
+
+        User user = myUserDetails.getUser();
 
         boolean isListValid = list.equals("watchlist") || list.equals("wishlist");
 
@@ -547,12 +534,10 @@ public class MainController {
         if (query.isBlank())
             return new ModelAndView("redirect:/myfriends");
 
-        User user;
-        try{
-            user = myUserDetails.getUser();
-        } catch (NullPointerException err){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
+
+        User user = myUserDetails.getUser();
 
         log.debug("user {} searched for {}", user.getUsername(), query);
 
@@ -589,12 +574,10 @@ public class MainController {
             @PathVariable Long id,
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
-        User user;
-        try{
-            user = myUserDetails.getUser();
-        } catch (NullPointerException err){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
+
+        User user = myUserDetails.getUser();
 
         friendService.saveFriend(user, id);
         return new ModelAndView("redirect:/myfriends");
@@ -605,12 +588,10 @@ public class MainController {
             @PathVariable Long id,
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
-        User user;
-        try{
-            user = myUserDetails.getUser();
-        } catch (NullPointerException err){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
+
+        User user = myUserDetails.getUser();
 
         friendService.acceptFriend(id, user.getId());
         return new ModelAndView("redirect:/myfriends");
@@ -621,12 +602,10 @@ public class MainController {
             @PathVariable Long id,
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
-        User user;
-        try{
-            user = myUserDetails.getUser();
-        } catch (NullPointerException err){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
+
+        User user = myUserDetails.getUser();
 
         friendService.unFriend(user.getId(), id);
         return new ModelAndView("redirect:/myfriends");
@@ -637,12 +616,10 @@ public class MainController {
             @PathVariable Long id,
             @AuthenticationPrincipal MyUserDetails myUserDetails
     ) {
-        User user;
-        try{
-            user = myUserDetails.getUser();
-        } catch (NullPointerException err){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
+
+        User user = myUserDetails.getUser();
 
         friendService.deleteFriend(id, user.getId());
         return new ModelAndView("redirect:/myfriends");
@@ -653,14 +630,12 @@ public class MainController {
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @PathVariable Long friendID
     ){
-        User user;
-        try{
-            user = myUserDetails.getUser();
-        } catch (NullPointerException err){
+        if (myUserDetails == null)
             return new ModelAndView("redirect:/");
-        }
 
-        if (friendID.equals(user.getId()))
+        User user = myUserDetails.getUser();
+
+        if (user.getId().equals(friendID))
             return new ModelAndView("redirect:/mywatchlist");
 
         User friend = userService.getUser(friendID);
@@ -701,7 +676,7 @@ public class MainController {
             return new ModelAndView("redirect:/");
         }
 
-        if (friendID.equals(user.getId()))
+        if (user.getId().equals(friendID))
             return new ModelAndView("redirect:/mywishlist");
 
         User friend = userService.getUser(friendID);
