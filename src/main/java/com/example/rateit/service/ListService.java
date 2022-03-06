@@ -57,9 +57,11 @@ public class ListService {
         for (WatchList watchList : watchLists) {
             if (watchList.getMediaType().equalsIgnoreCase("movie")){
                 Media movie = apiService.getMovie(watchList.getMediaId());
+                movie.setMediaType("movie");
                 mediaList.add(movie);
             } else {
                 Media tv = apiService.getTV(watchList.getMediaId());
+                tv.setMediaType("tv");
                 mediaList.add(tv);
             }
         }
@@ -73,9 +75,11 @@ public class ListService {
         for (WishList wishList: wishLists) {
             if (wishList.getMediaType().equalsIgnoreCase("movie")){
                 Media movie = apiService.getMovie(wishList.getMediaId());
+                movie.setMediaType("movie");
                 mediaList.add(movie);
             }else if (wishList.getMediaType().equalsIgnoreCase("tv")){
                 Media tv = apiService.getTV(wishList.getMediaId());
+                tv.setMediaType("tv");
                 mediaList.add(tv);
             }
         }

@@ -388,16 +388,16 @@ public class MainController {
         if (pageNo == null)
             pageNo = 1;
 
-        boolean isMyFriend = friendService.isMyFriend(user.getId(),userId);
+        boolean isMyFriend = friendService.isMyFriend(user.getId(), userId);
 
         if (!isMyFriend)
             return new ModelAndView("redirect:/");
 
-        Page<Post> posts = apiService.getPostsOfUser(userId,pageNo);
+        Page<Post> posts = apiService.getPostsOfUser(userId, pageNo);
         String username = userService.getUser(userId).getUsername();
         List<DisplayPost> displayPosts = mapPostsToDisplayPosts(posts.getContent(), false);
         mav.addObject("displayPosts", displayPosts);
-        mav.addObject("noPosts",displayPosts.isEmpty());
+        mav.addObject("noPosts", displayPosts.isEmpty());
         mav.addObject("username", username);
         mav.addObject("currentPage", pageNo);
         mav.addObject("totalPages", posts.getTotalPages());
@@ -412,7 +412,7 @@ public class MainController {
             @AuthenticationPrincipal MyUserDetails myUserDetails,
             @RequestParam(required = false) Integer pageNo
     ){
-        User user = myUserDetails.getUser();;
+        User user = myUserDetails.getUser();
         ModelAndView mav = new ModelAndView("post");
 
         if (pageNo == null)
@@ -660,13 +660,13 @@ public class MainController {
             return new ModelAndView("redirect:/");
         }
 
-        if (Objects.equals(friendID, user.getId()))
+        if (friendID.equals(user.getId()))
             return new ModelAndView("redirect:/mywatchlist");
 
         User friend = userService.getUser(friendID);
 
         // if friend does not exist or if that user is not our friend
-        if (friend == null || !friendService.isMyFriend(user,friend))
+        if (friend == null || !friendService.isMyFriend(user, friend))
             return new ModelAndView("redirect:/myfriends");
 
 
@@ -675,7 +675,7 @@ public class MainController {
 
         ModelAndView mav = new ModelAndView("media_list");
         mav.addObject("mediaDTOList", mediaDTOList);
-        mav.addObject("topic", String.format("%s's Watch list",friend.getUsername()));
+        mav.addObject("topic", String.format("%s's Watch list", friend.getUsername()));
         return mav;
     }
 
@@ -715,8 +715,8 @@ public class MainController {
 
         // send data object to the model
         ModelAndView mav = new ModelAndView("media_list");
-        mav.addObject("mediaDTOList",mediaDTOList);
-        mav.addObject("topic",String.format("%s's Wish list", friend.getUsername()));
+        mav.addObject("mediaDTOList", mediaDTOList);
+        mav.addObject("topic", String.format("%s's Wish list", friend.getUsername()));
         return mav;
     }
 
