@@ -1,7 +1,7 @@
 package com.example.rateit.service;
 
-import com.example.rateit.model.entity.Friend;
 import com.example.rateit.model.Status;
+import com.example.rateit.model.entity.Friend;
 import com.example.rateit.model.entity.User;
 import com.example.rateit.repository.FriendRepository;
 import com.example.rateit.repository.UserRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -35,9 +34,7 @@ public class FriendService {
 
         User toUser = to.get();
 
-        boolean isMyFriend = isMyFriend(from, toUser);
-
-        if(!isMyFriend){
+        if(!isMyFriend(from, toUser)){
             Friend friend = Friend.builder()
                     .to(toUser)
                     .from(from)
@@ -55,20 +52,6 @@ public class FriendService {
 
         friendRepository.getFriends(currentUser.getId()).forEach(friend -> {
             if (friend.getFrom().getId().equals(currentUser.getId()))
-                friendUsers.add(friend.getTo());
-            else
-                friendUsers.add(friend.getFrom());
-        });
-
-        return friendUsers;
-    }
-
-    public List<User> getFriends(Long currentUserId){
-
-        List<User> friendUsers = new ArrayList<>();
-
-        friendRepository.getFriends(currentUserId).forEach(friend -> {
-            if (Objects.equals(friend.getFrom().getId(), currentUserId))
                 friendUsers.add(friend.getTo());
             else
                 friendUsers.add(friend.getFrom());

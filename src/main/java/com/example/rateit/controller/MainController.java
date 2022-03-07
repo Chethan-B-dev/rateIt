@@ -329,10 +329,10 @@ public class MainController {
 
         Post post = new Post(
                 user,
-                Jsoup.clean(postRequestBody.getContent(),Safelist.basic()),
+                Jsoup.clean(postRequestBody.getContent(), Safelist.basic()),
                 LocalDateTime.now(),
                 postRequestBody.getRating(),
-                Jsoup.clean(postRequestBody.getMediaType(),Safelist.basic()),
+                Jsoup.clean(postRequestBody.getMediaType(), Safelist.basic()),
                 mediaId
         );
 
@@ -342,7 +342,7 @@ public class MainController {
     }
 
     @GetMapping("/myposts")
-    public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails,@RequestParam(required = false) Integer pageNo){
+    public ModelAndView myPosts(@AuthenticationPrincipal MyUserDetails myUserDetails, @RequestParam(required = false) Integer pageNo){
         User user = myUserDetails.getUser();
         ModelAndView mav = new ModelAndView("post");
         if (pageNo == null)

@@ -54,8 +54,8 @@ public class ListService {
         List<WatchList> watchLists = getUserWatchList(userId);
         List<Media> mediaList = new ArrayList<>();
 
-        for (WatchList watchList : watchLists) {
-            if (watchList.getMediaType().equalsIgnoreCase("movie")){
+        watchLists.forEach(watchList -> {
+            if (watchList.getMediaType().equals("movie")){
                 Media movie = apiService.getMovie(watchList.getMediaId());
                 movie.setMediaType("movie");
                 mediaList.add(movie);
@@ -64,7 +64,7 @@ public class ListService {
                 tv.setMediaType("tv");
                 mediaList.add(tv);
             }
-        }
+        });
 
         return mediaList;
     }
@@ -72,17 +72,19 @@ public class ListService {
     public List<Media> getWishListMedia(Long userId){
         List<WishList> wishLists = getUserWishList(userId);
         List<Media> mediaList = new ArrayList<>();
-        for (WishList wishList: wishLists) {
+
+        wishLists.forEach(wishList -> {
             if (wishList.getMediaType().equalsIgnoreCase("movie")){
                 Media movie = apiService.getMovie(wishList.getMediaId());
                 movie.setMediaType("movie");
                 mediaList.add(movie);
-            }else if (wishList.getMediaType().equalsIgnoreCase("tv")){
+            } else {
                 Media tv = apiService.getTV(wishList.getMediaId());
                 tv.setMediaType("tv");
                 mediaList.add(tv);
             }
-        }
+        });
+
         return mediaList;
     }
 
