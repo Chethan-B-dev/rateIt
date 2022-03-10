@@ -51,7 +51,7 @@ public class PostService {
 
     public Page<Post> getFeed(List<Long> userIds, Long myId, int pageNum){
         Sort sort = Sort.by("createdAt").descending();
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNum - 1,  pageSize,  sort);
         return postRepository.findByUserIdInAndUserIdNot(userIds, myId, pageable);
     }
 

@@ -458,8 +458,10 @@ public class MainController {
 
         ModelAndView mav = new ModelAndView("redirect:/myposts");
 
-        if (myUserDetails == null)
-            return new ModelAndView("redirect:/");
+        if (myUserDetails == null){
+            mav.setViewName("redirect:/");
+            return mav;
+        }
 
         User user = myUserDetails.getUser();
 
